@@ -1,11 +1,12 @@
-import csv,glob
+import csv,glob,os
 from numpy import mean
 
 times=[]
 temps=[]
 roomTemps=[]
 isReading=False;
-with open(glob.glob("*.csv")[0],newline='') as file:
+fileName=glob.glob("*.csv")[0]
+with open(fileName,newline='') as file:
   for row in csv.reader(file,delimiter='\n',quotechar=','):
     for r in row:
       v = r.split(',')  
@@ -70,3 +71,4 @@ print(dta3)
 print(dta4)
 print(dta5)
 print(dta6)
+os.remove(fileName)
