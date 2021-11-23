@@ -41,7 +41,7 @@ with open(fileName,newline='') as file:
 
 time0=times[0]
 ind0=(times.index(time0))
-print("Average room temps:\n%f\nDTAs:"%mean(roomTemps))
+print("%s\n\nAverage room temps:\n%f\nDTAs:"%(fileName[13:24],mean(roomTemps)))
 for i in range(10,60,10):
   t = min(times, key=lambda x:abs(x-(time0+i)))
   ind = times.index(t)
@@ -49,4 +49,4 @@ for i in range(10,60,10):
   dta = abs(temps[ind]-temps[ind0])
   print(dta)
 
-# os.remove(fileName)
+os.remove(fileName)
