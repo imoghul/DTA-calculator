@@ -43,20 +43,22 @@ def calc(fileName):
           temps.append(float(v[6])) # 2 or 6
           roomTemps.append(float(v[3]))
 
-  time0=times[0]
-  ind0=(times.index(time0))
+  time0 = times[0]
+  ind0 = (times.index(time0))
+  temp0 = temps[ind0]
   print("%s\n\nAverage room temp:\n%f\nDTAs:"%(fileName[13:24],mean(roomTemps)))
   prev=0
-  for i in range(10,60,10):
-    t = min(times, key=lambda x:abs(x-(time0+i)))
+  for i in range(1,6):
+    timeout = i*10+(1+(9/60))
+    t = min(times, key=lambda x:abs(x-(time0+timeout)))
     ind = times.index(t)
     # dta = (temps[ind]-temps[ind0])/((t-time0))
-    dta = abs(temps[ind]-temps[ind0])
-    tError=abs(t-time0)%10
+    dta = abs(temps[ind]-temp0)
+    tError=0#abs(t-time0)%10
     if(dta==prev or (tError<=9.5 and tError>=.5)):break;
     prev = dta
     print(dta)
   print("\n\n\n")
 for fileName in fileNames:
   calc(fileName)
-# os.remove(fileName)
+  # os.remove(fileName)
