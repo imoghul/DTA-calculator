@@ -53,7 +53,7 @@ def calc(fileName):
     # dta = (temps[ind]-temps[ind0])/((t-time0))
     dta = abs(temps[ind]-temps[ind0])
     tError=abs(t-time0)%10
-    if(dta==prev or (tError<=9 and tError>=1)):break;
+    if(dta==prev or (tError<=9.5 and tError>=.5)):break;
     prev = dta
     print(dta)
   print("\n\n\n")
