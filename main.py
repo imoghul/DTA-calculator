@@ -2,7 +2,8 @@ import csv,glob,os
 from numpy import mean
 
 
-fileNames=glob.glob("*.csv")
+fileNames=glob.glob("*RAW.csv")
+fileNames.sort()
 # print("Choose a file: ")
 # for i in range(len(fileNames)):
 #   print(i,": ",fileNames[i])
@@ -11,26 +12,36 @@ fileNames=glob.glob("*.csv")
 def calc(fileName):
   times=[]
   temps=[]
-  roomTemps=[0]
+  roomTemps=[]
   isReading=False;
   with open(fileName,newline='') as file:
     for row in csv.reader(file,delimiter='\n',quotechar=','):
       for r in row:
-        v=r.split(",")
-        if(v[0]=="Pre-PullDown UUT Sampling"):isReading=True
-        if(isReading):
-          dt = v[1].split("T")
-          d = dt[0].split("-")
-          t = dt[1].split(":")
-          year = int(d[0])
-          month = int(d[1])
-          day = int(d[2])
-          h = int(t[0])
-          m = int(t[1])
-          s = float(t[2])
+        v = r.split(',')  
+        if v[1]=="Pre-PullDown": isReading=True
+        if v[1]=="Calibration": isReading=False
+        if(isReading and len(v)==7):
+          dt=v[0]
+          dt = dt.split(" ")
+          d = dt[2]
+          d_arr = (d.split("/"))
+          t = dt[0]
+          year = int(d_arr[2])
+          month = int(d_arr[0])
+          day = int(d_arr[1])
+          h = int(t.split(":")[0])
+          m = int(t.split(":")[1])
+          s = float(t.split(":")[2])
+          if(dt[1]=="PM"):
+            if h!=12:
+              h += 12
+          if(dt[1]=="AM"):
+            if h==12:
+              h = 0
           num=(525600*year+43800*month+1440*day+60*h+m+s/60)
           times.append(num)
-          temps.append(float(v[3]))
+          temps.append(float(v[6])) # 2 or 6
+          roomTemps.append(float(v[3]))
 
   time0=times[0]
   ind0=(times.index(time0))
