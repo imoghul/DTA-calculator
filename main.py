@@ -10,7 +10,7 @@ dtToMin = lambda y,mon,d,h,m,s:(525600 * y + 43800 * mon + 1440 * d + 60 * h + m
 #   print(i,": ",fileNames[i])
 # x=int(input("Enter file number: "))
 # fileNames=[fileNames[2]]
-def readTime(dt):  # takes
+def readTime(dt):  # takes input in the format of      Hour:Min:Sec (A/P)M Month/Day/Year
     dt = dt.split(" ")
     d = dt[2]
     d_arr = (d.split("/"))
@@ -54,24 +54,27 @@ def calc(fileName):
     ind0 = (times.index(time0))
     temp0 = temps[ind0]
     prev = 0
-    for i in range(1, 7):
+    for i in range(1, 6+1):
         timeout = i * 10
         t = min(times, key=lambda x: abs(x - (time0 + timeout)))
         ind = times.index(t)
         # dta = (temps[ind]-temps[ind0])/((t-time0))
         dta = abs(temps[ind] - temp0)
-        tError = abs(t - time0) % 10
+        tError = abs((t-time0)-timeout)
         # print(tError)
-        if (dta == prev or (tError <= 9.5 and tError >= .5)): break
+        if (dta == prev or  tError >= .5): break
         prev = dta
         dtas.append(dta)
     return (mean(roomTemps), dtas)
 
 
 for fileName in fileNames:
+  try:
     (roomTemp, dtas) = calc(fileName)
     print("%s\n\nAverage room temp:\n%f\nDTAs:" % (fileName[13:24], roomTemp))
     for i in dtas:
         print(i)
     print("\n\n\n")
     # os.remove(fileName)
+  except:
+    print(fileName+" couldn't be read")
