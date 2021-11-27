@@ -7,15 +7,16 @@ fileNames.sort()
 dtToMin = lambda y, mon, d, h, m, s: (525600 * y + 43800 * mon + 1440 * d + 60
                                       * h + m + s / 60)
 
-
 # print("Choose a file: ")
 # for i in range(len(fileNames)):
 #   print(i,": ",fileNames[i])
 # x=int(input("Enter file number: "))
 # fileNames=[fileNames[2]]
-def readTime(
-    dt
-):  # takes input in the format of      Hour:Min:Sec (A/P)M Month/Day/Year
+
+
+# takes input in the format of      Hour:Min:Sec (A/P)M Month/Day/Year
+def readTime(dt):
+
     dt = dt.split(" ")
     d = dt[2]
     d_arr = (d.split("/"))
