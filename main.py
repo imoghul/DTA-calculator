@@ -74,14 +74,27 @@ def calc(fileName):
     return (mean(roomTemps), dtas)
 
 
-for fileName in fileNames:
-    try:
-        (roomTemp, dtas) = calc(fileName)
-        print("%s\n\nAverage room temp:\n%f\nDTAs:" %
-              (fileName, roomTemp))
-        for i in dtas:
-            print(i)
-        print("\n\n\n")
-        # os.remove(fileName)
-    except:
-        print(fileName + " couldn't be read")
+with open("result.csv", mode="w") as out:
+    writer = csv.writer(out,
+                        delimiter=',',
+                        quotechar='"',
+                        quoting=csv.QUOTE_MINIMAL)
+    writer.writerow([
+        "File Name", "Average Room Temp.", "DTA1", "DTA2", "DTA3", "DTA4",
+        "DTA5", "DTA6"
+    ])
+    for fileName in fileNames:
+        outlist = []
+        try:
+            (roomTemp, dtas) = calc(fileName)
+            print("%s\n\nAverage room temp:\n%f\nDTAs:" % (fileName, roomTemp))
+            outlist.append(fileName)
+            outlist.append(roomTemp)
+            for i in dtas:
+                print(i)
+                outlist.append(i)
+            print("\n\n\n")
+            writer.writerow(outlist)
+            # os.remove(fileName)
+        except:
+            print(fileName + " couldn't be read")
