@@ -78,7 +78,7 @@ for fileName in fileNames:
     try:
         (roomTemp, dtas) = calc(fileName)
         print("%s\n\nAverage room temp:\n%f\nDTAs:" %
-              (fileName[13:24], roomTemp))
+              (fileName, roomTemp))
         for i in dtas:
             print(i)
         print("\n\n\n")
