@@ -1,22 +1,10 @@
-import csv, glob, os
+import csv, glob, os, sys
 from numpy import mean
 
-fileNames = glob.glob("*RAW.csv")
-fileNames.sort()
+def dtToMin(y,mon,d,h,m,s):
+   return (525600 * y + 43800 * mon + 1440 * d + 60 * h + m + s / 60)
 
-dtToMin = lambda y, mon, d, h, m, s: (525600 * y + 43800 * mon + 1440 * d + 60
-                                      * h + m + s / 60)
-
-# print("Choose a file: ")
-# for i in range(len(fileNames)):
-#   print(i,": ",fileNames[i])
-# x=int(input("Enter file number: "))
-# fileNames=[fileNames[2]]
-
-
-# takes input in the format of      Hour:Min:Sec (A/P)M Month/Day/Year
-def readTime(dt):
-
+def readTime(dt):  # takes
     dt = dt.split(" ")
     d = dt[2]
     d_arr = (d.split("/"))
@@ -50,35 +38,39 @@ def calc(fileName):
                 if v[1] == "Calibration": isReading = False
                 if (isReading and len(v) == 7):
                     (year, month, day, h, m, s) = readTime(v[0])
-                    num = dtToMin(year, month, day, h, m, s)
+                    num = (525600 * year + 43800 * month + 1440 * day +
+                           60 * h + m + s / 60)
                     times.append(num)
-                    # 2 for thermocouple or 6 for slug
-                    temps.append(float(v[2]))
+                    temps.append(float(
+                        v[6]))  # 2 for thermocouple or 6 for slug
                     roomTemps.append(float(v[3]))
 
     time0 = times[0]
     ind0 = (times.index(time0))
     temp0 = temps[ind0]
     prev = 0
-    for i in range(1, 6 + 1):
+    for i in range(1, 7):
         timeout = i * 10
         t = min(times, key=lambda x: abs(x - (time0 + timeout)))
         ind = times.index(t)
         # dta = (temps[ind]-temps[ind0])/((t-time0))
         dta = abs(temps[ind] - temp0)
-        tError = abs((t - time0) - timeout)
+        tError = abs(t - time0) % 10
         # print(tError)
-        if (dta == prev or tError >= .5): break
+        if (dta == prev or (tError <= 9.5 and tError >= .5)): break
         prev = dta
         dtas.append(dta)
-    return (mean(roomTemps), dtas)
+    return (mean(roomTemps),dtas)
 
 
-with open("result.csv", mode="w") as out:
-    writer = csv.writer(out,
-                        delimiter=',',
-                        quotechar='"',
-                        quoting=csv.QUOTE_MINIMAL)
+with open("results.csv", mode="w",newline="") as out:
+    try:
+      os.chdir(sys.argv[1])
+    except:
+      pass
+    fileNames = glob.glob("*RAW*.csv",recursive=True)
+    fileNames.sort()
+    writer = csv.writer(out)
     writer.writerow([
         "File Name", "Average Room Temp.", "DTA1", "DTA2", "DTA3", "DTA4",
         "DTA5", "DTA6"
@@ -87,14 +79,11 @@ with open("result.csv", mode="w") as out:
         outlist = []
         try:
             (roomTemp, dtas) = calc(fileName)
-            print("%s\n\nAverage room temp:\n%f\nDTAs:" % (fileName, roomTemp))
             outlist.append(fileName)
             outlist.append(roomTemp)
             for i in dtas:
-                print(i)
-                outlist.append(i)
-            print("\n\n\n")
+                outlist.append(str(i))
+            print(outlist)
             writer.writerow(outlist)
-            # os.remove(fileName)
         except:
             print(fileName + " couldn't be read")
