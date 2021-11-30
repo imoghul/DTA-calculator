@@ -67,7 +67,7 @@ def calc(fileName):
 with open("results.csv", mode="w", newline="") as out:
     writer = csv.writer(out)
     writer.writerow([
-        "File Name", "Average Room Temp.", "DTA1", "DTA2", "DTA3", "DTA4",
+        "Test", "File Name", "Average Room Temp.", "DTA1", "DTA2", "DTA3", "DTA4",
         "DTA5", "DTA6"
     ])
     if len(sys.argv) > 1:
@@ -75,8 +75,8 @@ with open("results.csv", mode="w", newline="") as out:
     else:
         dirs = [os.getcwd()]
     original = os.getcwd()
-    for i in dirs:
-        os.chdir(i)
+    for dir in dirs:
+        os.chdir(dir)
         fileNames = glob.glob("*RAW*.csv", recursive=True)
         fileNames.sort()
         for fileName in fileNames:
@@ -87,6 +87,7 @@ with open("results.csv", mode="w", newline="") as out:
                 outlist.append(roomTemp)
                 for i in dtas:
                     outlist.append(str(i))
+                outlist.insert(0,dir)
                 print(outlist)
                 writer.writerow(outlist)
             except:
