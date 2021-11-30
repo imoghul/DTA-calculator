@@ -1,10 +1,12 @@
 import csv, glob, os, sys
 from numpy import mean
 
-def dtToMin(y,mon,d,h,m,s):
-   return (525600 * y + 43800 * mon + 1440 * d + 60 * h + m + s / 60)
 
-def readTime(dt):  # takes
+def dtToMin(y, mon, d, h, m, s):
+    return (525600 * y + 43800 * mon + 1440 * d + 60 * h + m + s / 60)
+
+
+def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     dt = dt.split(" ")
     d = dt[2]
     d_arr = (d.split("/"))
@@ -42,7 +44,7 @@ def calc(fileName):
                            60 * h + m + s / 60)
                     times.append(num)
                     temps.append(float(
-                        v[6]))  # 2 for thermocouple or 6 for slug
+                        v[2]))  # 2 for thermocouple or 6 for slug
                     roomTemps.append(float(v[3]))
 
     time0 = times[0]
@@ -60,30 +62,34 @@ def calc(fileName):
         if (dta == prev or (tError <= 9.5 and tError >= .5)): break
         prev = dta
         dtas.append(dta)
-    return (mean(roomTemps),dtas)
+    return (mean(roomTemps), dtas)
 
 
-with open("results.csv", mode="w",newline="") as out:
-    try:
-      os.chdir(sys.argv[1])
-    except:
-      pass
-    fileNames = glob.glob("*RAW*.csv",recursive=True)
-    fileNames.sort()
+with open("results.csv", mode="w", newline="") as out:
     writer = csv.writer(out)
     writer.writerow([
         "File Name", "Average Room Temp.", "DTA1", "DTA2", "DTA3", "DTA4",
         "DTA5", "DTA6"
     ])
-    for fileName in fileNames:
-        outlist = []
-        try:
-            (roomTemp, dtas) = calc(fileName)
-            outlist.append(fileName)
-            outlist.append(roomTemp)
-            for i in dtas:
-                outlist.append(str(i))
-            print(outlist)
-            writer.writerow(outlist)
-        except:
-            print(fileName + " couldn't be read")
+    if len(sys.argv) > 1:
+        dirs = sys.argv[1:]
+    else:
+        dirs = [os.getcwd()]
+    original = os.getcwd()
+    for i in dirs:
+        os.chdir(i)
+        fileNames = glob.glob("*RAW*.csv", recursive=True)
+        fileNames.sort()
+        for fileName in fileNames:
+            outlist = []
+            try:
+                (roomTemp, dtas) = calc(fileName)
+                outlist.append(fileName)
+                outlist.append(roomTemp)
+                for i in dtas:
+                    outlist.append(str(i))
+                print(outlist)
+                writer.writerow(outlist)
+            except:
+                print(fileName + " couldn't be read")
+        os.chdir(original)
