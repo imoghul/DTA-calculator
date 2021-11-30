@@ -40,8 +40,7 @@ def calc(fileName):
                 if v[1] == "Calibration": isReading = False
                 if (isReading and len(v) == 7):
                     (year, month, day, h, m, s) = readTime(v[0])
-                    num = (525600 * year + 43800 * month + 1440 * day +
-                           60 * h + m + s / 60)
+                    num = dtToMin(year, month, day, h, m, s)
                     times.append(num)
                     temps.append(float(
                         v[2]))  # 2 for thermocouple or 6 for slug
