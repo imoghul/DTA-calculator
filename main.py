@@ -41,7 +41,7 @@ def calc(fileName):
             for r in row:
                 v = r.split(',')
                 if v[1] == "Pre-PullDown": isReading = True
-                # if v[1] == "Calibration": isReading = False
+                if v[1] == "Calibration": isReading = False
                 if (isReading and len(v) == 7):
                     (year, month, day, h, m, s) = readTime(v[0])
                     num = dtToMin(year, month, day, h, m, s)
@@ -69,7 +69,7 @@ def calc(fileName):
 
 
 DTAs = []
-with open("results.csv", mode="w", newline="") as out:
+with open("results.csv", mode="w", newline='') as out:
     writer = csv.writer(out)
     #output header to csv
     header = [
