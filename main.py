@@ -23,12 +23,10 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     h = int(t.split(":")[0])
     m = int(t.split(":")[1])
     s = float(t.split(":")[2])
-    if (dt[1] == "PM"):
-        if h != 12:
-            h += 12
-    if (dt[1] == "AM"):
-        if h == 12:
-            h = 0
+    if (dt[1] == "PM") & h != 12:
+        h += 12
+    if (dt[1] == "AM") & h == 12:
+        h = 0
     return (year, month, day, h, m, s)
 
 
@@ -43,15 +41,15 @@ def calc(fileName):
             for r in row:
                 v = r.split(',')
                 if v[1] == "Pre-PullDown": isReading = True
-                if v[1] == "Calibration": isReading = False
+                # if v[1] == "Calibration": isReading = False
                 if (isReading and len(v) == 7):
                     (year, month, day, h, m, s) = readTime(v[0])
                     num = dtToMin(year, month, day, h, m, s)
                     times.append(num)
-                    temps.append(float(
-                        v[2]))  # 2 for thermocouple or 6 for slug
-                    roomTemps.append(float(v[3]))
-
+                    # 2 for thermocouple or 6 for slug
+                    temps.append(float(v[2]))  
+                    if(v[3]!="NaN"):
+                      roomTemps.append(float(v[3]))
     time0 = times[0]
     ind0 = (times.index(time0))
     temp0 = temps[ind0]
@@ -73,19 +71,25 @@ def calc(fileName):
 DTAs = []
 with open("results.csv", mode="w", newline="") as out:
     writer = csv.writer(out)
-    writer.writerow([
-        "Test", "Serial Number", "Date", "Time", "Average Room Temp.", "DTA1",
-        "DTA2", "DTA3", "DTA4", "DTA5", "DTA6"
-    ])
+    #output header to csv
+    header = [
+        "Test", "Serial Number", "Date", "Time", "Average Room Temp."]
+    for i in range(dtasToCalc):
+      header.append("DTA"+str(i+1))
+    writer.writerow(header)
+
+    # get list of directories to run
     if len(sys.argv) > 1:
         dirs = sys.argv[1:]
     else:
         dirs = [os.getcwd()]
     original = os.getcwd()
+
     for dir in dirs:
         os.chdir(dir)
         fileNames = glob.glob("*RAW*.csv", recursive=True)
         fileNames.sort()
+        
         for fileName in fileNames:
             outlist = [dir]
             try:
@@ -93,10 +97,14 @@ with open("results.csv", mode="w", newline="") as out:
                 DTAs.append(dtas)
                 filelist = fileName.split("_")
                 outlist.append(filelist[1])
-                _date = filelist[3]
-                d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
-                outlist.append(d)
-                outlist.append(filelist[4])
+                if (len(filelist) >= 5):
+                    _date = filelist[len(filelist)-3]
+                    d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
+                    outlist.append(d)
+                    outlist.append(filelist[len(filelist)-2])
+                else:
+                    outlist.append("")
+                    outlist.append("")
                 outlist.append(roomTemp)
                 for i in dtas:
                     outlist.append(str(i))
@@ -104,7 +112,8 @@ with open("results.csv", mode="w", newline="") as out:
                 writer.writerow(outlist)
             except:
                 print(fileName + " couldn't be read")
-        os.chdir(original)
+        
+        os.chdir(original) # return to original dir
     writer.writerow([])
 
     avgList = [
@@ -115,5 +124,5 @@ with open("results.csv", mode="w", newline="") as out:
         "Average DTAs: ",
     ]
     for i in range(dtasToCalc):
-        avgList.append(average([d[i] for d in DTAs if len(d) > i]))
+        avgList.append(round(average([d[i] for d in DTAs if len(d) > i]), 1))
     writer.writerow(avgList)
