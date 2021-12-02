@@ -69,7 +69,7 @@ def calc(fileName):
 
 
 DTAs = []
-with open("results.csv", mode="w", newline='') as out:
+with open("dta results.csv", mode="w", newline='') as out:
     writer = csv.writer(out)
     #output header to csv
     header = [
