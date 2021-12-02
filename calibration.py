@@ -20,7 +20,7 @@ def retrieveData(fileName):
                     else: return None
         return None
 
-
+interests = ["VL212860020","VL212880012","VL212910026"]
 baselineOffsets = {}
 with open("calibration results.csv", mode="w", newline='') as out:
     writer = csv.writer(out)
@@ -40,7 +40,7 @@ with open("calibration results.csv", mode="w", newline='') as out:
 
     for dir in dirs:
         os.chdir(dir)
-        fileNames = glob.glob("*SUM*.csv", recursive=True)
+        fileNames = glob.glob("**/*SUM*.csv", recursive=True)
         fileNames.sort()
         runs = {}
         for fileName in fileNames:
@@ -48,6 +48,7 @@ with open("calibration results.csv", mode="w", newline='') as out:
             try:
                 offset = retrieveData(fileName)
                 serialNum = fileName.split("_")[1]
+                if not (serialNum in interests): continue
                 test = dir
                 # check if a offset was retreived
                 if offset == None: continue
