@@ -1,14 +1,15 @@
 import csv, glob, os, sys
 from numpy import mean
 
-outFileName="dta results.csv"
-globType="**/*RAW*.csv"
+outFileName = "dta results.csv"
+globType = "**/*RAW*.csv"
 
 dtToMin = lambda y, mon, d, h, m, s: (525600 * y + 43800 * mon + 1440 * d + 60
                                       * h + m + s / 60)
 
 dtasToCalc = 6
 DTAs = []
+
 
 def average(x):
     if len(x) == 0: return 0
@@ -50,9 +51,9 @@ def calc(fileName):
                     num = dtToMin(year, month, day, h, m, s)
                     times.append(num)
                     # 2 for thermocouple or 6 for slug
-                    temps.append(float(v[2]))  
-                    if(v[3]!="NaN"):
-                      roomTemps.append(float(v[3]))
+                    temps.append(float(v[2]))
+                    if (v[3] != "NaN"):
+                        roomTemps.append(float(v[3]))
     time0 = times[0]
     ind0 = (times.index(time0))
     temp0 = temps[ind0]
@@ -70,36 +71,38 @@ def calc(fileName):
         dtas.append(dta)
     return (average(roomTemps), dtas)
 
-def writeHeaderToFile(writer):
-  header = [
-      "Test", "Serial Number", "Date", "Time", "Average Room Temp."]
-  for i in range(dtasToCalc):
-    header.append("DTA"+str(i+1))
-  writer.writerow(header)
 
-def writeDataToFile(writer,dir,fileNames):
-  for fileName in fileNames:
-      outlist = [dir]
-      try:
-          (roomTemp, dtas) = calc(fileName)
-          DTAs.append(dtas)
-          filelist = fileName.split("_")
-          outlist.append(filelist[1])
-          if (len(filelist) >= 5):
-              _date = filelist[len(filelist)-3]
-              d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
-              outlist.append(d)
-              outlist.append(filelist[len(filelist)-2])
-          else:
-              outlist.append("")
-              outlist.append("")
-          outlist.append(roomTemp)
-          for i in dtas:
-              outlist.append(str(i))
-          print(outlist)
-          writer.writerow(outlist)
-      except:
-          print(fileName + " couldn't be read")
+def writeHeaderToFile(writer):
+    header = ["Test", "Serial Number", "Date", "Time", "Average Room Temp."]
+    for i in range(dtasToCalc):
+        header.append("DTA" + str(i + 1))
+    writer.writerow(header)
+
+
+def writeDataToFile(writer, dir, fileNames):
+    for fileName in fileNames:
+        outlist = [dir]
+        try:
+            (roomTemp, dtas) = calc(fileName)
+            DTAs.append(dtas)
+            filelist = fileName.split("_")
+            outlist.append(filelist[1])
+            if (len(filelist) >= 5):
+                _date = filelist[len(filelist) - 3]
+                d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
+                outlist.append(d)
+                outlist.append(filelist[len(filelist) - 2])
+            else:
+                outlist.append("")
+                outlist.append("")
+            outlist.append(roomTemp)
+            for i in dtas:
+                outlist.append(str(i))
+            print(outlist)
+            writer.writerow(outlist)
+        except:
+            print(fileName + " couldn't be read")
+
 
 def writeSummaryToFile(writer):
     writer.writerow([])
@@ -113,3 +116,4 @@ def writeSummaryToFile(writer):
     for i in range(dtasToCalc):
         avgList.append(round(average([d[i] for d in DTAs if len(d) > i]), 1))
     writer.writerow(avgList)
+

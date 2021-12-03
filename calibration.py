@@ -1,8 +1,8 @@
 import csv, glob, os, sys
 from numpy import mean
 
-outFileName="calibration results.csv"
-globType="**/*SUM*.csv"
+outFileName = "calibration results.csv"
+globType = "**/*SUM*.csv"
 
 
 def average(x):
@@ -23,25 +23,30 @@ def retrieveData(fileName):
                     else: return None
         return None
 
-interests = ["VL212860020","VL212880012","VL212910026"]
-baselineOffsets = {}
 
 def writeHeaderToFile(writer):
-  header = [
-      "Test", "Run", "Serial Number", "Offset", "Delta Offset to Baseline"
-  ]
-  writer.writerow(header)
-def writeDataToFile(writer,dir,fileNames):
+    header = [
+        "Test", "Run", "Serial Number", "Offset", "Delta Offset to Baseline"
+    ]
+    # writer.writerow(header)
+
+
+interests = ["VL212860020", "VL212880012", "VL212910026"]
+baselineOffsets = {}
+data=[]
+
+def writeDataToFile(writer, dir, fileNames):
     runs = {}
     for fileName in fileNames:
         outlist = [dir]
         try:
             offset = retrieveData(fileName)
-            serialNum = fileName.split("_")[1]
-            if not (serialNum in interests): continue
-            test = dir
             # check if a offset was retreived
             if offset == None: continue
+            serialNum = fileName.split("_")[1]
+            # check if serial number is one of the ones we are testing
+            if not (serialNum in interests): continue
+            test = dir
             # increment number of runs
             try:
                 runs[serialNum] += 1
@@ -56,10 +61,42 @@ def writeDataToFile(writer,dir,fileNames):
                 except:  # no baseline found
                     pass
             outlist = [test, runs[serialNum], serialNum, offset, dbOffset]
-            print(outlist)
-            writer.writerow(outlist)
+            data.append(outlist)
+            # print(outlist)
+            # writer.writerow(outlist)
         except:
             print(fileName + " couldn't be read")
+    # writer.writerow([])
+
 
 def writeSummaryToFile(writer):
-  pass
+    serialNums = list(dict.fromkeys([x[2] for x in data]))
+    tests = list(dict.fromkeys([x[0] for x in data]))
+    header = tests.copy()
+    header+=["d"+x for x in tests]
+    header.insert(0,"Serial Number")
+    header.insert(1,"Run")
+    writer.writerow(header)
+    testData = {}
+    for s in serialNums:
+      testData[s]=[]
+      for d in data:
+        if d[2]==s:
+          testData[s].append([d[0],d[1],d[3],d[4]])
+
+    for s in testData:
+      runs = max([x[1] for x in testData[s]])
+      for r in range(1,1+runs):
+        l = [s,r]
+        for _ in range(len(tests)*2):l.append("")
+        for t in tests:
+          curr = None
+          for i in testData[s]:
+            if i[0]==t and i[1]==r:
+              curr = i
+          if curr == None:continue
+          l[tests.index(t)+2]=curr[2]
+          l[tests.index(t)+2+len(tests)]=curr[3]
+        print(l)
+        writer.writerow(l)
+      
