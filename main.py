@@ -5,7 +5,6 @@ from calibration import *
 with open(outFileName, mode="w", newline='') as out:
     writer = csv.writer(out)
     #output header to csv
-
     writeHeaderToFile(writer)
     # get list of directories to run
     if len(sys.argv) > 1:

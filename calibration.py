@@ -33,7 +33,8 @@ def writeHeaderToFile(writer):
 
 interests = ["VL212860020", "VL212880012", "VL212910026"]
 baselineOffsets = {}
-data=[]
+data = []
+
 
 def writeDataToFile(writer, dir, fileNames):
     runs = {}
@@ -72,31 +73,42 @@ def writeDataToFile(writer, dir, fileNames):
 def writeSummaryToFile(writer):
     serialNums = list(dict.fromkeys([x[2] for x in data]))
     tests = list(dict.fromkeys([x[0] for x in data]))
+    # creater and write headers
     header = tests.copy()
-    header+=["d"+x for x in tests]
-    header.insert(0,"Serial Number")
-    header.insert(1,"Run")
+    header += ["d_" + x for x in tests]
+    header.insert(0, "Serial Number")
+    header.insert(1, "Run")
     writer.writerow(header)
+    pdSetpoint = ["PD Setpoints: ", ""]
+    for i in range(len(header)):
+        pdSetpoint.append("")
+    for i in range(2, len(header)):
+        if "test4" in header[i]: pdSetpoint[i] = "10"
+        elif "test5" in header[i]: pdSetpoint[i] = "0"
+        elif "test6" in header[i]: pdSetpoint[i] = "-10"
+        else: pdSetpoint[i] = "-18"
+    writer.writerow(pdSetpoint)
+    # retrieve data and store in dict of key:serial# and data:[test run offset dboffset]
     testData = {}
     for s in serialNums:
-      testData[s]=[]
-      for d in data:
-        if d[2]==s:
-          testData[s].append([d[0],d[1],d[3],d[4]])
+        testData[s] = []
+        for d in data:
+            if d[2] == s:
+                testData[s].append([d[0], d[1], d[3], d[4]])
 
     for s in testData:
-      runs = max([x[1] for x in testData[s]])
-      for r in range(1,1+runs):
-        l = [s,r]
-        for _ in range(len(tests)*2):l.append("")
-        for t in tests:
-          curr = None
-          for i in testData[s]:
-            if i[0]==t and i[1]==r:
-              curr = i
-          if curr == None:continue
-          l[tests.index(t)+2]=curr[2]
-          l[tests.index(t)+2+len(tests)]=curr[3]
-        print(l)
-        writer.writerow(l)
-      
+        runs = max([x[1] for x in testData[s]])
+        for r in range(1, 1 + runs):
+            l = [s, r]
+            for _ in range(len(tests) * 2):
+                l.append("")
+            for t in tests:
+                curr = None
+                for i in testData[s]:
+                    if i[0] == t and i[1] == r:
+                        curr = i
+                if curr == None: continue
+                l[header.index(t)] = curr[2]
+                l[header.index(t) + len(tests)] = curr[3]
+            print(l)
+            writer.writerow(l)
