@@ -31,7 +31,7 @@ def writeHeaderToFile(writer):
     # writer.writerow(header)
 
 
-interests = ["VL212860020", "VL212880012", "VL212910026"]
+interests = ["VL212860020", "VL212880012", "VL212910026","FB6"]
 baselineOffsets = {}
 data = []
 
@@ -78,7 +78,6 @@ def writeSummaryToFile(writer):
     header += ["d_" + x for x in tests]
     header.insert(0, "Serial Number")
     header.insert(1, "Run")
-    writer.writerow(header)
     pdSetpoint = ["PD Setpoints: ", ""]
     for i in range(len(header)):
         pdSetpoint.append("")
@@ -88,6 +87,7 @@ def writeSummaryToFile(writer):
         elif "test6" in header[i]: pdSetpoint[i] = "-10"
         else: pdSetpoint[i] = "-18"
     writer.writerow(pdSetpoint)
+    writer.writerow(header)
     # retrieve data and store in dict of key:serial# and data:[test run offset dboffset]
     testData = {}
     for s in serialNums:
