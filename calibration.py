@@ -20,6 +20,7 @@ def retrieveData(fileName):
                 if (v[0] == "Post Calibration Data"): isReading = False
                 if (isReading and v[0] == "Air"):
                     if v[4] != '': return (float(v[4]))
+                    elif v[1] != '': return 0
                     else: return None
         return None
 
