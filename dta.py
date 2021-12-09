@@ -91,7 +91,9 @@ def writeDataToFile(writer, dir, fileNames):
                 _date = filelist[len(filelist) - 3]
                 d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
                 outlist.append(d)
-                outlist.append(filelist[len(filelist) - 2])
+                t=filelist[len(filelist) - 2]
+                t = t[0:2]+":"+t[2:4]+":"+t[4:6]
+                outlist.append(t)
             else:
                 outlist.append("")
                 outlist.append("")

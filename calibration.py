@@ -65,10 +65,8 @@ def writeDataToFile(writer, dir, fileNames):
             outlist = [test, runs[serialNum], serialNum, offset, dbOffset]
             data.append(outlist)
             print(outlist)
-            # writer.writerow(outlist)
         except:
             print(fileName + " couldn't be read")
-    # writer.writerow([])
 
 
 def writeSummaryToFile(writer):
