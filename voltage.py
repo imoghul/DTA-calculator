@@ -66,15 +66,8 @@ def writeHeaderToFile(writer):
     header = ["Test","Serial Number","Initial Temperature","Final Temperature","Test Duration","Chamber Temperature at Calib.","Voltage","Test Result"]
     writer.writerow(header)
 
-
-interests = ["VL212860020", "VL212880012", "VL212910026", "FB6"]
-data = []
-
-
 def writeDataToFile(writer, dir, fileNames):
-    runs = {}
     for fileName in fileNames:
-        outlist = [dir]
         try:
             serialNum = fileName.split("_")[1]
             (voltage,calib,chamber,testTime,initTemp,finalTemp,res) = retrieveData(fileName)
