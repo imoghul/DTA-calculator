@@ -29,13 +29,12 @@ def readTime(dt):  # sample: 2021-12-09T15:55:31.235
 
 
 def retrieveData(fileName):
-    if (fileName.find("_F_") != -1): pf="Fail"
-    else:pf="Pass"
     vphp1 = None
     calib = None
     chamber = None
     initTemp = None
     finalTemp = None
+    testResult = None
     isReadingCalib = False
     fileData = []
     with open(fileName, newline='') as file:
@@ -47,6 +46,7 @@ def retrieveData(fileName):
                 if (v[0] == "Post Calibration Data"): isReadingCalib = False
                 if (v[0] == "Init Temperature"): initTemp = float(v[1])
                 if (v[0] == "Final Temperature"): finalTemp = float(v[1])
+                if (v[0] == "TestResult"): testResult = (v[1])
                 if (v[0] == "PostCalCheck UUT Responses" and v[2] == "Vphp1"):
                     vphp1 = float(v[3])
                 if (v[0] == "PostCalCheck UUT Responses"
@@ -59,11 +59,11 @@ def retrieveData(fileName):
     begin = testTypes.index("PullDown UUT Sampling Responses")
     end = len(testTypes) - 1
     testTime = readTime(fileData[end][1]) - readTime(fileData[begin][1])
-    return vphp1, calib, chamber, testTime, initTemp, finalTemp,pf
+    return vphp1, calib, chamber, testTime, initTemp, finalTemp,testResult
 
 
 def writeHeaderToFile(writer):
-    header = ["Test","Serial Number","Initial Temperature","Final Temperature","Test Duration","Chamber Temperature at Calib.","Voltage","Pass/Fail"]
+    header = ["Test","Serial Number","Initial Temperature","Final Temperature","Test Duration","Chamber Temperature at Calib.","Voltage","Test Result"]
     writer.writerow(header)
 
 
@@ -77,8 +77,8 @@ def writeDataToFile(writer, dir, fileNames):
         outlist = [dir]
         try:
             serialNum = fileName.split("_")[1]
-            (voltage,calib,chamber,testTime,initTemp,finalTemp,pf) = retrieveData(fileName)
-            writer.writerow([dir,serialNum,initTemp,finalTemp,testTime,chamber,voltage,pf])
+            (voltage,calib,chamber,testTime,initTemp,finalTemp,res) = retrieveData(fileName)
+            writer.writerow([dir,serialNum,initTemp,finalTemp,testTime,chamber,voltage,res])
         except:
             print(fileName + " couldn't be read")
 
