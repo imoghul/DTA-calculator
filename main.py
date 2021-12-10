@@ -12,7 +12,8 @@ def createFile():
           dirs = sys.argv[2:]
       else:
           dirs = [os.getcwd()]
-      dirs.insert(0, "baseline")
+      # dirs.insert(0, "baseline")
+      # print(dirs)
       original = os.getcwd()
 
       for dir in dirs:
@@ -34,10 +35,15 @@ elif(sys.argv[1]=="d"):
 elif(sys.argv[1]=="c"):
   from calibration import *
   createFile()
+elif(sys.argv[1]=="v"):
+  from voltage import *
+  createFile()
 else:
   from calibration import *
   createFile()
   from dta import *
+  createFile()
+  from voltage import *
   createFile()
 
 
