@@ -29,7 +29,8 @@ def readTime(dt):  # sample: 2021-12-09T15:55:31.235
 
 
 def retrieveData(fileName):
-    if (fileName.find("_F_") != -1): return -1
+    if (fileName.find("_F_") != -1): pf="Fail"
+    else:pf="Pass"
     vphp1 = None
     calib = None
     chamber = None
@@ -58,12 +59,12 @@ def retrieveData(fileName):
     begin = testTypes.index("PullDown UUT Sampling Responses")
     end = len(testTypes) - 1
     testTime = readTime(fileData[end][1]) - readTime(fileData[begin][1])
-    return vphp1, calib, chamber, testTime, initTemp, finalTemp
+    return vphp1, calib, chamber, testTime, initTemp, finalTemp,pf
 
 
 def writeHeaderToFile(writer):
-    header = ["Serial Number", "BOT", "Voltage"]
-    # writer.writerow(header)
+    header = ["Test","Serial Number","Initial Temperature","Final Temperature","Test Duration","Chamber Temperature at Calib.","Voltage","Pass/Fail"]
+    writer.writerow(header)
 
 
 interests = ["VL212860020", "VL212880012", "VL212910026", "FB6"]
@@ -75,8 +76,9 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         outlist = [dir]
         try:
-            (voltage,calib,chamber,testTime,initTemp,finalTemp) = retrieveData(fileName)
-            print(fileName, voltage)
+            serialNum = fileName.split("_")[1]
+            (voltage,calib,chamber,testTime,initTemp,finalTemp,pf) = retrieveData(fileName)
+            writer.writerow([dir,serialNum,initTemp,finalTemp,testTime,chamber,voltage,pf])
         except:
             print(fileName + " couldn't be read")
 
