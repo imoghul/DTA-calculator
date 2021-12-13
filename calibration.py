@@ -32,7 +32,7 @@ def writeHeaderToFile(writer):
     # writer.writerow(header)
 
 
-interests = ["VL212860020", "VL212880012", "VL212910026","FB6"]
+interests = ["VL212860020", "VL212880012", "VL212910026", "FB6"]
 baselineOffsets = {}
 data = []
 

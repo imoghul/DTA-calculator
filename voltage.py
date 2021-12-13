@@ -59,19 +59,28 @@ def retrieveData(fileName):
     begin = testTypes.index("PullDown UUT Sampling Responses")
     end = len(testTypes) - 1
     testTime = readTime(fileData[end][1]) - readTime(fileData[begin][1])
-    return vphp1, calib, chamber, testTime, initTemp, finalTemp,testResult
+    return vphp1, calib, chamber, testTime, initTemp, finalTemp, testResult
 
 
 def writeHeaderToFile(writer):
-    header = ["Test","Serial Number","Initial Temperature","Final Temperature","Test Duration","Chamber Temperature at Calib.","Voltage","Test Result"]
+    header = [
+        "Test", "Serial Number", "Initial Temperature", "Final Temperature",
+        "Test Duration", "Chamber Temperature at Calib.", "Voltage",
+        "Test Result"
+    ]
     writer.writerow(header)
+
 
 def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         try:
             serialNum = fileName.split("_")[1]
-            (voltage,calib,chamber,testTime,initTemp,finalTemp,res) = retrieveData(fileName)
-            writer.writerow([dir,serialNum,initTemp,finalTemp,testTime,chamber,voltage,res])
+            (voltage, calib, chamber, testTime, initTemp, finalTemp,
+             res) = retrieveData(fileName)
+            writer.writerow([
+                dir, serialNum, initTemp, finalTemp, testTime, chamber,
+                voltage, res
+            ])
         except:
             print(fileName + " couldn't be read")
 

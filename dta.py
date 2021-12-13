@@ -91,8 +91,8 @@ def writeDataToFile(writer, dir, fileNames):
                 _date = filelist[len(filelist) - 3]
                 d = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
                 outlist.append(d)
-                t=filelist[len(filelist) - 2]
-                t = t[0:2]+":"+t[2:4]+":"+t[4:6]
+                t = filelist[len(filelist) - 2]
+                t = t[0:2] + ":" + t[2:4] + ":" + t[4:6]
                 outlist.append(t)
             else:
                 outlist.append("")
@@ -107,15 +107,9 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
-    writer.writerow([])
-    avgList = [
-        "",
-        "",
-        "",
-        "",
-        "Average DTAs: ",
-    ]
-    for i in range(dtasToCalc):
-        avgList.append(round(average([d[i] for d in DTAs if len(d) > i]), 1))
-    writer.writerow(avgList)
-
+    pass
+    # writer.writerow([])
+    # avgList = ["" for i in range(dtasToCalc+5)]
+    # for i in range(dtasToCalc):
+    #     avgList.append(round(average([d[i] for d in DTAs if len(d) > i]), 1))
+    # writer.writerow(avgList)
