@@ -1,13 +1,8 @@
 import csv, glob, os, sys
-from numpy import mean
+from utils import *
 
 outFileName = "calibration results.csv"
 globType = "**/*SUM*.csv"
-
-
-def average(x):
-    if len(x) == 0: return 0
-    return mean(x)
 
 
 def retrieveData(fileName):

@@ -1,6 +1,4 @@
 import csv, glob, os, sys
-from numpy import mean
-from calibration import *
 
 
 def createFile():

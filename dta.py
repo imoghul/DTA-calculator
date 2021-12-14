@@ -1,19 +1,11 @@
 import csv, glob, os, sys
-from numpy import mean
+from utils import *
 
 outFileName = "dta results.csv"
 globType = "**/*RAW*.csv"
 
-dtToMin = lambda y, mon, d, h, m, s: (525600 * y + 43800 * mon + 1440 * d + 60
-                                      * h + m + s / 60)
-
 dtasToCalc = 6
 DTAs = []
-
-
-def average(x):
-    if len(x) == 0: return 0
-    return mean(x)
 
 
 def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
