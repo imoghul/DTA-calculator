@@ -38,10 +38,15 @@ elif (sys.argv[1] == "c"):
 elif (sys.argv[1] == "v"):
     from voltage import *
     createFile()
+elif (sys.argv[1] == "p"):
+    from pdRate import *
+    createFile()
 else:
     from calibration import *
     createFile()
     from dta import *
     createFile()
     from voltage import *
+    createFile()
+    from pdRate import *
     createFile()
