@@ -41,6 +41,9 @@ elif (sys.argv[1] == "v"):
 elif (sys.argv[1] == "p"):
     from pdRate import *
     createFile()
+elif (sys.argv[1] == "s"):
+    from summary import *
+    createFile()
 else:
     from calibration import *
     createFile()
@@ -49,4 +52,6 @@ else:
     from voltage import *
     createFile()
     from pdRate import *
+    createFile()
+    from summary import *
     createFile()
