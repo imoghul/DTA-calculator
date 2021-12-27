@@ -45,7 +45,7 @@ def calc(fileName):
     start = dtToMin(y,mon,d,h,m,s)
     (y,mon,d,h,m,s) = readTime(endTime)
     end = dtToMin(y,mon,d,h,m,s)
-    return ((endTemp-startTemp)/(end-start),average(roomTemps))
+    return ((startTemp-endTemp)/(end-start),average(roomTemps))
 
 def writeHeaderToFile(writer):
     header = ["Test", "Serial Number", "Date", "Time", "Average Room Temperature", "PullDown Time"]
