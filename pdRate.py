@@ -36,13 +36,16 @@ def calc(fileName):
                     temps.append(float(v[2]))
                     times.append(v[0])
                     roomTemps.append(float(v[3]))
-    startTime = times[0]
-    endTime = times[-1]
-    (y,mon,d,h,m,s) = readTime(startTime)
-    start = dtToMin(y,mon,d,h,m,s)
-    (y,mon,d,h,m,s) = readTime(endTime)
-    end = dtToMin(y,mon,d,h,m,s)
-    return ((temps[-1]-temps[0])/(end-start),average(roomTemps))
+    # startTime = times[0]
+    # endTime = times[-1]
+    # (y,mon,d,h,m,s) = readTime(startTime)
+    # start = dtToMin(y,mon,d,h,m,s)
+    # (y,mon,d,h,m,s) = readTime(endTime)
+    # end = dtToMin(y,mon,d,h,m,s)
+    # (temps[-1]-temps[0])/(end-start)
+    (startTemp,startInd) = closestTo(temps,19)
+    (endTemp,endInd) = closestTo(temps,15)
+    return ((endTemp-startTemp)/(times[endInd]-times[startInd]),average(roomTemps))
 
 def writeHeaderToFile(writer):
     header = ["Test", "Serial Number", "Date", "Time", "Average Room Temperature", "PullDown Time"]
