@@ -27,6 +27,7 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
 def calc(fileName):
     times = []
     temps = []
+    roomTemps = []
     with open(fileName, newline='') as file:
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
@@ -34,16 +35,17 @@ def calc(fileName):
                 if len(v)>2 and v[5] == "Pre-PullDown":
                     temps.append(float(v[2]))
                     times.append(v[0])
+                    roomTemps.append(float(v[3]))
     startTime = times[0]
     endTime = times[-1]
     (y,mon,d,h,m,s) = readTime(startTime)
     start = dtToMin(y,mon,d,h,m,s)
     (y,mon,d,h,m,s) = readTime(endTime)
     end = dtToMin(y,mon,d,h,m,s)
-    return (temps[-1]-temps[0])/(end-start)
+    return ((temps[-1]-temps[0])/(end-start),average(roomTemps))
 
 def writeHeaderToFile(writer):
-    header = ["Test", "Serial Number", "Date", "Time", "PullDown Time"]
+    header = ["Test", "Serial Number", "Date", "Time", "Average Room Temperature", "PullDown Time"]
     writer.writerow(header)
 
 
@@ -51,7 +53,7 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         outlist = [dir]
         try:
-            pdRate = calc(fileName)
+            (pdRate,roomTemp) = calc(fileName)
             filelist = fileName.split("_")
             outlist.append(filelist[1])
             if (len(filelist) >= 5):
@@ -64,6 +66,7 @@ def writeDataToFile(writer, dir, fileNames):
             else:
                 outlist.append("")
                 outlist.append("")
+            outlist.append(roomTemp)
             outlist.append(pdRate)
             print(outlist)
             writer.writerow(outlist)
