@@ -3,7 +3,7 @@ from utils import *
 import random,string
 
 randStr = (''.join(random.choice(string.ascii_lowercase+string.digits+string.ascii_uppercase) for i in range(20)))
-tutFileName = "SUMMARY/summary mvt totes.csv"
+outFileName = "SUMMARY/summary mvt totes.csv"
 globType = "**/*SUM*.csv"
 
 data=[]
