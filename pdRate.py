@@ -100,14 +100,14 @@ def writeDataToFile(writer, dir, fileNames):
             filelist = fileName.split("_")
             if (len(filelist) >= 5):
                 _date = filelist[len(filelist) - 3]
-                date = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
-                time = filelist[len(filelist) - 2]
-                time = time[0:2] + ":" + time[2:4] + ":" + time[4:6]
+                dat = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
+                tim = filelist[len(filelist) - 2]
+                tim = tim[0:2] + ":" + tim[2:4] + ":" + tim[4:6]
             else:
-                date = ""
-                time = ""
-            d["Date"] = date
-            d['Time'] = time
+                dat = ""
+                tim = ""
+            d["Date"] = dat
+            d['Time'] = tim
             data.append(d)
         except:
            print(fileName + " couldn't be read")
