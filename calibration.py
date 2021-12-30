@@ -32,11 +32,14 @@ def writeHeaderToFile(writer):
 
 interests = ["VL212860020", "VL212880012", "VL212910026", "FB6"]
 baselineOffsets = {}
+neg20 = {}
 data = []
-
+runs = {}
 
 def writeDataToFile(writer, dir, fileNames):
-    runs = {}
+    
+    for i in interests:
+        runs[i]=0
     for fileName in fileNames:
         outlist = [dir]
         try:
@@ -48,16 +51,20 @@ def writeDataToFile(writer, dir, fileNames):
             if not (serialNum in interests): continue
             pdSp = str(setPoint)#dir
             # increment number of runs
-            try:
-                runs[serialNum] += 1
-            except:
-                runs[serialNum] = 1
+            runs[serialNum] += 1
             dbOffset = 0
+            if(setPoint == -20):
+                #print(serialNum,offset)
+                try:
+                    neg20[serialNum].append(offset)
+                except:
+                    neg20[serialNum] = []
+                    neg20[serialNum].append(offset)
             if (dir == "baseline"):
                 baselineOffsets[serialNum] = offset
             else:
                 try:  # delta baseline calculation
-                    dbOffset = offset - baselineOffsets[serialNum]
+                    dbOffset = abs(offset - baselineOffsets[serialNum])
                 except:  # no baseline found
                     pass
             outlist = [pdSp, runs[serialNum], serialNum, offset, dbOffset]
@@ -65,7 +72,6 @@ def writeDataToFile(writer, dir, fileNames):
             print(outlist,dir)
         except:
             print(fileName + " couldn't be read")
-
 
 def writeSummaryToFile(writer):
     serialNums = list(dict.fromkeys([x[2] for x in data]))
@@ -76,6 +82,13 @@ def writeSummaryToFile(writer):
     header.insert(0, "Serial Number")
     header.insert(1, "Run")
     writer.writerow(header)
+    # these lines recalculate the delta based off average -20 offsets
+    #print(neg20)
+    for i in baselineOffsets:
+        baselineOffsets[i] = average(neg20[i])
+    #print(baselineOffsets)
+    for i in data:
+        i[-1] = abs(baselineOffsets[i[2]]-i[-2])
     # retrieve data and store in dict of key:serial# and data:[test run offset dboffset]
     testData = {}
     for s in serialNums:
@@ -83,7 +96,7 @@ def writeSummaryToFile(writer):
         for d in data:
             if d[2] == s:
                 testData[s].append([d[0], d[1], d[3], d[4]])
-
+    print(testData)
     for s in testData:
         runs = max([x[1] for x in testData[s]])
         for r in range(1, 1 + runs):
@@ -98,4 +111,5 @@ def writeSummaryToFile(writer):
                 if curr == None: continue
                 l[header.index(sp)] = curr[2]
                 l[header.index(sp) + len(pdSps)] = curr[3]
+            print(l)
             writer.writerow(l)
