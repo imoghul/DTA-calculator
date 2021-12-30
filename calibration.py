@@ -42,11 +42,11 @@ def writeDataToFile(writer, dir, fileNames):
         try:
             setPoint,offset = retrieveData(fileName)
             # check if a offset was retreived
-            if offset == None or setPoint == None: continue
+            if offset == None: continue
             serialNum = fileName.split("_")[1]
             # check if serial number is one of the ones we are testing
             if not (serialNum in interests): continue
-            test = str(setPoint)#dir
+            pdSp = str(setPoint)#dir
             # increment number of runs
             try:
                 runs[serialNum] += 1
@@ -60,19 +60,19 @@ def writeDataToFile(writer, dir, fileNames):
                     dbOffset = offset - baselineOffsets[serialNum]
                 except:  # no baseline found
                     pass
-            outlist = [test, runs[serialNum], serialNum, offset, dbOffset]
+            outlist = [pdSp, runs[serialNum], serialNum, offset, dbOffset]
             data.append(outlist)
-            print(outlist)
+            print(outlist,dir)
         except:
             print(fileName + " couldn't be read")
 
 
 def writeSummaryToFile(writer):
     serialNums = list(dict.fromkeys([x[2] for x in data]))
-    tests = list(dict.fromkeys([x[0] for x in data]))
+    pdSps = list(dict.fromkeys([x[0] for x in data]))
     # creater and write headers
-    header = tests.copy()
-    header += ["d_" + x for x in tests]
+    header = pdSps.copy()
+    header += ["d_" + x for x in pdSps]
     header.insert(0, "Serial Number")
     header.insert(1, "Run")
     writer.writerow(header)
@@ -88,14 +88,14 @@ def writeSummaryToFile(writer):
         runs = max([x[1] for x in testData[s]])
         for r in range(1, 1 + runs):
             l = [s, r]
-            for _ in range(len(tests) * 2):
+            for _ in range(len(pdSps) * 2):
                 l.append("")
-            for t in tests:
+            for sp in pdSps:
                 curr = None
                 for i in testData[s]:
-                    if i[0] == t and i[1] == r:
+                    if i[0] == sp and i[1] == r:
                         curr = i
                 if curr == None: continue
-                l[header.index(t)] = curr[2]
-                l[header.index(t) + len(tests)] = curr[3]
+                l[header.index(sp)] = curr[2]
+                l[header.index(sp) + len(pdSps)] = curr[3]
             writer.writerow(l)
