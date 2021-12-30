@@ -35,11 +35,11 @@ baselineOffsets = {}
 neg20 = {}
 data = []
 runs = {}
-
+for i in interests:
+    runs[i]=0
+  
 def writeDataToFile(writer, dir, fileNames):
     
-    for i in interests:
-        runs[i]=0
     for fileName in fileNames:
         outlist = [dir]
         try:
