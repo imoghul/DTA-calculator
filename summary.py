@@ -5,7 +5,7 @@ import random, string
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
                   string.ascii_uppercase) for i in range(20)))
-outFileName = "SUMMARY/summary.csv"
+outFileName = "SUMMARY/" + input("Output file Location (SUMMARY/): ")
 globType = "**/*SUM*.csv"
 
 data = []

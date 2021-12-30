@@ -18,8 +18,11 @@ def createFile():
         for dir in dirs:
             os.chdir(dir)
             fileNames = glob.glob(globType, recursive=True)
-            fileNames.sort(key=lambda x: x.split("_")[1] + x.split("_")[3] + x.
+            try:
+                fileNames.sort(key=lambda x: x.split("_")[1] + x.split("_")[3] + x.
                            split("_")[4])
+            except:
+                pass
             writeDataToFile(writer, dir, fileNames)  # runs for every directory
             os.chdir(original)  # return to original dir
 

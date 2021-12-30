@@ -7,17 +7,20 @@ globType = "**/*SUM*.csv"
 
 def retrieveData(fileName):
     isReading = False
+    offset = None
+    setPoint = None
     with open(fileName, newline='') as file:
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(",")
                 if (v[0] == "Calibration Data"): isReading = True
                 if (v[0] == "Post Calibration Data"): isReading = False
+                if (len(v)>3 and v[2] == "PrePullDownCheck_Setpoint -20C"): setPoint = float(v[3])
                 if (isReading and v[0] == "Air"):
-                    if v[4] != '': return (float(v[4]))
-                    elif v[1] != '': return 0
-                    else: return None
-        return None
+                    if v[4] != '': offset = (float(v[4]))
+                    elif v[1] != '': offset = 0
+                    else: offset == None
+        return setPoint,offset
 
 
 def writeHeaderToFile(writer):
@@ -37,13 +40,13 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         outlist = [dir]
         try:
-            offset = retrieveData(fileName)
+            setPoint,offset = retrieveData(fileName)
             # check if a offset was retreived
-            if offset == None: continue
+            if offset == None or setPoint == None: continue
             serialNum = fileName.split("_")[1]
             # check if serial number is one of the ones we are testing
             if not (serialNum in interests): continue
-            test = dir
+            test = str(setPoint)#dir
             # increment number of runs
             try:
                 runs[serialNum] += 1
@@ -72,15 +75,6 @@ def writeSummaryToFile(writer):
     header += ["d_" + x for x in tests]
     header.insert(0, "Serial Number")
     header.insert(1, "Run")
-    pdSetpoint = ["PD Setpoints: ", ""]
-    for i in range(len(header)):
-        pdSetpoint.append("")
-    for i in range(2, len(header)):
-        if "test4" in header[i]: pdSetpoint[i] = "10"
-        elif "test5" in header[i]: pdSetpoint[i] = "0"
-        elif "test6" in header[i]: pdSetpoint[i] = "-10"
-        else: pdSetpoint[i] = "-18"
-    writer.writerow(pdSetpoint)
     writer.writerow(header)
     # retrieve data and store in dict of key:serial# and data:[test run offset dboffset]
     testData = {}
