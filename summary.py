@@ -62,7 +62,7 @@ def calc(fileName):
                 if (v[0] == "UUT Responses"): inPostCal = False
                 if (v[0] in [
                         "SN", "TestResult", "Init Temperature",
-                        "PullDown Starting Temperature", "Final Temperature"
+                        "PullDown Starting Temperature", "Final Temperature", "Cooling Time (s)"
                 ]):
                     titles.append(v[0])
                     vals.append(v[1] if len(v) > 1 else "")
