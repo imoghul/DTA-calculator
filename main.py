@@ -2,7 +2,7 @@ import csv, glob, os, sys
 
 
 def createFile():
-    with open(outFileName, mode="w", newline='') as out:
+    with open("CSV OUTPUT/"+outFileName, mode="w", newline='') as out:
         writer = csv.writer(out)
         #output header to csv
         writeHeaderToFile(writer)
@@ -10,7 +10,7 @@ def createFile():
         if len(sys.argv) > 2:
             dirs = sys.argv[2:]
         else:
-            dirs = [os.getcwd()]
+            dirs = [os.getcwd()+"/TEST DATA/"]
         # dirs.insert(0, "baseline")
         # print(dirs)
         original = os.getcwd()
@@ -30,7 +30,7 @@ def createFile():
 
 
 if (len(sys.argv) < 2):
-    print("enter arguments: d/c/b folders")
+    print("usage: python EOLT-Test-Analyzer/main.py [d/c/v/p/s] <test directories>")
     exit()
 elif (sys.argv[1] == "d"):
     from dta import *
