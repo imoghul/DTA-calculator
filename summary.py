@@ -1,6 +1,10 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 from utils import *
-import random, string
+import random
+import string
 
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
@@ -55,11 +59,13 @@ def calc(fileName):
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(',')
-                if (v[0] == "Calibration Data"): inCal = True
+                if (v[0] == "Calibration Data"):
+                    inCal = True
                 if (v[0] == "Post Calibration Data"):
                     inCal = False
                     inPostCal = True
-                if (v[0] == "UUT Responses"): inPostCal = False
+                if (v[0] == "UUT Responses"):
+                    inPostCal = False
                 if (v[0] in [
                         "SN", "TestResult", "Init Temperature",
                         "PullDown Starting Temperature", "Final Temperature", "Cooling Time (s)"
@@ -92,7 +98,8 @@ def calc(fileName):
                     offset = 0
                 if (inPostCal and v[0] == "Air" and offset == -1):
                     offset = float(v[2])
-        if offset != -1: titles.append("Offset")
+        if offset != -1:
+            titles.append("Offset")
         titles = fixDupl(titles)
         vals.append(offset)
         for i in range(len(titles)):
@@ -134,7 +141,8 @@ def writeSummaryToFile(writer):
     for i in temp:
         keys = list(i.keys())
         for i in keys:
-            if i not in header: header.append(i)
+            if i not in header:
+                header.append(i)
     writer.writerow(
         [i if i.find(randStr) == -1 else i[0:i.find(randStr)] for i in header])
     for d in data:

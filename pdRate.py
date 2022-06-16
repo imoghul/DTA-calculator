@@ -1,9 +1,11 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 from utils import *
 
 outFileName = "pulldown rate results.csv"
 globType = "**/*RAW*.csv"
-
 
 
 def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
@@ -32,23 +34,25 @@ def calc(fileName):
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(',')
-                if len(v)>2 and v[5] == "Pre-PullDown":
+                if len(v) > 2 and v[5] == "Pre-PullDown":
                     temps.append(float(v[2]))
                     times.append(v[0])
                     roomTemps.append(float(v[3]))
 
-    (startTemp,startInd) = closestTo(temps,19)
-    (endTemp,endInd) = closestTo(temps,15)
+    (startTemp, startInd) = closestTo(temps, 19)
+    (endTemp, endInd) = closestTo(temps, 15)
     endTime = times[endInd]
     startTime = times[startInd]
-    (y,mon,d,h,m,s) = readTime(startTime)
-    start = dtToMin(y,mon,d,h,m,s)
-    (y,mon,d,h,m,s) = readTime(endTime)
-    end = dtToMin(y,mon,d,h,m,s)
-    return ((startTemp-endTemp)/(end-start),average(roomTemps))
+    (y, mon, d, h, m, s) = readTime(startTime)
+    start = dtToMin(y, mon, d, h, m, s)
+    (y, mon, d, h, m, s) = readTime(endTime)
+    end = dtToMin(y, mon, d, h, m, s)
+    return ((startTemp-endTemp)/(end-start), average(roomTemps))
+
 
 def writeHeaderToFile(writer):
-    header = ["Test", "Serial Number", "Date", "Time", "Average Room Temperature", "PullDown Time"]
+    header = ["Test", "Serial Number", "Date", "Time",
+              "Average Room Temperature", "PullDown Time"]
     writer.writerow(header)
 
 
@@ -56,7 +60,7 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         outlist = [dir]
         try:
-            (pdRate,roomTemp) = calc(fileName)
+            (pdRate, roomTemp) = calc(fileName)
             filelist = fileName.split("_")
             outlist.append(filelist[1])
             if (len(filelist) >= 5):

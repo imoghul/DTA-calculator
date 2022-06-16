@@ -1,4 +1,7 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 from utils import *
 
 outFileName = "calibration results.csv"
@@ -13,14 +16,20 @@ def retrieveData(fileName):
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(",")
-                if (v[0] == "Calibration Data"): isReading = True
-                if (v[0] == "Post Calibration Data"): isReading = False
-                if (len(v)>3 and v[2] == "PrePullDownCheck_Setpoint -20C"): setPoint = float(v[3])
+                if (v[0] == "Calibration Data"):
+                    isReading = True
+                if (v[0] == "Post Calibration Data"):
+                    isReading = False
+                if (len(v) > 3 and v[2] == "PrePullDownCheck_Setpoint -20C"):
+                    setPoint = float(v[3])
                 if (isReading and v[0] == "Air"):
-                    if v[4] != '': offset = (float(v[4]))
-                    elif v[1] != '': offset = 0
-                    else: offset == None
-        return setPoint,offset
+                    if v[4] != '':
+                        offset = (float(v[4]))
+                    elif v[1] != '':
+                        offset = 0
+                    else:
+                        offset == None
+        return setPoint, offset
 
 
 def writeHeaderToFile(writer):
@@ -36,25 +45,28 @@ neg20 = {}
 data = []
 runs = {}
 for i in interests:
-    runs[i]=0
-  
+    runs[i] = 0
+
+
 def writeDataToFile(writer, dir, fileNames):
-    
+
     for fileName in fileNames:
         outlist = [dir]
         try:
-            setPoint,offset = retrieveData(fileName)
+            setPoint, offset = retrieveData(fileName)
             # check if a offset was retreived
-            if offset == None: continue
+            if offset == None:
+                continue
             serialNum = fileName.split("_")[1]
             # check if serial number is one of the ones we are testing
-            if not (serialNum in interests): continue
-            pdSp = str(setPoint)#dir
+            if not (serialNum in interests):
+                continue
+            pdSp = str(setPoint)  # dir
             # increment number of runs
             runs[serialNum] += 1
             dbOffset = 0
             if(setPoint == -20):
-                #print(serialNum,offset)
+                # print(serialNum,offset)
                 try:
                     neg20[serialNum].append(offset)
                 except:
@@ -69,9 +81,10 @@ def writeDataToFile(writer, dir, fileNames):
                     pass
             outlist = [pdSp, runs[serialNum], serialNum, offset, dbOffset]
             data.append(outlist)
-            print(outlist,dir)
+            print(outlist, dir)
         except:
             print(fileName + " couldn't be read")
+
 
 def writeSummaryToFile(writer):
     serialNums = list(dict.fromkeys([x[2] for x in data]))
@@ -83,10 +96,10 @@ def writeSummaryToFile(writer):
     header.insert(1, "Run")
     writer.writerow(header)
     # these lines recalculate the delta based off average -20 offsets
-    #print(neg20)
+    # print(neg20)
     for i in baselineOffsets:
         baselineOffsets[i] = average(neg20[i])
-    #print(baselineOffsets)
+    # print(baselineOffsets)
     for i in data:
         i[-1] = abs(baselineOffsets[i[2]]-i[-2])
     # retrieve data and store in dict of key:serial# and data:[test run offset dboffset]
@@ -108,7 +121,8 @@ def writeSummaryToFile(writer):
                 for i in testData[s]:
                     if i[0] == sp and i[1] == r:
                         curr = i
-                if curr == None: continue
+                if curr == None:
+                    continue
                 l[header.index(sp)] = curr[2]
                 l[header.index(sp) + len(pdSps)] = curr[3]
             print(l)

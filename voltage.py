@@ -1,4 +1,7 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 from utils import *
 
 outFileName = "voltage results.csv"
@@ -34,19 +37,26 @@ def retrieveData(fileName):
             for r in row:
                 v = r.split(",")
                 fileData.append(v)
-                if (v[0] == "Calibration Data"): isReadingCalib = True
-                if (v[0] == "Post Calibration Data"): isReadingCalib = False
-                if (v[0] == "Init Temperature"): initTemp = float(v[1])
-                if (v[0] == "Final Temperature"): finalTemp = float(v[1])
-                if (v[0] == "TestResult"): testResult = (v[1])
+                if (v[0] == "Calibration Data"):
+                    isReadingCalib = True
+                if (v[0] == "Post Calibration Data"):
+                    isReadingCalib = False
+                if (v[0] == "Init Temperature"):
+                    initTemp = float(v[1])
+                if (v[0] == "Final Temperature"):
+                    finalTemp = float(v[1])
+                if (v[0] == "TestResult"):
+                    testResult = (v[1])
                 if (v[0] == "PostCalCheck UUT Responses" and v[2] == "Vphp1"):
                     vphp1 = float(v[3])
                 if (v[0] == "PostCalCheck UUT Responses"
                         and v[2] == "chamber"):
                     chamber = float(v[3])
                 if isReadingCalib and v[0] == "Air":
-                    if v[4] != '': calib = (float(v[4]))
-                    elif v[1] != '': calib = 0
+                    if v[4] != '':
+                        calib = (float(v[4]))
+                    elif v[1] != '':
+                        calib = 0
     testTypes = [x[0] for x in fileData]
     begin = testTypes.index("PullDown UUT Sampling Responses")
     end = len(testTypes) - 1

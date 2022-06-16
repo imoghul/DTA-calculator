@@ -1,4 +1,7 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 from utils import *
 
 outFileName = "dta results.csv"
@@ -36,8 +39,10 @@ def calc(fileName):
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(',')
-                if v[1] == "Pre-PullDown": isReading = True
-                if v[1] == "Calibration": isReading = False
+                if v[1] == "Pre-PullDown":
+                    isReading = True
+                if v[1] == "Calibration":
+                    isReading = False
                 if (isReading and len(v) == 7):
                     (year, month, day, h, m, s) = readTime(v[0])
                     num = dtToMin(year, month, day, h, m, s)
@@ -58,7 +63,8 @@ def calc(fileName):
         dta = abs(temps[ind] - temp0)
         tError = abs(t - time0 - timeout)
         # print(tError)
-        if (dta == prev or tError >= .6): break
+        if (dta == prev or tError >= .6):
+            break
         prev = dta
         dtas.append(dta)
     return (average(roomTemps), dtas)

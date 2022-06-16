@@ -1,10 +1,13 @@
-import csv, glob, os, sys
+import csv
+import glob
+import os
+import sys
 
 
 def createFile():
     with open("CSV OUTPUT/"+outFileName, mode="w", newline='') as out:
         writer = csv.writer(out)
-        #output header to csv
+        # output header to csv
         writeHeaderToFile(writer)
         # get list of directories to run
         if len(sys.argv) > 2:
@@ -20,7 +23,7 @@ def createFile():
             fileNames = glob.glob(globType, recursive=True)
             try:
                 fileNames.sort(key=lambda x: x.split("_")[1] + x.split("_")[3] + x.
-                           split("_")[4])
+                               split("_")[4])
             except:
                 pass
             writeDataToFile(writer, dir, fileNames)  # runs for every directory
@@ -30,7 +33,8 @@ def createFile():
 
 
 if (len(sys.argv) < 2):
-    print("usage: python EOLT-Test-Analyzer/main.py [d/c/v/p/s] <test directories>")
+    print(
+        "usage: python EOLT-Test-Analyzer/main.py [d/c/v/p/s] <test directories>")
     exit()
 elif (sys.argv[1] == "d"):
     from dta import *
