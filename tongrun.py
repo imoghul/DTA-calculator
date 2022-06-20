@@ -81,7 +81,8 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         try:
             counter+=1
-            if(counter>=100):return
+            # if(counter>=100):return
+            print(counter)
             calc(fileName)
         except:
             print(fileName + " couldn't be read")
@@ -115,5 +116,5 @@ def writeSummaryToFile(writer):
     for d in data:
         outlist = []
         for h in headers:
-            outlist.append(data[d][h] if h in data[d] else "not retrieved")
+            outlist.append(data[d][h] if h in data[d] else "doesn't exist")
         writer.writerow(outlist)
