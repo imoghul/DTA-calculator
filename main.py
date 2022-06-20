@@ -2,6 +2,9 @@ import csv
 import glob
 import os
 import sys
+from tkinter import filedialog
+from tkinter import *
+
 
 
 def createFile():
@@ -11,7 +14,12 @@ def createFile():
         writeHeaderToFile(writer)
         # get list of directories to run
         if len(sys.argv) > 2:
-            dirs = sys.argv[2:]
+            if(sys.argv[2] == 'i'):
+                root = Tk()
+                root.withdraw()
+                dirs = [filedialog.askdirectory()]#.replace("/","\\")
+
+            else: dirs = sys.argv[2:]
         else:
             dirs = [os.getcwd()+"/TEST DATA/"]
         # dirs.insert(0, "baseline")
@@ -51,6 +59,9 @@ elif (sys.argv[1] == "p"):
 elif (sys.argv[1] == "s"):
     from summary import *
     createFile()
+elif (sys.argv[1] == "t"):
+    from tongrun import *
+    createFile()
 else:
     from calibration import *
     createFile()
@@ -62,3 +73,6 @@ else:
     createFile()
     from summary import *
     createFile()
+    from tongrun import *
+    createFile()
+
