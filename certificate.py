@@ -1,30 +1,41 @@
 from docx import *
-from docx.blkcntnr import BlockItemContainer
-from docx.enum.section import WD_SECTION
-from docx.enum.text import WD_BREAK
-from docx.section import Section, Sections
 from docx.shared import *
+import shutil
 docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\CSV OUTPUT\\TONGRUN\\Certificates\\"
 docName = "test.docx"
 xmlName = "test.xml"
-doc = Document(docPath+docName)
-# print(document.tables)
-from docx import Document
 
-print(doc.tables)
-exit()
+def createCertificate(path,sn,cbDate,result):
+    dest = path+"%s_certificate.docx"%sn
+    shutil.copy2(path+"TEMPLATE.docx",dest)
+    doc = Document(dest)
 
-# doc.tables[-1].cell(0, 0).text = "stuff"
-# doc.tables[-1].cell(0, 0).width = 500
-# doc.tables[-1].cell(0, 1).text = "stuff"
-
-for row in doc.tables[0].rows:
-    for cell in row.cells:
-        paragraphs = cell.paragraphs
-        for paragraph in paragraphs:
-            for run in paragraph.runs:
+    for t in doc.tables:
+        for c in t._cells:
+            
+            if c.text == "SERIAL NUMBER": 
+                c.text = sn
+                paragraphs = c.paragraphs
+                paragraph = paragraphs[0]
+                run_obj = paragraph.runs
+                run = run_obj[0]
                 font = run.font
-                font.size= Pt(30)
+                font.size = Pt(30)
+                font.color.rgb = RGBColor(0xff,0xff,0xff)
                 font.name = "AvenirNext LT Pro Regular"
-                font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
-doc.save(docPath+docName)
+            elif c.text == "CALIBRATION DATE" or c.text == "RESULT": 
+                if(c.text == "CALIBRATION DATE"): c.text = cbDate
+                elif (c.text == "RESULT"): c.text = result
+                paragraphs = c.paragraphs
+                paragraph = paragraphs[0]
+                run_obj = paragraph.runs
+                run = run_obj[0]
+                font = run.font
+                font.size = Pt(12)
+                font.color.rgb = RGBColor(0xff,0xff,0xff)
+                font.name = "AvenirNext LT Pro Regular"
+    
+            doc.save(dest)
+
+
+createCertificate(docPath,"38248923","6/20/2022","Pass")
