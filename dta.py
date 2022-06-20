@@ -6,7 +6,7 @@ from utils import *
 
 outFileName = "dta results.csv"
 globType = "**/*RAW*.csv"
-
+detectionList = []
 dtasToCalc = 6
 DTAs = []
 

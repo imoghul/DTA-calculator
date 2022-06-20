@@ -6,7 +6,7 @@ from utils import *
 
 outFileName = "pulldown rate results.csv"
 globType = "**/*RAW*.csv"
-
+detectionList = []
 
 def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     dt = dt.split(" ")

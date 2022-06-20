@@ -12,8 +12,20 @@ randStr = (''.join(
 # + input("Output file Location (TONGRUN/): ")
 outFileName = "TONGRUN/summary.csv"
 globType = "**/*SUM*.csv"
+detectionList = ["Model ID@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5"]
 
 data = {}
+# 
+#    Dictionary that stores all data as such:
+#    {
+#       SN: {
+#               filename, model id, etc.: ...
+#               region name: {
+#                               Air1, Air2, Glyclol: ... 
+#                            }
+#           }
+#    }
+# 
 
 def fixDupl(arr):
     common = [i for i in arr if arr.count(i) > 1]
@@ -28,13 +40,35 @@ def fixDupl(arr):
 
 def calc(fileName):
     with open(fileName, newline='') as file:
+        sn =""
+        region = ""
         for row in csv.reader(file, delimiter='\n', quotechar=','):
             for r in row:
                 v = r.split(',')
                 if("SN" in v or "Serial Number" in v):
-                    data[v[1]] = {}
-                    data[v[1]]["filename"] = fileName.split("\\")[-1]
+                    sn = v[1]
+                    data[sn] = {}
+                    data[sn]["SN"] = sn
+                    data[sn]["filename"] = fileName.split("\\")[-1]
                     continue
+                if(len(v)==1):
+                    region = v[0]
+                    data[sn][region] = {}
+                for i in detectionList:
+                    index = int(i.split("@")[-1])-1
+                    dataField = i.split("@")[0]
+                    if dataField in v:
+                        data[sn][dataField] = v[index]
+                    if ':' in i:
+                        temp = i.split(':')
+                        tempRegion = temp[0]
+                        tempData = temp[1].split("@")[0]#" ".join(temp[1].split("@")[0:-1])
+                        if(tempData in v and region == tempRegion):
+                            data[sn][region][tempData] = v[index] if v[index]!="" else "not calibrated"
+                
+                    
+
+
 
 
 
@@ -54,6 +88,32 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
-    print(data)
-    for i in range(10):
-        pass# writer.writerow()
+    
+    headers = [h.split("@")[0] for h in detectionList]
+    headers.insert(0,"filename")
+    headers.insert(0,"SN")
+    regions = []
+    
+    for d in data:
+        for i in data[d]:
+            if(type(data[d][i])==dict and i not in regions): regions.append(i)
+                
+    dataTemp = data.copy()
+    
+    for d in data: # fix nested dicts
+        for r in regions:
+            try:
+                vals = data[d][r]
+                for v in vals:
+                    data[d][r+":"+v] = data[d][r][v]
+                del data[d][r]
+            except:
+                print("bad")
+                pass
+       
+    writer.writerow(headers)
+    for d in data:
+        outlist = []
+        for h in headers:
+            outlist.append(data[d][h] if h in data[d] else "not retrieved")
+        writer.writerow(outlist)

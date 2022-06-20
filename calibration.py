@@ -6,7 +6,7 @@ from utils import *
 
 outFileName = "calibration results.csv"
 globType = "**/*SUM*.csv"
-
+detectionList = []
 
 def retrieveData(fileName):
     isReading = False

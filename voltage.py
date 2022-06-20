@@ -6,7 +6,7 @@ from utils import *
 
 outFileName = "voltage results.csv"
 globType = "**/*SUM*.csv"
-
+detectionList = []
 
 def readTime(dt):  # sample: 2021-12-09T15:55:31.235
     dt = dt.split("T")

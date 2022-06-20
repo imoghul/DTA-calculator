@@ -2,9 +2,11 @@ import csv
 import glob
 import os
 import sys
+
+from click import edit
+from utils import editList
 from tkinter import filedialog
 from tkinter import *
-
 
 
 def createFile():
@@ -17,15 +19,15 @@ def createFile():
             if(sys.argv[2] == 'i'):
                 root = Tk()
                 root.withdraw()
-                dirs = [filedialog.askdirectory()]#.replace("/","\\")
-
+                dirs = [filedialog.askdirectory()]
             else: dirs = sys.argv[2:]
         else:
             dirs = [os.getcwd()+"/TEST DATA/"]
         # dirs.insert(0, "baseline")
         # print(dirs)
         original = os.getcwd()
-
+        editList(detectionList)
+        
         for dir in dirs:
             os.chdir(dir)
             fileNames = glob.glob(globType, recursive=True)
