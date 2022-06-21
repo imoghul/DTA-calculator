@@ -39,26 +39,6 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
-def editList(l):    
-    inp=" "
-    while(inp!=""):
-        print()
-        for i in range(len(l)):
-            print("%d: %s"%(i,l[i]))
-        print()
-
-        inp = str(input("to add an element type the exact name and column number separated by an @\nfor sub categories enter region:value@column#\nfor example to get calibration glycol you type: Calibration Data:Glycol@5\nto remove an element type r and the number, for example: r 1\nto end press enter\ninput: "))
-        
-        if(inp==""):
-            continue
-        if(inp[0]=="r"):
-            l.pop(int(inp.split(" ")[1]))
-        else:
-            l.append(inp)
-        
-    return l
-
-
 def process_bar(process,current, total,bar_length=50):
     fraction = current/total
     arrow = int(fraction*bar_length-1)*'-'+'>'

@@ -5,13 +5,12 @@ import json
 import sys
 
 from click import edit
-from utils import editList
 from factory import *
 from tkinter import filedialog
 from tkinter import *
 
 dirs=""
-outdir = "OUTPUT/"
+outdir = ""
 certdir = ""
 
 if(sys.argv[1] == 'i'):
@@ -21,13 +20,12 @@ if(sys.argv[1] == 'i'):
     certdir = filedialog.askdirectory()+"/"
 elif(sys.argv[1] == 'd'):
     with open("EOLT-Test-Analyzer/dirs.json") as file:data=json.load(file)
-    if(len(data)<2): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
+    if(len(data)<3): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
     outdir = data["out_dir"]
     certdir = data["certificate_dir"]
     dirs = [data["search_dirs"]]
 else:
-    outdir += "FACTORY\\"
-
+    raise Exception("\n\nUse valid arguments")
 
 transferCertDir(certdir)
 
@@ -45,12 +43,9 @@ def createFile():
                 dirs = [filedialog.askdirectory()+"/"]
             elif(sys.argv[1] != 'd'): 
                 dirs = sys.argv[1:]
-        else:
-            dirs = [os.getcwd()+"/TEST DATA/"]
-        # dirs.insert(0, "baseline")
-        # print(dirs)
+        else: 
+            raise Exception("\n\nUse valid arguments")
         original = os.getcwd()
-        editList(detectionList)
 
         for dir in dirs:
             os.chdir(dir)

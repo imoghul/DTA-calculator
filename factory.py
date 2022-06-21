@@ -9,7 +9,12 @@ from certificate import *
 
 outFileName = "summary.csv"
 globType = "**/*SUM*.csv"
-detectionList = ["Model ID@2","TestResult@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5","Post Calibration Data:Air1@5","Post Calibration Data:Air2@5","Post Calibration Data:Glycol@5","Calibration Data:Air@5","Post Calibration Data:Air@5"]
+
+with open("EOLT-Test-Analyzer/preferences.txt") as f:
+    detectionList = f.readlines()
+detectionList = [i[0:-1] if(i[-1]=="\n") else i for i in detectionList]
+print(detectionList)
+
 regions = []
 data = {}
 headers = [h.split("@")[0] for h in detectionList]
@@ -71,16 +76,16 @@ def writeHeaderToFile(writer):
 
 def writeDataToFile(writer, dir, fileNames):
     counter = 0
-    length = len(fileNames)
+    length = 100#len(fileNames)
     global certdir
     for fileName in fileNames:
         try:
             counter+=1
             if(counter>length):return
-            process_bar("Retrieving Data",counter,length)
+            process_bar("Processing",counter,length)
             calc(fileName)
             writer.writerow([data[currentSN][h] if h in data[currentSN] else "doesn't exist" for h in headers])
-            createCertificate(currentSN,data[currentSN]["Date"],"Pass" if data[currentSN]["TestResult"]=="Test Complete" else "Fail",certdir)
+            # createCertificate(currentSN,data[currentSN]["Date"],"Pass" if data[currentSN]["TestResult"]=="Test Complete" else "Fail",certdir)
         except:
             print(fileName + " couldn't be read")
 
