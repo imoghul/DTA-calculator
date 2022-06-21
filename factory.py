@@ -70,7 +70,7 @@ def writeHeaderToFile(writer):
 
 def writeDataToFile(writer, dir, fileNames):
     counter = 0
-    length = len(fileNames)
+    length = 10#len(fileNames)
     for fileName in fileNames:
         try:
             counter+=1

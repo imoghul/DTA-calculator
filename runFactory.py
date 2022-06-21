@@ -1,6 +1,7 @@
 import csv
 import glob
 import os
+import json
 import sys
 
 from click import edit
@@ -16,11 +17,11 @@ if(sys.argv[1] == 'i'):
     root.withdraw()
     outdir = filedialog.askdirectory()+"/"
 elif(sys.argv[1] == 'd'):
-    with open("EOLT-Test-Analyzer/dirs.txt") as f:lines = f.readlines()
-    if(len(lines)<2): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
-    outdir = lines[0]
+    with open("EOLT-Test-Analyzer/dirs.json") as file:data=json.load(file)
+    if(len(data)<2): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
+    outdir = data["out_dir"]
     if(outdir[-1]=="\n") : outdir = outdir[0:-1]
-    dirs = [lines[1]]
+    dirs = [data["search_dirs"]]
     for d in dirs:
         if(d[-1]=="\n") : d = d[0:-1]
 else:
@@ -74,7 +75,8 @@ createFile()
 
 
 
-lines = ["",""]
-lines[0] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")+"\n"
-lines[1] = ' '.join([d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs])
-with open("EOLT-Test-Analyzer/dirs.txt", "w") as f:f.writelines(lines)
+lines = {}
+lines["out_dir"] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")+"\n"
+lines["search_dirs"] = ' '.join([d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs])
+with open("EOLT-Test-Analyzer/dirs.json", "w") as f:
+    json.dump(lines,f,indent=4)
