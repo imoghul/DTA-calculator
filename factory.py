@@ -74,7 +74,7 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         try:
             counter+=1
-            if(counter>=length):return
+            if(counter>length):return
             process_bar("Retrieving Data",counter,length)
             calc(fileName)
             writer.writerow([data[currentSN][h] if h in data[currentSN] else "doesn't exist" for h in headers])

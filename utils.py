@@ -1,5 +1,9 @@
-from numpy import mean
+# from numpy import mean
 
+def mean(x):
+    sum = 0
+    for i in x: sum+=i
+    return sum/len(x)
 
 def average(x):
     if len(x) == 0:

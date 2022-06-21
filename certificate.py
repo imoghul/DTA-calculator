@@ -2,8 +2,7 @@ from docx import *
 from docx.shared import *
 import shutil
 docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\OUTPUT\\FACTORY\\Certificates\\"
-docName = "test.docx"
-xmlName = "test.xml"
+
 
 def createCertificate(sn,cbDate,result,path=docPath):
     dest = path+"%s_certificate.docx"%sn

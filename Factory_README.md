@@ -3,10 +3,9 @@
 ## Install Dependencies
 
 * Install python (windows store)
-* Install following modules:
+* Install following module:
 ```shell
 python -m pip install python-docx
-python -m pip install numpy
 ```
 
 ## Launch
