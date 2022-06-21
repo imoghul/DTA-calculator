@@ -48,7 +48,6 @@ def createFile():
         # print(dirs)
         original = os.getcwd()
         editList(detectionList)
-        print(dirs)
 
         for dir in dirs:
             os.chdir(dir)
@@ -78,5 +77,4 @@ createFile()
 lines = ["",""]
 lines[0] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")+"\n"
 lines[1] = ' '.join([d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs])
-print(lines)
 with open("EOLT-Test-Analyzer/dirs.txt", "w") as f:f.writelines(lines)

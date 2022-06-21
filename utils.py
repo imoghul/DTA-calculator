@@ -54,9 +54,16 @@ def editList(l):
     return l
 
 
-def process_bar(current, total,bar_length=20):
+def process_bar(process,current, total,bar_length=50):
     fraction = current/total
     arrow = int(fraction*bar_length-1)*'-'+'>'
     padding = int(bar_length-len(arrow))*' '
     ending = '\n' if current==total else '\r'
-    print(f'Progress: [{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total}',end = ending)
+    print(f'{process}: [{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total}',end = ending)
+
+
+def parseSUMfileName(fileName):
+    data = {}
+    _date = fileName.split("_")[-3]
+    data["Date"] =  _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+    return data
