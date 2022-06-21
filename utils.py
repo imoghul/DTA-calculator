@@ -42,7 +42,7 @@ def editList(l):
             print("%d: %s"%(i,l[i]))
         print()
 
-        inp = str(input("to add an element type the exact name and column number separated by an @\nfor sub categories enter region:value\nfor example to get calibration glycol you type: Calibration Data:Glycol@5\nto remove an element type r and the number, for example: r 1\nto end press enter\ninput: "))
+        inp = str(input("to add an element type the exact name and column number separated by an @\nfor sub categories enter region:value@column#\nfor example to get calibration glycol you type: Calibration Data:Glycol@5\nto remove an element type r and the number, for example: r 1\nto end press enter\ninput: "))
         
         if(inp==""):
             continue

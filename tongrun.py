@@ -5,6 +5,8 @@ import sys
 from utils import *
 import random
 import string
+from certificate import *
+
 
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
@@ -12,7 +14,7 @@ randStr = (''.join(
 # + input("Output file Location (TONGRUN/): ")
 outFileName = "summary.csv"
 globType = "**/*SUM*.csv"
-detectionList = ["Model ID@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5","Post Calibration Data:Air1@5","Post Calibration Data:Air2@5","Post Calibration Data:Glycol@5"]
+detectionList = ["Model ID@2","TestResult@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5","Post Calibration Data:Air1@5","Post Calibration Data:Air2@5","Post Calibration Data:Glycol@5","Calibration Data:Air@5","Post Calibration Data:Air@5"]
 
 data = {}
 # 
@@ -57,14 +59,14 @@ def calc(fileName):
                 for i in detectionList:
                     index = int(i.split("@")[-1])-1
                     dataField = i.split("@")[0]
-                    if dataField in v:
+                    if dataField==v[0]:
                         data[sn][dataField] = v[index]
                     if ':' in i:
                         temp = i.split(':')
                         tempRegion = temp[0]
                         tempData = temp[1].split("@")[0]#" ".join(temp[1].split("@")[0:-1])
                         if(tempData in v and region == tempRegion):
-                            data[sn][region][tempData] = v[index] if v[index]!="" else "not calibrated"
+                            data[sn][region][tempData] = v[index] if v[index]!="" else "0"#"not calibrated"
                 
                     
 

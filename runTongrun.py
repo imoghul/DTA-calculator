@@ -9,7 +9,7 @@ from tkinter import filedialog
 from tkinter import *
 
 
-outdir = "CSV OUTPUT/"
+outdir = "OUTPUT/"
 if(sys.argv[1] == 'i'):
     root = Tk()
     root.withdraw()
