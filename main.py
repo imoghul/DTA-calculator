@@ -14,8 +14,6 @@ if(sys.argv[2] == 'i'):
     root = Tk()
     root.withdraw()
     outdir = filedialog.askdirectory()
-elif sys.argv[1] == "t":
-    outdir += "\\TONGRUN\\"
 
 
 def createFile():
@@ -70,9 +68,6 @@ elif (sys.argv[1] == "p"):
 elif (sys.argv[1] == "s"):
     from summary import *
     createFile()
-elif (sys.argv[1] == "t"):
-    from tongrun import *
-    createFile()
 else:
     from calibration import *
     createFile()
@@ -83,7 +78,5 @@ else:
     from pdRate import *
     createFile()
     from summary import *
-    createFile()
-    from tongrun import *
     createFile()
 

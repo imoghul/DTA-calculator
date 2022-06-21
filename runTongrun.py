@@ -17,7 +17,6 @@ if(sys.argv[1] == 'i'):
 else:
     outdir += "TONGRUN\\"
 
-print(outdir)
 
 
 def createFile():
