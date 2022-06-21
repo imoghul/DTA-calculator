@@ -2,7 +2,8 @@
 
 ## Install Dependencies
 
-* Install python (windows store)
+* Install python 
+  * windows store
 * Install following module:
 ```shell
 python -m pip install python-docx
@@ -31,6 +32,8 @@ When the program launches with test directories passed in, the stage of picking 
 The first directory chosen will be the output directory. This is the directory in which the output "summary.csv" will be put
 
 The second one will be the directory in which tests will be read from. It is safe to choose a parent directory as it will recursively check all sub directories
+
+The third one will be the directory in which certificates go which will contain TEMPLATE.docx
 
 If manual directory Selection was not chosen then the data will automatically be stored in FACTORY in the following suggested directory tree
 

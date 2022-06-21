@@ -1,5 +1,6 @@
 # from numpy import mean
 
+
 def mean(x):
     sum = 0
     for i in x: sum+=i

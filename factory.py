@@ -17,6 +17,7 @@ headers.insert(0,"Date")
 headers.insert(0,"File Name")
 headers.insert(0,"SN")
 currentSN = None
+certdir = None
 # 
 #    Dictionary that stores all data as such:
 #    {
@@ -70,7 +71,8 @@ def writeHeaderToFile(writer):
 
 def writeDataToFile(writer, dir, fileNames):
     counter = 0
-    length = 10#len(fileNames)
+    length = len(fileNames)
+    global certdir
     for fileName in fileNames:
         try:
             counter+=1
@@ -78,12 +80,13 @@ def writeDataToFile(writer, dir, fileNames):
             process_bar("Retrieving Data",counter,length)
             calc(fileName)
             writer.writerow([data[currentSN][h] if h in data[currentSN] else "doesn't exist" for h in headers])
-            # createCertificate(currentSN,data[currentSN]["Date"],"Pass" if data[currentSN]["TestResult"]=="Test Complete" else "Fail")
+            createCertificate(currentSN,data[currentSN]["Date"],"Pass" if data[currentSN]["TestResult"]=="Test Complete" else "Fail",certdir)
         except:
             print(fileName + " couldn't be read")
-
 
 def writeSummaryToFile(writer):
     pass
 
-
+def transferCertDir(dir):
+    global certdir
+    certdir = dir

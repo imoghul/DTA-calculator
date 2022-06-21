@@ -6,28 +6,30 @@ import sys
 
 from click import edit
 from utils import editList
+from factory import *
 from tkinter import filedialog
 from tkinter import *
 
 dirs=""
 outdir = "OUTPUT/"
+certdir = ""
 
 if(sys.argv[1] == 'i'):
     root = Tk()
     root.withdraw()
     outdir = filedialog.askdirectory()+"/"
+    certdir = filedialog.askdirectory()+"/"
 elif(sys.argv[1] == 'd'):
     with open("EOLT-Test-Analyzer/dirs.json") as file:data=json.load(file)
     if(len(data)<2): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
     outdir = data["out_dir"]
-    if(outdir[-1]=="\n") : outdir = outdir[0:-1]
+    certdir = data["certificate_dir"]
     dirs = [data["search_dirs"]]
-    for d in dirs:
-        if(d[-1]=="\n") : d = d[0:-1]
 else:
     outdir += "FACTORY\\"
 
 
+transferCertDir(certdir)
 
 def createFile():
     global dirs
@@ -70,13 +72,13 @@ if (len(sys.argv) < 2):
         "usage: python EOLT-Test-Analyzer/main.py <test directories>")
     exit()
 
-from factory import *
 createFile()
 
 
 
 lines = {}
-lines["out_dir"] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")+"\n"
+lines["out_dir"] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
+lines["certificate_dir"] = certdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
 lines["search_dirs"] = ' '.join([d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs])
 with open("EOLT-Test-Analyzer/dirs.json", "w") as f:
     json.dump(lines,f,indent=4)
