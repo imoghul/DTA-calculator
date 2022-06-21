@@ -10,26 +10,28 @@ from tkinter import *
 
 
 outdir = "CSV OUTPUT/"
-if(sys.argv[2] == 'i'):
+if(sys.argv[1] == 'i'):
     root = Tk()
     root.withdraw()
-    outdir = filedialog.askdirectory()
-elif sys.argv[1] == "t":
-    outdir += "\\TONGRUN\\"
+    outdir = filedialog.askdirectory()+"/"
+else:
+    outdir += "TONGRUN\\"
+
+print(outdir)
 
 
 def createFile():
-    with open(outdir+"\\"+outFileName, mode="w", newline='') as out:
+    with open(outdir+outFileName, mode="w", newline='') as out:
         writer = csv.writer(out)
         # output header to csv
         writeHeaderToFile(writer)
         # get list of directories to run
-        if len(sys.argv) > 2:
-            if(sys.argv[2] == 'i'):
+        if len(sys.argv) > 1:
+            if(sys.argv[1] == 'i'):
                 root = Tk()
                 root.withdraw()
                 dirs = [filedialog.askdirectory()]
-            else: dirs = sys.argv[2:]
+            else: dirs = sys.argv[1:]
         else:
             dirs = [os.getcwd()+"/TEST DATA/"]
         # dirs.insert(0, "baseline")
@@ -40,6 +42,7 @@ def createFile():
         for dir in dirs:
             os.chdir(dir)
             fileNames = glob.glob(globType, recursive=True)
+            
             try:
                 fileNames.sort(key=lambda x: x.split("_")[1] + x.split("_")[3] + x.
                                split("_")[4])
@@ -53,37 +56,9 @@ def createFile():
 
 if (len(sys.argv) < 2):
     print(
-        "usage: python EOLT-Test-Analyzer/main.py [d/c/v/p/s] <test directories>")
+        "usage: python EOLT-Test-Analyzer/main.py <test directories>")
     exit()
-elif (sys.argv[1] == "d"):
-    from dta import *
-    createFile()
-elif (sys.argv[1] == "c"):
-    from calibration import *
-    createFile()
-elif (sys.argv[1] == "v"):
-    from voltage import *
-    createFile()
-elif (sys.argv[1] == "p"):
-    from pdRate import *
-    createFile()
-elif (sys.argv[1] == "s"):
-    from summary import *
-    createFile()
-elif (sys.argv[1] == "t"):
-    from tongrun import *
-    createFile()
-else:
-    from calibration import *
-    createFile()
-    from dta import *
-    createFile()
-    from voltage import *
-    createFile()
-    from pdRate import *
-    createFile()
-    from summary import *
-    createFile()
-    from tongrun import *
-    createFile()
+
+from tongrun import *
+createFile()
 

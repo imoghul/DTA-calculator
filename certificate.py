@@ -37,5 +37,3 @@ def createCertificate(path,sn,cbDate,result):
     
             doc.save(dest)
 
-
-createCertificate(docPath,"38248923","6/20/2022","Pass")

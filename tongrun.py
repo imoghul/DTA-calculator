@@ -10,9 +10,9 @@ randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
                   string.ascii_uppercase) for i in range(20)))
 # + input("Output file Location (TONGRUN/): ")
-outFileName = "TONGRUN/summary.csv"
+outFileName = "summary.csv"
 globType = "**/*SUM*.csv"
-detectionList = ["Model ID@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5"]
+detectionList = ["Model ID@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5","Post Calibration Data:Air1@5","Post Calibration Data:Air2@5","Post Calibration Data:Glycol@5"]
 
 data = {}
 # 
@@ -78,18 +78,18 @@ def writeHeaderToFile(writer):
 
 def writeDataToFile(writer, dir, fileNames):
     counter = 0
+    length = len(fileNames)
     for fileName in fileNames:
         try:
             counter+=1
             # if(counter>=100):return
-            print(counter)
+            process_bar(counter,length)# print("%f%"%100*counter/length)
             calc(fileName)
         except:
             print(fileName + " couldn't be read")
 
 
 def writeSummaryToFile(writer):
-    
     headers = [h.split("@")[0] for h in detectionList]
     headers.insert(0,"filename")
     headers.insert(0,"SN")
@@ -101,7 +101,12 @@ def writeSummaryToFile(writer):
                 
     dataTemp = data.copy()
     
-    for d in data: # fix nested dicts
+    # fix nested dicts 
+    # this code essentially converts a nested dict for example:
+    # {Model ID:..., Calibration:{Air1:...,Air2:...,Glycol:...}}
+    # into
+    # {Model ID:..., "Calibration:Air1":...,"Calibration:Air2":...,"Calibration:Glycol":...}
+    for d in data: 
         for r in regions:
             try:
                 vals = data[d][r]
