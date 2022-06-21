@@ -43,6 +43,7 @@ EOLT SCRIPTS
 │   │   └───FACTORY
 |   |   |   summary.csv
 |   |   |   └───Certificates
+|   |   |   |   TEMPLATE.docx
 |   |   |   |   *.docx
 |   
 │   
