@@ -8,18 +8,28 @@ from utils import editList
 from tkinter import filedialog
 from tkinter import *
 
-
+dirs=""
 outdir = "OUTPUT/"
+
 if(sys.argv[1] == 'i'):
     root = Tk()
     root.withdraw()
     outdir = filedialog.askdirectory()+"/"
+elif(sys.argv[1] == 'd'):
+    with open("EOLT-Test-Analyzer/dirs.txt") as f:lines = f.readlines()
+    if(len(lines)<2): raise Exception("\n\nInvalid saved directores. Try manually before re-attempting this method")
+    outdir = lines[0]
+    if(outdir[-1]=="\n") : outdir = outdir[0:-1]
+    dirs = [lines[1]]
+    for d in dirs:
+        if(d[-1]=="\n") : d = d[0:-1]
 else:
     outdir += "FACTORY\\"
 
 
 
 def createFile():
+    global dirs
     with open(outdir+outFileName, mode="w", newline='') as out:
         writer = csv.writer(out)
         # output header to csv
@@ -29,15 +39,17 @@ def createFile():
             if(sys.argv[1] == 'i'):
                 root = Tk()
                 root.withdraw()
-                dirs = [filedialog.askdirectory()]
-            else: dirs = sys.argv[1:]
+                dirs = [filedialog.askdirectory()+"/"]
+            elif(sys.argv[1] != 'd'): 
+                dirs = sys.argv[1:]
         else:
             dirs = [os.getcwd()+"/TEST DATA/"]
         # dirs.insert(0, "baseline")
         # print(dirs)
         original = os.getcwd()
         editList(detectionList)
-        
+        print(dirs)
+
         for dir in dirs:
             os.chdir(dir)
             fileNames = glob.glob(globType, recursive=True)
@@ -61,3 +73,10 @@ if (len(sys.argv) < 2):
 from factory import *
 createFile()
 
+
+
+lines = ["",""]
+lines[0] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")+"\n"
+lines[1] = ' '.join([d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs])
+print(lines)
+with open("EOLT-Test-Analyzer/dirs.txt", "w") as f:f.writelines(lines)

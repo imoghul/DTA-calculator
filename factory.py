@@ -63,7 +63,7 @@ def writeDataToFile(writer, dir, fileNames):
     for fileName in fileNames:
         try:
             counter+=1
-            # if(counter>=100):return
+            if(counter>=100):return
             process_bar(counter,length)# print("%f%"%100*counter/length)
             calc(fileName)
         except:

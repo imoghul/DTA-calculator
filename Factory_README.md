@@ -16,6 +16,7 @@ python -m pip install numpy
 python EOLT-Test-Analyzer/runFactory.py <test directories>
 # example: python EOLT-Test-Analyzer/runFactory.py TEST\ DATA/test1 TEST\ DATA/test2
 # test directory can be the letter "i" for graphical selection
+# the letter "d" will use the directories from the last run 
 ``` 
 #### Automatic
 Double click run.bat
@@ -26,7 +27,7 @@ Double click run.bat
 The program must be run from the parent directory of the scripts. This means that run.bat should be in the parent directory. 
 
 #### Directory Selection
-When the program launches with test directories passed in, the stage of picking directories is skipped. If 'i' was used as the test directory then directories will have to be chosen. 
+When the program launches with test directories passed in, the stage of picking directories is skipped. If 'i' was used as the test directory then directories will have to be chosen. If 'd' was used the program will use the directores chosen in the last run. If this gets corrupted then try manually, this should fix it.
 
 The first directory chosen will be the output directory. This is the directory in which the output "summary.csv" will be put
 
