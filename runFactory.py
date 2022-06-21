@@ -15,7 +15,7 @@ if(sys.argv[1] == 'i'):
     root.withdraw()
     outdir = filedialog.askdirectory()+"/"
 else:
-    outdir += "TONGRUN\\"
+    outdir += "FACTORY\\"
 
 
 
@@ -58,6 +58,6 @@ if (len(sys.argv) < 2):
         "usage: python EOLT-Test-Analyzer/main.py <test directories>")
     exit()
 
-from tongrun import *
+from factory import *
 createFile()
 

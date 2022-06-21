@@ -7,11 +7,6 @@ import random
 import string
 from certificate import *
 
-
-randStr = (''.join(
-    random.choice(string.ascii_lowercase + string.digits +
-                  string.ascii_uppercase) for i in range(20)))
-# + input("Output file Location (TONGRUN/): ")
 outFileName = "summary.csv"
 globType = "**/*SUM*.csv"
 detectionList = ["Model ID@2","TestResult@2","Calibration Data:Air1@5","Calibration Data:Air2@5","Calibration Data:Glycol@5","Post Calibration Data:Air1@5","Post Calibration Data:Air2@5","Post Calibration Data:Glycol@5","Calibration Data:Air@5","Post Calibration Data:Air@5"]
@@ -28,17 +23,6 @@ data = {}
 #           }
 #    }
 # 
-
-def fixDupl(arr):
-    common = [i for i in arr if arr.count(i) > 1]
-    for val in common:
-        temp = 1
-        for i in range(len(arr)):
-            if arr[i] == val:
-                arr[i] += randStr + str(temp) + "(%d)" % temp
-                temp += 1
-    return (arr)
-
 
 def calc(fileName):
     with open(fileName, newline='') as file:
@@ -68,11 +52,6 @@ def calc(fileName):
                         if(tempData in v and region == tempRegion):
                             data[sn][region][tempData] = v[index] if v[index]!="" else "0"#"not calibrated"
                 
-                    
-
-
-
-
 
 def writeHeaderToFile(writer):
     pass

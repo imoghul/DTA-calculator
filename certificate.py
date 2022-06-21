@@ -1,7 +1,7 @@
 from docx import *
 from docx.shared import *
 import shutil
-docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\CSV OUTPUT\\TONGRUN\\Certificates\\"
+docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\CSV OUTPUT\\FACTORY\\Certificates\\"
 docName = "test.docx"
 xmlName = "test.xml"
 
