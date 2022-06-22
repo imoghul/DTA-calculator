@@ -9,18 +9,21 @@ from factory import *
 from tkinter import filedialog
 from tkinter import *
 
-try:basePath = sys._MEIPASS
-except Exception:basePath = os.path.abspath(".")
-bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
-locationFile = "locations.json"#os.path.join(bundle_dir, 'locations.json')
+# try:basePath = sys._MEIPASS
+# except Exception:basePath = os.path.abspath(".")
+# bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+#locationFile = os.path.join(bundle_dir, 'locations.json')
 
 cli = False
 mode  = ('d' if input("Press enter to use previous locations\nTo choose new locations enter any other character: ")=="" else 'i') if not cli else sys.argv[1]
+
+
 
 dirs=""
 outdir = ""
 certdir = ""
 preferencesFile = ""
+locationFile = "locations.json"
 
 if (cli and len(sys.argv) < 2):
     raise Exception("usage: python EOLT-Test-Analyzer/main.py <test locations>")
@@ -107,5 +110,5 @@ lines["search_dirs"] = [d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in d
 with open(locationFile, "w") as f:
     json.dump(lines,f,indent=4)
 
-with open(locationFile) as f:
-    print(json.load(f))
+# with open(locationFile) as f:
+#     print(json.load(f))
