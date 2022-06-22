@@ -111,7 +111,7 @@ def writeHeaderToFile(writer):
 
 def writeDataToFile(writer, dir, fileNames):
     counter = 0
-    length = len(fileNames)
+    length = 100#len(fileNames)
     global certdir
     for fileName in fileNames:
         try:

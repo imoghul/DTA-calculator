@@ -9,6 +9,11 @@ from factory import *
 from tkinter import filedialog
 from tkinter import *
 
+try:basePath = sys._MEIPASS
+except Exception:basePath = os.path.abspath(".")
+bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+locationFile = "locations.json"#os.path.join(bundle_dir, 'locations.json')
+
 cli = False
 mode  = ('d' if input("Press enter to use previous locations\nTo choose new locations enter any other character: ")=="" else 'i') if not cli else sys.argv[1]
 
@@ -22,7 +27,7 @@ if (cli and len(sys.argv) < 2):
 
 if(mode == 'd'):
     try:
-        with open("locations.json") as file:data=json.load(file)
+        with open(locationFile) as file:data=json.load(file)
         outdir = data["out_dir"]
         certdir = data["certificate_dir"]
         preferencesFile = data["preferences_file"]
@@ -36,7 +41,7 @@ elif(mode == 'i'):
     certdir = filedialog.askdirectory(title = "Select the certificate directory")+"/"
     preferencesFile = filedialog.askopenfilename(title = "Select the preferences file")
     try:
-        with open("locations.json") as file:data=json.load(file)
+        with open(locationFile) as file:data=json.load(file)
         _outdir = data["out_dir"]
         _certdir = data["certificate_dir"]
         _preferencesFile = data["preferences_file"]
@@ -47,6 +52,8 @@ elif(mode == 'i'):
     if(certdir=="/"):certdir = _certdir
     if(preferencesFile==""): preferencesFile = _preferencesFile
     # print(outdir,certdir,preferencesFile)
+
+# print(outdir, certdir, preferencesFile)
 
 transferDirs(certdir,preferencesFile)
 
@@ -94,5 +101,11 @@ lines["out_dir"] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
 lines["preferences_file"] = preferencesFile
 lines["certificate_dir"] = certdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
 lines["search_dirs"] = [d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs]
-with open("locations.json", "w") as f:
+
+
+
+with open(locationFile, "w") as f:
     json.dump(lines,f,indent=4)
+
+with open(locationFile) as f:
+    print(json.load(f))
