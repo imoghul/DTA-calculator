@@ -1,5 +1,7 @@
 # from numpy import mean
 
+def empty():
+    pass
 
 def mean(x):
     sum = 0
@@ -39,12 +41,12 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
-def process_bar(process,current, total,bar_length=50):
+def process_bar(process,current, total,message = "None",bar_length=50):
     fraction = current/total
     arrow = int(fraction*bar_length-1)*'-'+'>'
     padding = int(bar_length-len(arrow))*' '
     ending = '\n' if current==total else '\r'
-    print(f'{process}: [{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total}',end = ending)
+    print(f'{process}:\t[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total}    Message:{message}',end = ending)
 
 
 def parseSUMfileName(fileName):
