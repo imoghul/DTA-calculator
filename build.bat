@@ -1,5 +1,10 @@
-cd scripts Rem change directory into the scripts directory
-python saveConfigDir.py Rem create or update the configdir.txt to contain the config dir that the script will use in the .exe
-python -m PyInstaller -F --add-data "configdir.txt;." runFactory.py Rem create the exe including the configdir.txt in it
-del runFactory.spec Rem remove extra .spec file
-move dist\runFactory.exe ..\run.exe Rem move the exe from dist to parent directory
+@REM  change directory into the scripts directory
+cd scripts 
+@REM  create or update the configdir.txt to contain the config dir that the script will use in the .exe
+python saveConfigDir.py 
+@REM  create the exe including the configdir.txt in it
+python -m PyInstaller -F --add-data "configdir.txt;." run.py 
+@REM  remove extra .spec file
+del run.spec 
+@REM  move the exe from dist to parent directory
+move dist\run.exe ..\run.exe 

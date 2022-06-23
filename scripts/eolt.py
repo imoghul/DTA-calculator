@@ -14,6 +14,7 @@ globType = "**/*.csv"
 preferencesFile = None
 
 
+dirNum = 0
 
 detectionList_FT2_SUM = None
 detectionList_FT3 = None
@@ -99,6 +100,8 @@ def writeHeaderToFile(writer):
 
 
 def writeDataToFile(writer, dir, fileNames):
+    global dirNum
+    dirNum+=1
     counter = 0
     length = len(fileNames)
     global certdir
@@ -107,7 +110,7 @@ def writeDataToFile(writer, dir, fileNames):
             success = calc(fileName)
             counter+=1
             if(counter>length):return
-            process_bar("Retrieving",counter,length,message="Reading from "+dir)
+            process_bar("Retrieving",counter,length,message="Reading from directory number "+str(dirNum))
         # except:
         #     print(fileName + " couldn't be read")
     # print(data)
