@@ -1,0 +1,22 @@
+{
+    "Test Preferences":{
+        "FT2 SUM":[
+            "Model ID@2",
+            "TestResult@2",
+            "Calibration Data:Air1@5",
+            "Calibration Data:Air2@5",
+            "Calibration Data:Glycol@5",
+            "Post Calibration Data:Air1@5",
+            "Post Calibration Data:Air2@5",
+            "Post Calibration Data:Glycol@5",
+            "Calibration Data:Air@5",
+            "Post Calibration Data:Air@5"
+        ],
+
+        "FT3":[
+            "Barcode 8"
+        ]
+    },
+
+    "Generate Certificates":false
+}

@@ -35,7 +35,6 @@ if(mode == 'd'):
         with open(locationFile) as file:data=json.load(file)
         outdir = data["out_dir"]
         certdir = data["certificate_dir"]
-        # preferencesFile = data["preferences_file"]
         dirs = data["search_dirs"]
         if(type(dirs)!=list): dirs = [dirs]
     except: raise Exception("\n\nOne or more of the directories couldn't be found, please select locations manually")
@@ -49,7 +48,6 @@ elif(mode == 'i'):
         with open(locationFile) as file:data=json.load(file)
         _outdir = data["out_dir"]
         _certdir = data["certificate_dir"]
-        # _preferencesFile = data["preferences_file"]
         _dirs = data["search_dirs"]
         if(type(_dirs)!=list): _dirs = [_dirs]
     except: raise Exception("\n\nOne or more of the directories couldn't be found, please select ALL locations manually")
@@ -114,3 +112,5 @@ with open(locationFile, "w") as f:
 
 # with open(locationFile) as f:
 #     print(json.load(f))
+
+os.system("pause")
