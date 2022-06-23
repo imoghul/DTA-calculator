@@ -137,7 +137,7 @@ def transferDirs(cdir,pdir):
     preferencesFile = pdir
     with open(preferencesFile) as f:
         retrieveData = json.load(f)
-    detectionList_FT2_SUM = retrieveData["FT2 SUM"]
+    detectionList_FT2_SUM = retrieveData["FT2 SUM"] if "FT2 SUM" in retrieveData else []
     detectionList_FT2_SUM = [i[0:-1] if(i[-1]=="\n") else i for i in detectionList_FT2_SUM]
-    detectionList_FT3 = retrieveData["FT3"]
+    detectionList_FT3 = retrieveData["FT3"] if "FT3" in retrieveData else []
     # print(detectionList_FT2_SUM)

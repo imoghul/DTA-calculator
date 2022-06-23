@@ -1,3 +1,4 @@
+from copyreg import pickle
 import csv
 import glob
 import os
@@ -9,21 +10,22 @@ from factory import *
 from tkinter import filedialog
 from tkinter import *
 
-# try:basePath = sys._MEIPASS
-# except Exception:basePath = os.path.abspath(".")
-# bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
-#locationFile = os.path.join(bundle_dir, 'locations.json')
+try:basePath = sys._MEIPASS
+except Exception:basePath = os.path.abspath(".")
+bundle_dir = getattr(sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+configdir = os.path.join(bundle_dir, 'configdir.txt')
 
 cli = False
 mode  = ('d' if input("Press enter to use previous locations\nTo choose new locations enter any other character: ")=="" else 'i') if not cli else sys.argv[1]
 
-
-
 dirs=""
 outdir = ""
 certdir = ""
-preferencesFile = ""
-locationFile = "locations.json"
+
+with open("configdir.txt","r") as f:configdir = f.read()
+
+preferencesFile = configdir+"\\preferences.json"
+locationFile = configdir+"\\locations.json"
 
 if (cli and len(sys.argv) < 2):
     raise Exception("usage: python EOLT-Test-Analyzer/main.py <test locations>")
@@ -33,7 +35,7 @@ if(mode == 'd'):
         with open(locationFile) as file:data=json.load(file)
         outdir = data["out_dir"]
         certdir = data["certificate_dir"]
-        preferencesFile = data["preferences_file"]
+        # preferencesFile = data["preferences_file"]
         dirs = data["search_dirs"]
         if(type(dirs)!=list): dirs = [dirs]
     except: raise Exception("\n\nOne or more of the directories couldn't be found, please select locations manually")
@@ -42,18 +44,18 @@ elif(mode == 'i'):
     root.withdraw()
     outdir = filedialog.askdirectory(title = "Select the output directory")+"/"
     certdir = filedialog.askdirectory(title = "Select the certificate directory")+"/"
-    preferencesFile = filedialog.askopenfilename(title = "Select the preferences file")
+    # preferencesFile = filedialog.askopenfilename(title = "Select the preferences file")
     try:
         with open(locationFile) as file:data=json.load(file)
         _outdir = data["out_dir"]
         _certdir = data["certificate_dir"]
-        _preferencesFile = data["preferences_file"]
+        # _preferencesFile = data["preferences_file"]
         _dirs = data["search_dirs"]
         if(type(_dirs)!=list): _dirs = [_dirs]
     except: raise Exception("\n\nOne or more of the directories couldn't be found, please select ALL locations manually")
     if(outdir=="/"): outdir = _outdir
     if(certdir=="/"):certdir = _certdir
-    if(preferencesFile==""): preferencesFile = _preferencesFile
+    # if(preferencesFile==""): preferencesFile = _preferencesFile
     # print(outdir,certdir,preferencesFile)
 
 # print(outdir, certdir, preferencesFile)
@@ -101,7 +103,7 @@ createFile()
 
 lines = {}
 lines["out_dir"] = outdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
-lines["preferences_file"] = preferencesFile
+# lines["preferences_file"] = preferencesFile
 lines["certificate_dir"] = certdir+("/" if outdir[-1]!="/" and outdir[-1]!="\\" else "")
 lines["search_dirs"] = [d+("/" if d[-1]!="/" and d[-1]!="\\" else "") for d in dirs]
 
