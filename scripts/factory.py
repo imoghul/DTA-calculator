@@ -24,17 +24,6 @@ headers = []
 currentSN = None
 certdir = None
 genCert = False
-# 
-#    Dictionary that stores all data as such:
-#    {
-#       SN: {
-#               filename, model id, etc.: ...
-#               region name: {
-#                               Air1, Air2, Glyclol: ... 
-#                            }
-#           }
-#    }
-# 
 
 def calc(fileName):
     global currentSN,data
