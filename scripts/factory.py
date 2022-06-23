@@ -58,17 +58,14 @@ def calc(fileName):
                         # data[sn][region] = {}
                         if(region not in regions): regions.append(region)
                     for i in detectionList_FT2_SUM:
-                        index = int(i.split("@")[-1])-1
-                        dataField = i.split("@")[0]
-                        if dataField==v[0]:
+                        index = i["column"]-1#int(i.split("@")[-1])-1
+                        dataField = i["title"]#i.split("@")[0]
+                        dataRegion = None if "region" not in i else i["region"]
+                        if dataRegion==None and dataField==v[0]:
+                            # print(fileName,dataField)
                             data[sn][dataField] = v[index]
-                        if ':' in i:
-                            temp = i.split(':')
-                            tempRegion = temp[0]
-                            tempData = temp[1].split("@")[0]#" ".join(temp[1].split("@")[0:-1])
-                            if(tempData in v and region == tempRegion):
-                                """data[sn][region][tempData]"""
-                                data[sn][region+":"+tempData] = v[index] if v[index]!="" else "0"#"not calibrated"
+                        if dataRegion!=None and (dataField in v and region == dataRegion):
+                            data[sn][region+":"+dataField] = v[index] if v[index]!="" else "0"#"not calibrated"
             _date = fileName.split("_")[-3]
             data[sn]["Date"] =  _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
@@ -104,7 +101,7 @@ def calc(fileName):
 
 def writeHeaderToFile(writer):
     global headers
-    headers = [h.split("@")[0] for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
+    headers = [(h["title"] if "region" not in h else h["region"]+":"+h["title"]) for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
     headers.insert(0,"File Name:FT3")
     headers.insert(0,"File Name:FT2 SUM")
     headers.insert(0,"Date")
@@ -117,14 +114,14 @@ def writeDataToFile(writer, dir, fileNames):
     length = len(fileNames)
     global certdir
     for fileName in fileNames:
-        try:
+        # try:
             success = calc(fileName)
             counter+=1
             if(counter>length):return
             process_bar("Retrieving",counter,length)
-        except:
-            print(fileName + " couldn't be read")
-
+        # except:
+        #     print(fileName + " couldn't be read")
+    # print(data)
 def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
