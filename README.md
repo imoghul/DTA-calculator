@@ -9,6 +9,10 @@
 python -m pip install python-docx
 ```
 
+## Build
+
+The project will need to be built due to the different file structure across different systems that will use the script. 
+
 ## Launch
 
 #### Command Line
