@@ -69,29 +69,35 @@ JSON is the file type used to define settings for this script, similar to how ``
 
 Preferences are defined in a JSON file called ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed.
 
-The default ```preferences.json``` provided is shown below
+A sample ```preferences.json``` provided is shown below
 ```json
 {
-    "Test Preferences":{
-        "FT2 SUM":[
-            "Model ID@2",
-            "TestResult@2",
-            "Calibration Data:Air1@5",
-            "Calibration Data:Air2@5",
-            "Calibration Data:Glycol@5",
-            "Post Calibration Data:Air1@5",
-            "Post Calibration Data:Air2@5",
-            "Post Calibration Data:Glycol@5",
-            "Calibration Data:Air@5",
-            "Post Calibration Data:Air@5"
+    "Test Preferences": {
+        "FT2 SUM": [
+            {
+                "title": "Model ID",
+                "column": 2
+            },
+            {
+                "title": "TestResult",
+                "column": 2
+            },
+            {
+                "title": "Air2",
+                "region": "Post Calibration Data",
+                "column": 5
+            },
+            {
+                "title": "Glycol",
+                "region": "Post Calibration Data",
+                "column": 5
+            }
         ],
-
-        "FT3":[
+        "FT3": [
             "Barcode 8"
         ]
     },
-
-    "Generate Certificates":false
+    "Generate Certificates": false
 }
 ```
 
@@ -99,9 +105,9 @@ The default ```preferences.json``` provided is shown below
 In a JSON file (the file type used for this script), data is stored in "dictionaries". The syntax for a dictionary is:
 ```json
 {
-    element1:data,
-    element2:data,
-    element3:data
+    key1:data,
+    key2:data,
+    key3:data
 }
 ```
 
@@ -121,7 +127,7 @@ To determine what type of test a csv file is, the file name is observed with cer
 
 #### FT2 SUM
 
-The syntax for FT2 SUM test preferences is as follows: ```Region(conditional):Data Field@Column#```. The first aspect to define is Region. A Region starts in the csv file when there is a row with only the first cell having text. Calibration Data, Post Calibration Data, and UUT Responses are all examples of regions. This will only be included if necessary. As for the first entry, Model ID, it is not in a region therefore a Region should not be included. The next value to define, Data Field, is the value that is sought. This must be the text in the first cell in the row. After the '@' comes the column number, which is simply the number of the column that the data actually appears. The column numbers start at 1. 
+The syntax for FT2 SUM test preferences is as follows: Under they key "FT2 SUM" is a list of dictionaries. Each dictionary corresponds to a data value to extract from the test file. Each dictionary has keys "title" and "column" with an option "region". The first aspect to define is region. A region starts in the csv file when there is a row with only the first cell having text. Calibration Data, Post Calibration Data, and UUT Responses are all examples of regions. This will only be included if necessary. As for the first entry, Model ID, it is not in a region therefore a region should not be included. The next value to define, title, is the value that is sought. This must be the text in the first cell in the row. After that comes the column number, which is simply the number of the column that the data actually appears in. The column numbers start at 1. 
 
 Due to the nature of the SUM file, being that each file corresponds to one serial number, and data is spread across rows rather than columns, the script will go row by row checking for the data it needs. Therefore in the final summary, data will be logged in the order it appears in.
 
