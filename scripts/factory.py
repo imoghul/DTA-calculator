@@ -118,7 +118,7 @@ def writeDataToFile(writer, dir, fileNames):
             success = calc(fileName)
             counter+=1
             if(counter>length):return
-            process_bar("Retrieving",counter,length)
+            process_bar("Retrieving",counter,length,message="Reading from "+dir)
         # except:
         #     print(fileName + " couldn't be read")
     # print(data)
