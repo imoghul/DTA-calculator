@@ -23,6 +23,7 @@ data = {}
 headers = []
 currentSN = None
 certdir = None
+genCert = False
 # 
 #    Dictionary that stores all data as such:
 #    {
@@ -57,22 +58,20 @@ def calc(fileName):
                         # data[sn][region] = {}
                         if(region not in regions): regions.append(region)
                     for i in detectionList_FT2_SUM:
-                        index = int(i.split("@")[-1])-1
-                        dataField = i.split("@")[0]
-                        if dataField==v[0]:
+                        index = i["column"]-1#int(i.split("@")[-1])-1
+                        dataField = i["title"]#i.split("@")[0]
+                        dataRegion = None if "region" not in i else i["region"]
+                        if dataRegion==None and dataField==v[0]:
+                            # print(fileName,dataField)
                             data[sn][dataField] = v[index]
-                        if ':' in i:
-                            temp = i.split(':')
-                            tempRegion = temp[0]
-                            tempData = temp[1].split("@")[0]#" ".join(temp[1].split("@")[0:-1])
-                            if(tempData in v and region == tempRegion):
-                                """data[sn][region][tempData]"""
-                                data[sn][region+":"+tempData] = v[index] if v[index]!="" else "0"#"not calibrated"
+                        if dataRegion!=None and (dataField in v and region == dataRegion):
+                            data[sn][region+":"+dataField] = v[index] if v[index]!="" else "0"#"not calibrated"
             _date = fileName.split("_")[-3]
             data[sn]["Date"] =  _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
     elif("_RAW" in fileName): 
         fileType = "FT2 RAW"
+        return False
     elif("FT3_" in fileName or "ft3_" in fileName): 
         with open(fileName, newline='') as file:
             ft3headers = None
@@ -96,12 +95,13 @@ def calc(fileName):
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
     else:
         fileType = "FT1"
-    
+        return False
+    return True
 
 
 def writeHeaderToFile(writer):
     global headers
-    headers = [h.split("@")[0] for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
+    headers = [(h["title"] if "region" not in h else h["region"]+":"+h["title"]) for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
     headers.insert(0,"File Name:FT3")
     headers.insert(0,"File Name:FT2 SUM")
     headers.insert(0,"Date")
@@ -114,30 +114,30 @@ def writeDataToFile(writer, dir, fileNames):
     length = len(fileNames)
     global certdir
     for fileName in fileNames:
-        try:
-            calc(fileName)
+        # try:
+            success = calc(fileName)
             counter+=1
             if(counter>length):return
             process_bar("Retrieving",counter,length)
-        except:
-            print(fileName + " couldn't be read")
-
+        # except:
+        #     print(fileName + " couldn't be read")
+    # print(data)
 def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     for sn in data:
         counter+=1
         writer.writerow([data[sn][h] if h in data[sn] else "doesn't exist" for h in headers])
-        # if("Date" in data[sn] and "TestResult" in data[sn]):createCertificate(sn,data[sn]["Date"],"Pass" if data[sn]["TestResult"]=="Test Complete" else "Fail",certdir)
+        if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
+            createCertificate(sn,data[sn]["Date"],"Pass" if data[sn]["TestResult"]=="Test Complete" else "Fail",certdir)
         process_bar("Writing Data",counter,length)
 
 def transferDirs(cdir,pdir):
-    global certdir,preferencesFile,detectionList_FT2_SUM,detectionList_FT3,retrieveData
+    global certdir,preferencesFile,detectionList_FT2_SUM,detectionList_FT3,retrieveData,genCert
     certdir = cdir
     preferencesFile = pdir
     with open(preferencesFile) as f:
         retrieveData = json.load(f)
-    detectionList_FT2_SUM = retrieveData["FT2 SUM"] if "FT2 SUM" in retrieveData else []
-    detectionList_FT2_SUM = [i[0:-1] if(i[-1]=="\n") else i for i in detectionList_FT2_SUM]
-    detectionList_FT3 = retrieveData["FT3"] if "FT3" in retrieveData else []
-    # print(detectionList_FT2_SUM)
+    detectionList_FT2_SUM = retrieveData["Test Preferences"]["FT2 SUM"] if "FT2 SUM" in retrieveData["Test Preferences"] else []
+    detectionList_FT3 = retrieveData["Test Preferences"]["FT3"] if "FT3" in retrieveData["Test Preferences"] else []
+    genCert = retrieveData["Generate Certificates"]
