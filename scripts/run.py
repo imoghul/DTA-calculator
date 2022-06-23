@@ -5,7 +5,6 @@ import os
 import json
 import sys
 
-from click import edit
 from eolt import *
 from tkinter import filedialog
 from tkinter import *
