@@ -67,7 +67,19 @@ If manual directory selection was not chosen (enter was pressed without any othe
 
 JSON is the file type used to define settings for this script, similar to how ```.xml``` and ```.INI``` files are used.
 
-Preferences are defined in a JSON file called ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed.
+
+In the JSON files for this script, data is stored in "dictionaries". The syntax for a dictionary is:
+```json
+{
+    key1:data,
+    key2:data,
+    key3:data
+}
+```
+All of the preferences are are stored in one big dictionary. The syntax for a list is: ```[element1, element2, element3]```. All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
+
+#### JSON In This Script
+The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed.
 
 A sample ```preferences.json``` provided is shown below
 ```json
@@ -101,29 +113,17 @@ A sample ```preferences.json``` provided is shown below
 }
 ```
 
+##### Test Preferences
 
-In a JSON file (the file type used for this script), data is stored in "dictionaries". The syntax for a dictionary is:
-```json
-{
-    key1:data,
-    key2:data,
-    key3:data
-}
-```
-
-All of the preferences are are stored in one big dictionary. The test preferences are specifically stored in a sub dictionary under the element "Test Preferences". In this sub dictionary, data to be retrieved from a specific test is defined in a list which is assigned to the key of its test. The syntax for a list is: ```[element1, element2, element3]```. All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
+The test preferences are specifically stored in a sub dictionary under the element "Test Preferences". In this sub dictionary, data to be retrieved from a specific test is defined in a list which is assigned to the key of its test.
 
 Different tests have different syntax due to the nature of how the corresponding csv files are layed out. The keys for different tests are 
 * FT1 - ft1 files
 * FT2 SUM - ft2 summary files
 * FT2 RAW - ft2 raw data files
 * FT3 - ft3 files
-
-The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated.
-
-#### Determining The Test
-
-To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
+##### Generate Certificates
+The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and the column entery for Test Preferences.
 
 #### FT2 SUM
 
@@ -154,7 +154,12 @@ The default ```locations.json``` provided is shown below
 * Under the key "certificate_dir" is where the directory with the ```TEMPLATE.docx``` and the other output certificates is stored. 
 * Under the key "search_dirs" is a list of directories. These are the directories that will be searched recursively for test files to read. If using the graphical selection in the runtime of the script, only one directory can be selected. If one wishes to select more than one, they must resort to adding them here.
 
-## Execution
+## Runtime
+
+### Determining The Test
+
+To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
+### Execution
 After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```.
 
 ****
