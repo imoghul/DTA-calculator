@@ -20,7 +20,7 @@ def createCertificate(sn,cbDate,result,path=docPath):
                 run = run_obj[0]
                 font = run.font
                 font.size = Pt(30)
-                font.color.rgb = RGBColor(0xff,0xff,0xff)
+                font.color.rgb = RGBColor(0x00,0x00,0x00)#RGBColor(0xff,0xff,0xff)
                 font.name = "AvenirNext LT Pro Regular"
             elif c.text == "CALIBRATION DATE" or c.text == "RESULT": 
                 if(c.text == "CALIBRATION DATE"): c.text = cbDate
