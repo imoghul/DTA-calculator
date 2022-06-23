@@ -155,6 +155,8 @@ The default ```locations.json``` provided is shown below
 * Under the key "certificate_dir" is where the directory with the ```TEMPLATE.docx``` and the other output certificates is stored. 
 * Under the key "search_dirs" is a list of directories. These are the directories that will be searched recursively for test files to read. If using the graphical selection in the runtime of the script, only one directory can be selected. If one wishes to select more than one, they must resort to adding them here.
 
+These values are overwritten when they are selected from the script
+
 ## Runtime
 
 ### Determining The Test
