@@ -19,7 +19,6 @@ python -m pip install pyinstaller
 ```
 ### Automatically
 Double click on ```setup.bat```.
-After that has completed double click ```installDependencies.bat```
 ## Build
 
 The project will need to be built due to the different file structure across different systems that will use the script. Building is not necessary if using the command line. To build the script double click on ```build.dat```, or ```build.sh``` if using a Mac or Linux machine. You will be prompted to pick the config folder. NOTE: You will not be able to change this later on without rebuilding. Choose a folder in which you wish to put configuration files. 
