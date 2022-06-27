@@ -31,7 +31,7 @@ def createCertificate(sn,cbDate,result,path=docPath):
                 run = run_obj[0]
                 font = run.font
                 font.size = Pt(12)
-                font.color.rgb = RGBColor(0xff,0xff,0xff)
+                font.color.rgb = RGBColor(0x00,0x00,0x00)#RGBColor(0xff,0xff,0xff)
                 font.name = "AvenirNext LT Pro Regular"
     
             doc.save(dest)

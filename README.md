@@ -16,9 +16,9 @@ python -m pip install pyinstaller
 Double click on ```setup.bat```
 ## Build
 
-The project will need to be built due to the different file structure across different systems that will use the script. Building is not necessary if using the command line. To build the script double click on build.dat, or build.sh if using a Mac or Linux machine. You will be prompted to pick the config folder. NOTE: You will not be able to change this later on without rebuilding. Choose a folder in which you wish to put configuration files. 
+The project will need to be built due to the different file structure across different systems that will use the script. Building is not necessary if using the command line. To build the script double click on ```build.dat```, or ```build.sh``` if using a Mac or Linux machine. You will be prompted to pick the config folder. NOTE: You will not be able to change this later on without rebuilding. Choose a folder in which you wish to put configuration files. 
 
-Once finished building, you should find a file named ```run.exe```. This file will be the executable that will be used to run the script. The only other files needed are the contents of the ```default``` directory. Apart from that, all other files can be deleted.
+Once finished building, you should find a file named ```run.exe``` located in the ```scripts/dist``` directory. This file will be the executable that will be used to run the script. The only other files needed are the contents of the ```default``` directory. Apart from that, all other files can be deleted.
 
 ## Launch
 
@@ -69,15 +69,15 @@ If manual directory selection was not chosen (enter was pressed without any othe
 JSON is the file type used to define settings for this script, similar to how ```.xml``` and ```.INI``` files are used.
 
 
-In the JSON files for this script, data is stored in "dictionaries". The syntax for a dictionary is:
+In the JSON files for this script, data is stored in "dictionaries". All of the preferences are are stored in one big dictionary. The syntax for a dictionary is:
 ```json
 {
-    key1:data,
-    key2:data,
-    key3:data
+    "key1":data1,
+    "key2":data2,
+    "key3":data3
 }
 ```
-All of the preferences are are stored in one big dictionary. The syntax for a list is: ```[element1, element2, element3]```. All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
+ The syntax for a list is: ```[element1, element2, element3]```. All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
 
 #### JSON In This Script
 
@@ -120,7 +120,7 @@ A sample ```preferences.json``` provided is shown below
 
 ##### Test Preferences
 
-The test preferences are specifically stored in a sub dictionary under the element "Test Preferences". In this sub dictionary, data to be retrieved from a specific test is defined in a list which is assigned to the key of its test.
+The test preferences are specifically stored in a sub dictionary under the key "Test Preferences". In this sub dictionary, data to be retrieved from a specific test is defined in a list which is assigned to the key of its test.
 
 Different tests have different syntax due to the nature of how the corresponding csv files are layed out. The keys for different tests are 
 * FT1 - ft1 files
