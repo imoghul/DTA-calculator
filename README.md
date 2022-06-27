@@ -86,7 +86,7 @@ The program utilizes two configuration files that will be in the aforementioned 
 
 The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed.
 
-A sample ```preferences.json``` provided is shown below
+A sample ```preferences.json``` is shown below
 ```json
 {
     "Test Preferences": {
@@ -114,7 +114,9 @@ A sample ```preferences.json``` provided is shown below
             "Barcode 8"
         ]
     },
-    "Generate Certificates": false
+    "Generate Certificates": false,
+    "Avoid":["TR1562152126","VL212460004"],
+    "Limit":["TR1562152132"]
 }
 ```
 
@@ -129,6 +131,10 @@ Different tests have different syntax due to the nature of how the corresponding
 * FT3 - ft3 files
 ##### Generate Certificates
 The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and the column entery for Test Preferences.
+
+##### Avoid and Limit
+
+These are used in defining which serial numbers to look at. Both are included in the example above for the purpose of syntax, though in actual application they are mutually exclusive due to their nature. Avoid determines which serial numbers not to include in the summary, and Limit will only include certain serial numbers. The syntax of both of these are lists
 
 #### FT2 SUM
 
@@ -167,7 +173,7 @@ These values are overwritten when they are selected from the script
 
 To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
 ### Execution
-After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```.
+After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode. Meaning that the ```summary.csv``` file will be overwritten every time
 
 ****
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/tongrun
