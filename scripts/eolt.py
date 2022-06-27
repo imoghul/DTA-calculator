@@ -30,8 +30,8 @@ genCert = False
 
 def calc(fileName):
     global currentSN, data
-    fileType = None
-    if("_SUM" in fileName):
+    fileType = getFileType(fileName)
+    if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
             sn = ""
             region = ""
@@ -64,10 +64,9 @@ def calc(fileName):
             _date = fileName.split("_")[-3]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
-    elif("_RAW" in fileName):
-        fileType = "FT2 RAW"
+    elif(fileType == "FT2 RAW"):
         return False
-    elif("FT3_" in fileName or "ft3_" in fileName):
+    elif(fileType == "FT3"):
         with open(fileName, newline='') as file:
             ft3headers = None
             sn = None
@@ -89,8 +88,7 @@ def calc(fileName):
                                 except:
                                     pass
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
-    else:
-        fileType = "FT1"
+    elif(fileType == "FT1"):
         return False
     return True
 

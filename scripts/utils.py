@@ -57,3 +57,12 @@ def parseSUMfileName(fileName):
     _date = fileName.split("_")[-3]
     data["Date"] =  _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
     return data
+
+def getFileType(fileName):
+    if("_SUM" in fileName):
+        return "FT2 SUM"
+    elif("_RAW" in fileName):
+        return "FT2 RAW"
+    elif("FT3_" in fileName or "ft3_" in fileName):
+        return "FT3"
+    else: return "FT1" 
