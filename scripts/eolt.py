@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 import json
 import glob
 import os
@@ -29,7 +30,7 @@ genCert = False
 
 
 def calc(fileName):
-    global currentSN, data
+    global currentSN, data, headers
     fileType = getFileType(fileName)
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
@@ -47,20 +48,18 @@ def calc(fileName):
                             continue
                     if(len(v) == 1):
                         region = v[0]
-                        # data[sn][region] = {}
                         if(region not in regions):
                             regions.append(region)
                     for i in detectionList_FT2_SUM:
-                        index = i["column"]-1  # int(i.split("@")[-1])-1
-                        dataField = i["title"]  # i.split("@")[0]
+                        
+                        index = i["column"]-1  
+                        dataField = i["title"]
+                        dataKey = getFT2SUMTitle(i)
                         dataRegion = None if "region" not in i else i["region"]
                         if dataRegion == None and dataField == v[0]:
-                            # print(fileName,dataField)
-                            data[sn][dataField] = v[index]
+                            data[sn][dataKey] = v[index]
                         if dataRegion != None and (dataField in v and region == dataRegion):
-                            # "not calibrated"
-                            data[sn][region+":" +
-                                     dataField] = v[index] if v[index] != "" else "0"
+                            data[sn][dataKey] = v[index] if v[index] != "" else "0"
             _date = fileName.split("_")[-3]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
@@ -76,11 +75,12 @@ def calc(fileName):
                     if(ft3headers == None):
                         ft3headers = v
                     else:
-                        # print(ft3headers)
                         sn = v[ft3headers.index("Serial Number")]
+                        _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
                         if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
+                            data[sn]["Date"] = _date
                         for i in detectionList_FT3:
                             if(i in ft3headers):
                                 try:
@@ -94,14 +94,16 @@ def calc(fileName):
 
 
 def writeHeaderToFile(writer):
-    global headers
-    headers = [(h["title"] if "region" not in h else h["region"]+":"+h["title"])
-               for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
-    headers.insert(0, "File Name:FT3")
-    headers.insert(0, "File Name:FT2 SUM")
-    headers.insert(0, "Date")
-    headers.insert(0, "Serial Number")
-    writer.writerow(headers)
+    pass
+    # global headers
+    # headers = [(h["title"] if "region" not in h else h["region"]+":"+h["title"]+(":"+h["column header"] if "column header" in h else ""))
+    #            for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
+    # headers.insert(0, "File Name:FT3")
+    # headers.insert(0, "File Name:FT2 SUM")
+    # headers.insert(0, "Date")
+    # headers.insert(0, "Serial Number")
+    # print(headers)
+    # writer.writerow(headers)
 
 
 def writeDataToFile(writer, dir, fileNames):
@@ -111,19 +113,42 @@ def writeDataToFile(writer, dir, fileNames):
     length = len(fileNames)
     global certdir
     for fileName in fileNames:
-        # try:
-        success = calc(fileName)
-        counter += 1
-        if(counter > length):
-            return
-        process_bar("Retrieving", counter, length,
-                    message="Reading from the %s directory" % ordinal(dirNum))
-        # except:
-        #     print(fileName + " couldn't be read")
-    # print(data)
+        try:
+            success = calc(fileName)
+            counter += 1
+            if(counter > length):
+                return
+            process_bar("Retrieving", counter, length,
+                        message="Reading from the %s directory" % ordinal(dirNum))
+        except:
+            print(fileName + " couldn't be read")
+    
+    
+    
 
 
 def writeSummaryToFile(writer):
+    global data
+    # sort data
+    try:
+        data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(sn[1]["Date"],"%m/%d/%y"))}
+    except:pass
+    # header calculating
+    global headers
+    for i in data:
+        for j in data[i]:
+            if j not in headers: headers.append(j)
+    for i in reversed(detectionList_FT3):
+        moveToBeginning(headers,i)
+    for i in reversed([getFT2SUMTitle(j) for j in detectionList_FT2_SUM]):
+        moveToBeginning(headers,i)
+    moveToBeginning(headers,"File Name:FT3")
+    moveToBeginning(headers,"File Name:FT2 SUM")
+    moveToBeginning(headers,"Date")
+    moveToBeginning(headers,"Serial Number")
+    writer.writerow(headers)
+
+    # writing data
     counter = 0
     length = len(data)
     for sn in data:

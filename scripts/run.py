@@ -85,10 +85,10 @@ def createFile():
             # try:os.chdir(dir)
             # except: raise Exception(f"Invalid directory: {dir}")
             fileNames = glob.glob(dir+globType, recursive=True)
-            try:
-                if(getFileType(fileNames[0]) == "FT2 SUM"):fileNames.sort(key = lambda x:x.split("_")[-2] + "_" + x.split("_")[-3])
-            except:
-                pass
+            # try:
+            #     if(getFileType(fileNames[0]) == "FT2 SUM"):fileNames.sort(key = lambda x:x.split("_")[-2] + "_" + x.split("_")[-3])
+            # except:
+            #     pass
             writeDataToFile(writer, dir, [f.replace("\\","/") for f in fileNames])  # runs for every directory
             # os.chdir(original)  # return to original dir
 

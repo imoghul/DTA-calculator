@@ -66,3 +66,9 @@ def getFileType(fileName):
     elif("FT3_" in fileName or "ft3_" in fileName):
         return "FT3"
     else: return "FT1" 
+
+def moveToBeginning(l,elem):
+    l.insert(0, l.pop(l.index(elem)))
+
+def getFT2SUMTitle(d):
+    return ((d["region"]+":") if "region" in d else "")+(d["title"])+((":"+d["column header"])if "column header" in d else "")
