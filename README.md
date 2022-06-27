@@ -2,10 +2,8 @@
 
 ## Download Source Code
 
-1. Navigate to https://github.com/imoghul/EOLT-Test-Analyzer/tree/tongrun
-2. Press the green "Code" button
-3. Press "Download ZIP"
-4. Extract zip folder
+1. Press: https://github.com/imoghul/EOLT-Test-Analyzer/archive/refs/heads/tongrun.zip
+2. Extract Contents
 
 ## Install Dependencies
 ### Manually
