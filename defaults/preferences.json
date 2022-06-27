@@ -12,42 +12,50 @@
             {
                 "title": "Air1",
                 "region": "Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Air2",
                 "region": "Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Glycol",
                 "region": "Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Air1",
                 "region": "Post Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Air2",
                 "region": "Post Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Glycol",
                 "region": "Post Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Air",
                 "region": "Post Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             },
             {
                 "title": "Air",
                 "region": "Calibration Data",
-                "column": 5
+                "column": 5,
+                "column header":"Modified Offset"
             }
         ],
         "FT3": [
@@ -55,4 +63,4 @@
         ]
     },
     "Generate Certificates": false
-}
+}   

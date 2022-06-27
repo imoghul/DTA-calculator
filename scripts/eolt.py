@@ -130,9 +130,9 @@ def writeDataToFile(writer, dir, fileNames):
 def writeSummaryToFile(writer):
     global data
     # sort data
-    try:
-        data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(sn[1]["Date"],"%m/%d/%y"))}
-    except:pass
+    # try:
+    #     data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(sn[1]["Date"],"%m/%d/%y"))}
+    # except:pass
     # header calculating
     global headers
     for i in data:
