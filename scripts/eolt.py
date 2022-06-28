@@ -151,7 +151,7 @@ def writeSummaryToFile(writer):
             if j not in headers: headers.append(j)
     for i in reversed(detectionList_FT3):
         moveToBeginning(headers,i)
-    for i in reversed([getFT2SUMTitle(j) for j in detectionList_FT2_SUM]):
+    for i in reversed([getFT2SUMTitle_config(j) for j in detectionList_FT2_SUM]):
         moveToBeginning(headers,i)
     moveToBeginning(headers,"File Name:FT3")
     moveToBeginning(headers,"File Name:FT2 SUM")
