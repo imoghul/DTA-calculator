@@ -44,12 +44,16 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
-def process_bar(process,current, total,message = "",bar_length=15):
+def process_bar(process,current, total,message = "",bar_length=25,bar_pos = 40*" "):
     fraction = current/total
     arrow = int(fraction*bar_length-1)*'-'+'>'
     padding = int(bar_length-len(arrow))*' '
     ending = '\n' if current==total else '\r'
-    print(f'{process}:\t[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}',end = ending)
+    
+    padTable = ""
+    while(len(f'{process}:'+padTable))<len(bar_pos): padTable+=" "
+    # print(padTable+"test")
+    print(f'{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}',end = ending)
 
 
 def parseSUMfileName(fileName):

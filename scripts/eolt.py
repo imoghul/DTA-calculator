@@ -129,10 +129,9 @@ def writeDataToFile(writer, dir, fileNames):
             counter += 1
             if(counter > length):
                 return
-            process_bar("Retrieving", counter, length,
-                        message="Reading from the %s directory" % ordinal(dirNum))
-        except:
-            print(fileName + " couldn't be read")
+            process_bar("Retrieving from the %s directory"%ordinal(dirNum), counter, length)
+        except Exception as e:
+            print(fileName + " couldn't be read with the following error: "+str(e))
     
     
     
@@ -142,7 +141,7 @@ def writeSummaryToFile(writer):
     global data
     # sort data
     # try:
-    data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(str(dateutil.parser.parse(sn[1]["Date"])).split(" ")[0],"%Y-%m-%d"))}
+    # data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(str(dateutil.parser.parse(sn[1]["Date"])),"%Y-%m-%d %H:%M:%S"))}
     # except:pass
     # header calculating
     global headers
@@ -163,6 +162,7 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     for sn in data:
+        print(sn)
         counter += 1
         process_bar("Writing Data", counter, length)
 
