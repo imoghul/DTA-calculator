@@ -76,4 +76,17 @@ goto main
 
 
 
-start /WAIT cmd /c python -m pip install python-docx PyInstaller
+
+
+
+
+
+
+
+
+
+
+
+
+
+start /WAIT cmd /c python -m pip install python-docx PyInstaller python-dateutil

@@ -9,6 +9,7 @@ import random
 import string
 from certificate import *
 import threading
+import dateutil.parser
 
 outFileName = "summary.csv"
 globType = "**/*.csv"
@@ -51,15 +52,22 @@ def calc(fileName):
                         if(region not in regions):
                             regions.append(region)
                     for i in detectionList_FT2_SUM:
-                        
-                        index = i["column"]-1  
+                        index = i["column"]-1 
                         dataField = i["title"]
                         dataKey = getFT2SUMTitle(i)
                         dataRegion = None if "region" not in i else i["region"]
-                        if dataRegion == None and dataField == v[0]:
-                            data[sn][dataKey] = v[index]
-                        if dataRegion != None and (dataField in v and region == dataRegion):
-                            data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                        if(type(dataField)!=list):
+                            if dataRegion == None and dataField == v[0]:
+                                data[sn][dataKey] = v[index]
+                            if dataRegion != None and (dataField in v and region == dataRegion):
+                                data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                        elif type(dataField)==list:
+                            
+                            if dataRegion == None and all([i in v for i in dataField]):
+                                data[sn][dataKey] = v[index]
+                            if dataRegion != None and (all([i in v for i in dataField]) and region == dataRegion):
+                                data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                                # print(sn,data[sn][dataKey])
             _date = fileName.split("_")[-3]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
@@ -81,6 +89,7 @@ def calc(fileName):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
                             data[sn]["Date"] = _date
+                            data[sn]["Model ID"] = v[ft3headers.index("Model ID")]
                         for i in detectionList_FT3:
                             if(i in ft3headers):
                                 try:
@@ -131,7 +140,7 @@ def writeSummaryToFile(writer):
     global data
     # sort data
     # try:
-    #     data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(sn[1]["Date"],"%m/%d/%y"))}
+    data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(str(dateutil.parser.parse(sn[1]["Date"])).split(" ")[0],"%Y-%m-%d"))}
     # except:pass
     # header calculating
     global headers
@@ -152,11 +161,12 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     for sn in data:
+        if getSkippable(sn): 
+            length-=1
+            continue                
+
         counter += 1
-        if("Avoid" in retrieveData and sn in retrieveData["Avoid"]):
-            continue
-        if("Limit" in retrieveData and sn not in retrieveData["Limit"]):
-            continue
+
         writer.writerow([data[sn][h] if h in data[sn]
                         else "doesn't exist" for h in headers])
         if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
@@ -176,3 +186,38 @@ def transferDirs(cdir, pdir):
     detectionList_FT3 = retrieveData["Test Preferences"]["FT3"] if "FT3" in retrieveData["Test Preferences"] else [
     ]
     genCert = retrieveData["Generate Certificates"]
+
+
+def getSkippable(sn):
+    global data,retrieveData
+    skip = False
+    if("Avoid" in retrieveData):
+        for i in retrieveData["Avoid"]:
+            if anyIn(data[sn][i],retrieveData["Avoid"][i]): skip = True
+    if("Limit" in retrieveData):
+        for i in retrieveData["Limit"]:
+            
+            try:
+                if not anyIn(data[sn][i],retrieveData["Limit"][i]):
+                    skip = True
+            except:print(data[sn])
+    if("Dates" in retrieveData):
+        isIn = False
+        for i in retrieveData["Dates"]:
+            snDate = dateutil.parser.parse(data[sn]["Date"])
+            snDate = {
+                "Day":snDate.day,
+                "Month":snDate.month,
+                "Year":snDate.year
+            }
+            if("Day" not in i):
+                del snDate["Day"]
+            if("Month" not in i):
+                del snDate["Month"]
+            if("Year" not in i):
+                del snDate["Year"]
+            
+            if(snDate == i): isIn = True
+            # print(i,snDate,isIn)
+        if(not isIn): skip = True
+    return skip

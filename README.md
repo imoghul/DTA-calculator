@@ -177,7 +177,7 @@ These values are overwritten when they are selected from the script
 
 To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
 ### Execution
-After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode. Meaning that the ```summary.csv``` file will be overwritten every time. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time.
+After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode. Meaning that the ```summary.csv``` file will be overwritten every time. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time. If there is a conflict between data in any of the files FT2 SUM takes preference.
 
 ****
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/tongrun

@@ -71,4 +71,7 @@ def moveToBeginning(l,elem):
     l.insert(0, l.pop(l.index(elem)))
 
 def getFT2SUMTitle(d):
-    return ((d["region"]+":") if "region" in d else "")+(d["title"])+((":"+d["column header"])if "column header" in d else "")
+    return ((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"])==list else d["title"]))+((":"+d["column header"])if "column header" in d else "")
+
+def anyIn(val,l): # checks if any of the elements of l are in val
+    return True in [(i in val) for i in l]
