@@ -70,8 +70,12 @@ def getFileType(fileName):
 def moveToBeginning(l,elem):
     l.insert(0, l.pop(l.index(elem)))
 
-def getFT2SUMTitle(d):
+def getFT2SUMTitle_config(d):
     return ((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"])==list else d["title"]))+((":"+d["column header"])if "column header" in d else "")
+
+def getFT2SUMTitle_raw(title,columnheader=None,region=None):
+    return ((region+":") if region!=None else "")+(("_".join(title) if type(title)==list else title))+((":"+columnheader)if columnheader != None else "")
+
 
 def anyIn(val,l): # checks if any of the elements of l are in val
     return True in [(i in val) for i in l]

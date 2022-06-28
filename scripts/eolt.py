@@ -54,18 +54,20 @@ def calc(fileName):
                     for i in detectionList_FT2_SUM:
                         index = i["column"]-1 
                         dataField = i["title"]
-                        dataKey = getFT2SUMTitle(i)
+                        dataColumnHeader = i["column header"] if "column header" in i else None
+                        dataKey = getFT2SUMTitle_config(i)
                         dataRegion = None if "region" not in i else i["region"]
                         if(type(dataField)!=list):
                             if dataRegion == None and dataField == v[0]:
+                                # key = getFT2SUMTitle_raw(v[0],columnheader=dataColumnHeader,region = dataRegion)
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (dataField in v and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
                         elif type(dataField)==list:
-                            
-                            if dataRegion == None and all([i in v for i in dataField]):
+                            allIn = all([i in v for i in dataField])
+                            if dataRegion == None and allIn:
                                 data[sn][dataKey] = v[index]
-                            if dataRegion != None and (all([i in v for i in dataField]) and region == dataRegion):
+                            if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
                                 # print(sn,data[sn][dataKey])
             _date = fileName.split("_")[-3]
@@ -161,18 +163,21 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     for sn in data:
-        if getSkippable(sn): 
-            length-=1
-            continue                
-
         counter += 1
+        process_bar("Writing Data", counter, length)
 
-        writer.writerow([data[sn][h] if h in data[sn]
-                        else "doesn't exist" for h in headers])
+        for h in headers: 
+            if(h not in data[sn]):
+                data[sn][h]="doesn't exist"
+        
+        if getSkippable(sn):
+            continue                
+        
+        writer.writerow([data[sn][h] for h in headers])
         if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
             createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                               ["TestResult"] == "Test Complete" else "Fail", certdir)
-        process_bar("Writing Data", counter, length)
+        
 
 
 def transferDirs(cdir, pdir):
@@ -193,14 +198,13 @@ def getSkippable(sn):
     skip = False
     if("Avoid" in retrieveData):
         for i in retrieveData["Avoid"]:
+            if i not in data[sn]: continue
             if anyIn(data[sn][i],retrieveData["Avoid"][i]): skip = True
     if("Limit" in retrieveData):
         for i in retrieveData["Limit"]:
-            
-            try:
-                if not anyIn(data[sn][i],retrieveData["Limit"][i]):
-                    skip = True
-            except:print(data[sn])
+            if i not in data[sn]: skip = True
+            if not anyIn(data[sn][i],retrieveData["Limit"][i]):
+                skip = True
     if("Dates" in retrieveData):
         isIn = False
         for i in retrieveData["Dates"]:
