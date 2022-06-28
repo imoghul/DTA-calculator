@@ -31,16 +31,26 @@ certdir = None
 genCert = False
 
 
-def calc(fileName):
-    # isIn = None
-    # if "Limit" in retrieveData:
-    #     if "Serial Number" in retrieveData["Limit"]:
-    #         if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
-    #         else:isIn = False
-    # if isIn==False:return
-                
+def calc(fileName): 
     global currentSN, data, headers
     fileType = getFileType(fileName)
+    
+    # # # # # # # # # # # # # # # # # # # # # # # #
+    # THEORETICALLY WORKING BUT RISIKY CODE BELOW #
+    # # # # # # # # # # # # # # # # # # # # # # # #
+    
+    # if(fileType == "FT2 SUM" or fileType=="FT2 RAW"):
+    #     isIn = None
+    #     if "Limit" in retrieveData:
+    #         if "Serial Number" in retrieveData["Limit"]:
+    #             if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
+    #             else:isIn = False
+    #         if "Model ID" in retrieveData["Limit"]:
+    #             if anyIn(fileName,retrieveData["Limit"]["Model ID"]): isIn = True
+    #             else:isIn = False
+    #     if isIn==False:
+    #         return
+    
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
             sn = ""
