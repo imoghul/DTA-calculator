@@ -9,6 +9,7 @@ import random
 import string
 from certificate import *
 import threading
+import re
 import dateutil.parser
 
 outFileName = "summary.csv"
@@ -31,6 +32,13 @@ genCert = False
 
 
 def calc(fileName):
+    isIn = None
+    if "Limit" in retrieveData:
+        if "Serial Number" in retrieveData["Limit"]:
+            if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
+            else:isIn = False
+    if isIn==False:return
+                
     global currentSN, data, headers
     fileType = getFileType(fileName)
     if(fileType == "FT2 SUM"):
@@ -70,7 +78,8 @@ def calc(fileName):
                             if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
                                 # print(sn,data[sn][dataKey])
-            _date = fileName.split("_")[-3]
+            _date = fileName.replace(".csv","").split("_")
+            _date = _date[_date.index("SUM")-2]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
     elif(fileType == "FT2 RAW"):
@@ -142,7 +151,8 @@ def writeSummaryToFile(writer):
     # sort data
     try:
         data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(str(dateutil.parser.parse(sn[1]["Date"])),"%Y-%m-%d %H:%M:%S"))}
-    except:pass
+    except:
+        print("Bad date exists, so will not sort by date")
     # header calculating
     global headers
     for i in data:

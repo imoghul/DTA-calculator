@@ -72,6 +72,7 @@ def getFileType(fileName):
     else: return "FT1" 
 
 def moveToBeginning(l,elem):
+    if elem not in l:return
     l.insert(0, l.pop(l.index(elem)))
 
 def getFT2SUMTitle_config(d):
