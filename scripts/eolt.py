@@ -32,12 +32,12 @@ genCert = False
 
 
 def calc(fileName):
-    isIn = None
-    if "Limit" in retrieveData:
-        if "Serial Number" in retrieveData["Limit"]:
-            if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
-            else:isIn = False
-    if isIn==False:return
+    # isIn = None
+    # if "Limit" in retrieveData:
+    #     if "Serial Number" in retrieveData["Limit"]:
+    #         if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
+    #         else:isIn = False
+    # if isIn==False:return
                 
     global currentSN, data, headers
     fileType = getFileType(fileName)
