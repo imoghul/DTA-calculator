@@ -6,5 +6,5 @@ python saveConfigDir.py
 python -m PyInstaller -F --add-data "configdir.txt;." --icon="..\deps\phononic_icon.ico" run.py 
 @REM remove extra .spec file
 del run.spec 
-@REM move the exe from dist to parent directory
-@REM move dist\run.exe ..\run.exe 
+@REM copy the exe from dist to parent directory
+copy dist\run.exe ..\run.exe 
