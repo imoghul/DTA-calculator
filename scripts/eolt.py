@@ -215,7 +215,9 @@ def getSkippable(sn):
             if anyIn(data[sn][i],retrieveData["Avoid"][i]): skip = True
     if("Limit" in retrieveData):
         for i in retrieveData["Limit"]:
-            if i not in data[sn]: skip = True
+            if i not in data[sn]: 
+                skip = True
+                continue
             if not anyIn(data[sn][i],retrieveData["Limit"][i]):
                 skip = True
     try:
