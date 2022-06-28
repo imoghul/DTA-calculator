@@ -31,26 +31,34 @@ certdir = None
 genCert = False
 
 
-def calc(fileName): 
+def calc(fileName):
     global currentSN, data, headers
     fileType = getFileType(fileName)
-    
+
     # # # # # # # # # # # # # # # # # # # # # # # #
     # THEORETICALLY WORKING BUT RISIKY CODE BELOW #
     # # # # # # # # # # # # # # # # # # # # # # # #
-    
-    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType=="FT2 RAW")):
+
+    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW")):
         isIn = None
         if "Limit" in retrieveData:
             if "Serial Number" in retrieveData["Limit"]:
-                if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
-                else:isIn = False
+                if anyIn(fileName, retrieveData["Limit"]["Serial Number"]):
+                    isIn = True
+                else:
+                    isIn = False
             if "Model ID" in retrieveData["Limit"]:
-                if anyIn(fileName,retrieveData["Limit"]["Model ID"]): isIn = True
-                else:isIn = False
-        if isIn==False:
+                if anyIn(fileName, retrieveData["Limit"]["Model ID"]):
+                    isIn = True
+                else:
+                    isIn = False
+        if isIn == False:
             return
-    
+
+    # # # # # # # # # # # # # # # # # # # # # # # #
+    #                                             #
+    # # # # # # # # # # # # # # # # # # # # # # # #
+
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
             sn = ""
@@ -70,28 +78,29 @@ def calc(fileName):
                         if(region not in regions):
                             regions.append(region)
                     for i in detectionList_FT2_SUM:
-                        index = i["column"]-1 
+                        index = i["column"]-1
                         dataField = i["title"]
                         dataColumnHeader = i["column header"] if "column header" in i else None
                         dataKey = getFT2SUMTitle_config(i)
                         dataRegion = None if "region" not in i else i["region"]
-                        if(type(dataField)!=list):
+                        if(type(dataField) != list):
                             if dataRegion == None and dataField == v[0]:
                                 # key = getFT2SUMTitle_raw(v[0],columnheader=dataColumnHeader,region = dataRegion)
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (dataField in v and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
-                        elif type(dataField)==list:
+                        elif type(dataField) == list:
                             allIn = all([i in v for i in dataField])
                             if dataRegion == None and allIn:
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
                                 # print(sn,data[sn][dataKey])
-            _date = fileName.replace(".csv","").split("_")
+            _date = fileName.replace(".csv", "").split("_")
             index = 1
             for i in range(len(_date)):
-                if("SUM" in _date[i]):index = i
+                if("SUM" in _date[i]):
+                    index = i
             _date = _date[index-2]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
@@ -113,7 +122,8 @@ def calc(fileName):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
                             data[sn]["Date"] = _date
-                            data[sn]["Model ID"] = v[ft3headers.index("Model ID")]
+                            data[sn]["Model ID"] = v[ft3headers.index(
+                                "Model ID")]
                         for i in detectionList_FT3:
                             if(i in ft3headers):
                                 try:
@@ -142,34 +152,34 @@ def writeDataToFile(writer, dir, fileNames):
             counter += 1
             if(counter > length):
                 return
-            process_bar("Retrieving from the %s directory"%ordinal(dirNum), counter, length)
+            process_bar("Retrieving from the %s directory" %
+                        ordinal(dirNum), counter, length)
         except Exception as e:
             print(fileName + " couldn't be read with the following error: "+str(e))
-    
-    
-    
 
 
 def writeSummaryToFile(writer):
     global data
     # sort data
     try:
-        data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(str(dateutil.parser.parse(sn[1]["Date"])),"%Y-%m-%d %H:%M:%S"))}
+        data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(
+            str(dateutil.parser.parse(sn[1]["Date"])), "%Y-%m-%d %H:%M:%S"))}
     except:
         print("Bad date exists, so will not sort by date")
     # header calculating
     global headers
     for i in data:
         for j in data[i]:
-            if j not in headers: headers.append(j)
+            if j not in headers:
+                headers.append(j)
     for i in reversed(detectionList_FT3):
-        moveToBeginning(headers,i)
+        moveToBeginning(headers, i)
     for i in reversed([getFT2SUMTitle_config(j) for j in detectionList_FT2_SUM]):
-        moveToBeginning(headers,i)
-    moveToBeginning(headers,"File Name:FT3")
-    moveToBeginning(headers,"File Name:FT2 SUM")
-    moveToBeginning(headers,"Date")
-    moveToBeginning(headers,"Serial Number")
+        moveToBeginning(headers, i)
+    moveToBeginning(headers, "File Name:FT3")
+    moveToBeginning(headers, "File Name:FT2 SUM")
+    moveToBeginning(headers, "Date")
+    moveToBeginning(headers, "Serial Number")
     writer.writerow(headers)
 
     # writing data
@@ -179,18 +189,17 @@ def writeSummaryToFile(writer):
         counter += 1
         process_bar("Writing Data", counter, length)
 
-        for h in headers: 
+        for h in headers:
             if(h not in data[sn]):
-                data[sn][h]="doesn't exist"
-        
+                data[sn][h] = "doesn't exist"
+
         if getSkippable(sn):
-            continue                
-        
+            continue
+
         writer.writerow([data[sn][h] for h in headers])
         if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
             createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                               ["TestResult"] == "Test Complete" else "Fail", certdir)
-        
 
 
 def transferDirs(cdir, pdir):
@@ -207,18 +216,20 @@ def transferDirs(cdir, pdir):
 
 
 def getSkippable(sn):
-    global data,retrieveData
+    global data, retrieveData
     skip = False
     if("Avoid" in retrieveData):
         for i in retrieveData["Avoid"]:
-            if i not in data[sn]: continue
-            if anyIn(data[sn][i],retrieveData["Avoid"][i]): skip = True
+            if i not in data[sn]:
+                continue
+            if anyIn(data[sn][i], retrieveData["Avoid"][i]):
+                skip = True
     if("Limit" in retrieveData):
         for i in retrieveData["Limit"]:
-            if i not in data[sn]: 
+            if i not in data[sn]:
                 skip = True
                 continue
-            if not anyIn(data[sn][i],retrieveData["Limit"][i]):
+            if not anyIn(data[sn][i], retrieveData["Limit"][i]):
                 skip = True
     try:
         if("Dates" in retrieveData):
@@ -226,9 +237,9 @@ def getSkippable(sn):
             for i in retrieveData["Dates"]:
                 snDate = dateutil.parser.parse(data[sn]["Date"])
                 snDate = {
-                    "Day":snDate.day,
-                    "Month":snDate.month,
-                    "Year":snDate.year
+                    "Day": snDate.day,
+                    "Month": snDate.month,
+                    "Year": snDate.year
                 }
                 if("Day" not in i):
                     del snDate["Day"]
@@ -236,9 +247,12 @@ def getSkippable(sn):
                     del snDate["Month"]
                 if("Year" not in i):
                     del snDate["Year"]
-                
-                if(snDate == i): isIn = True
+
+                if(snDate == i):
+                    isIn = True
                 # print(i,snDate,isIn)
-            if(not isIn): skip = True
-    except:pass
+            if(not isIn):
+                skip = True
+    except:
+        pass
     return skip

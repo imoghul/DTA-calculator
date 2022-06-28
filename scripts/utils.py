@@ -1,15 +1,19 @@
 # from numpy import mean
 
 def ordinal(n):
-    return "%d%s" % (n,"tsnrhtdd"[(n//10%10!=1)*(n%10<4)*n%10::4])
+    return "%d%s" % (n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
+
 
 def empty():
     pass
 
+
 def mean(x):
     sum = 0
-    for i in x: sum+=i
+    for i in x:
+        sum += i
     return sum/len(x)
+
 
 def average(x):
     if len(x) == 0:
@@ -44,23 +48,26 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
-def process_bar(process,current, total,message = "",bar_length=25,bar_pos = 40*" "):
+def process_bar(process, current, total, message="", bar_length=25, bar_pos=40*" "):
     fraction = current/total
     arrow = int(fraction*bar_length-1)*'-'+'>'
     padding = int(bar_length-len(arrow))*' '
-    ending = '\n' if current==total else '\r'
-    
+    ending = '\n' if current == total else '\r'
+
     padTable = ""
-    while(len(f'{process}:'+padTable))<len(bar_pos): padTable+=" "
+    while(len(f'{process}:'+padTable)) < len(bar_pos):
+        padTable += " "
     # print(padTable+"test")
-    print(f'{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}',end = ending)
+    print(
+        f'{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}', end=ending)
 
 
 def parseSUMfileName(fileName):
     data = {}
     _date = fileName.split("_")[-3]
-    data["Date"] =  _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+    data["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
     return data
+
 
 def getFileType(fileName):
     if("_SUM" in fileName):
@@ -69,18 +76,23 @@ def getFileType(fileName):
         return "FT2 RAW"
     elif("FT3_" in fileName or "ft3_" in fileName):
         return "FT3"
-    else: return "FT1" 
+    else:
+        return "FT1"
 
-def moveToBeginning(l,elem):
-    if elem not in l:return
+
+def moveToBeginning(l, elem):
+    if elem not in l:
+        return
     l.insert(0, l.pop(l.index(elem)))
 
+
 def getFT2SUMTitle_config(d):
-    return ((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"])==list else d["title"]))+((":"+d["column header"])if "column header" in d else "")
-
-def getFT2SUMTitle_raw(title,columnheader=None,region=None):
-    return ((region+":") if region!=None else "")+(("_".join(title) if type(title)==list else title))+((":"+columnheader)if columnheader != None else "")
+    return ((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))+((":"+d["column header"])if "column header" in d else "")
 
 
-def anyIn(val,l): # checks if any of the elements of l are in val
+def getFT2SUMTitle_raw(title, columnheader=None, region=None):
+    return ((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title))+((":"+columnheader)if columnheader != None else "")
+
+
+def anyIn(val, l):  # checks if any of the elements of l are in val
     return True in [(i in val) for i in l]
