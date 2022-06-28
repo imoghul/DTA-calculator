@@ -57,10 +57,28 @@
                 "column": 5,
                 "column header":"Modified Offset"
             }
+            ,
+            {
+                "title": ["PrePullDown UUT Responses","type freezer"],
+                "region": "UUT Responses",
+                "column": 5
+            }
         ],
         "FT3": [
             "Barcode 8"
         ]
     },
-    "Generate Certificates": false
+    "Generate Certificates": false,
+    
+    "Limit":{
+        
+    },
+    "Avoid":{
+
+    },
+    "Dates":[
+        {
+
+        }
+    ]
 }   
