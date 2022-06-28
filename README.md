@@ -23,7 +23,7 @@ Double click on ```setup.bat```.
 
 The project will need to be built due to the different file structure across different systems that will use the script. Building is not necessary if using the command line. To build the script double click on ```build.dat```, or ```build.sh``` if using a Mac or Linux machine. You will be prompted to pick the config folder. NOTE: You will not be able to change this later on without rebuilding. Choose a folder in which you wish to put configuration files. 
 
-Once finished building, you should find a file named ```run.exe``` located in the ```scripts/dist``` directory. This file will be the executable that will be used to run the script. The only other files needed are the contents of the ```default``` directory. Apart from that, all other files can be deleted.
+Once finished building, you should find a file named ```run.exe```. This file will be the executable that will be used to run the script. The only other files needed are the contents of the ```default``` directory. Apart from that, all other files can be deleted.
 
 ## Launch
 

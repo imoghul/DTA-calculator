@@ -39,17 +39,17 @@ def calc(fileName):
     # THEORETICALLY WORKING BUT RISIKY CODE BELOW #
     # # # # # # # # # # # # # # # # # # # # # # # #
     
-    # if(fileType == "FT2 SUM" or fileType=="FT2 RAW"):
-    #     isIn = None
-    #     if "Limit" in retrieveData:
-    #         if "Serial Number" in retrieveData["Limit"]:
-    #             if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
-    #             else:isIn = False
-    #         if "Model ID" in retrieveData["Limit"]:
-    #             if anyIn(fileName,retrieveData["Limit"]["Model ID"]): isIn = True
-    #             else:isIn = False
-    #     if isIn==False:
-    #         return
+    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType=="FT2 RAW")):
+        isIn = None
+        if "Limit" in retrieveData:
+            if "Serial Number" in retrieveData["Limit"]:
+                if anyIn(fileName,retrieveData["Limit"]["Serial Number"]): isIn = True
+                else:isIn = False
+            if "Model ID" in retrieveData["Limit"]:
+                if anyIn(fileName,retrieveData["Limit"]["Model ID"]): isIn = True
+                else:isIn = False
+        if isIn==False:
+            return
     
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
@@ -89,7 +89,10 @@ def calc(fileName):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
                                 # print(sn,data[sn][dataKey])
             _date = fileName.replace(".csv","").split("_")
-            _date = _date[_date.index("SUM")-2]
+            index = 1
+            for i in range(len(_date)):
+                if("SUM" in _date[i]):index = i
+            _date = _date[index-2]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
     elif(fileType == "FT2 RAW"):
@@ -125,15 +128,6 @@ def calc(fileName):
 
 def writeHeaderToFile(writer):
     pass
-    # global headers
-    # headers = [(h["title"] if "region" not in h else h["region"]+":"+h["title"]+(":"+h["column header"] if "column header" in h else ""))
-    #            for h in detectionList_FT2_SUM] + [h for h in detectionList_FT3]
-    # headers.insert(0, "File Name:FT3")
-    # headers.insert(0, "File Name:FT2 SUM")
-    # headers.insert(0, "Date")
-    # headers.insert(0, "Serial Number")
-    # print(headers)
-    # writer.writerow(headers)
 
 
 def writeDataToFile(writer, dir, fileNames):
