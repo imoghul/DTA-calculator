@@ -1,0 +1,4 @@
+docx==0.2.4
+docx2pdf==0.1.8
+python_dateutil==2.8.2
+python_docx==0.8.11

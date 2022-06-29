@@ -16,10 +16,7 @@ Please read the following before attempting to use this software.
 * Type cmd and press enter
 * Install following modules by pasting into the command line:
 ```shell
-python -m pip install python-docx
-python -m pip install pyinstaller
-python -m pip install python-dateutil
-python -m pip install docx2pdf
+python -m pip install docx==0.2.4 docx2pdf==0.1.8 python_dateutil==2.8.2 python_docx==0.8.11
 ```
 ### Automatically
 Double click on ```setup.bat```.
