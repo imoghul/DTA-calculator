@@ -83,7 +83,9 @@ In the JSON files for this script, data is stored in "dictionaries". All of the 
     "key3":data3
 }
 ```
- The syntax for a list is: ```[element1, element2, element3]```. All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
+Lists are used in many different instances in these json files. The syntax for a list is: ```[element1, element2, element3]```. 
+
+All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
 
 #### JSON In This Script
 
@@ -130,7 +132,7 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
     "Generate Certificates": true,
     "PDF Certificates": true,
     "Limit": {
-        "Serial Number":["TR156"],
+        "Serial Number":["TR156","VL212"],
         "TestResult":["Test Complete"]
     },
     "Avoid": {
@@ -163,7 +165,7 @@ The key "Generate Certificates" will either be ```false``` or ```true``` and wil
 
 ##### Avoid and Limit
 
-These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a dictionary of their own and will contain elements with the key being the header of the row and the data pertaining to that key being a list. In the list, exact values are not necessary, rather they only must be part the data. For example, TSX is part of Model ID TSX505GA and TSX505SA, therefore both of these Model ID's will count under TSX. In the sample configuration. Only passing devices that contain TR156 in the serial number and don't contain TSX, or PF in the Model ID will count. Essentially, this is all non TSX and PF models with passing results and TR156 in the serial number. 
+These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a dictionary of their own and will contain elements with the key being the header of the row and the data pertaining to that key being a list. In the list, exact values are not necessary, rather they only must be part the data. For example, TSX is part of Model ID TSX505GA and TSX505SA, therefore both of these Model ID's will count under TSX. In the sample configuration. Only passing devices that contain TR156 or VL212 in the serial number and don't contain TSX, or PF in the Model ID will count. Essentially, this is all non TSX and PF models with passing results and TR156 or VL212 in the serial number. 
 
 ##### Dates
 
