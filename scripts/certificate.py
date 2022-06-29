@@ -26,10 +26,12 @@ def createCertificate(sn,cbDate,result,DAQTemp,PostCalibAir,path=docPath):
                 font.color.rgb = RGBColor(0x00,0x00,0x00)#RGBColor(0xff,0xff,0xff)
                 font.name = "AvenirNext LT Pro Regular"
             elif c.text == "CALIBRATION DATE" or c.text == "RESULT" or c.text == "DAQ TEMP" or c.text == "CALIB": 
-                if(c.text == "CALIBRATION DATE"): c.text = cbDate
-                elif (c.text == "RESULT"): c.text = result
-                elif (c.text == "DAQ TEMP"): c.text = DAQTemp
-                elif (c.text == "CALIB"): c.text = PostCalibAir
+                try:
+                    if(c.text == "CALIBRATION DATE"): c.text = cbDate
+                    elif (c.text == "RESULT"): c.text = result
+                    elif (c.text == "DAQ TEMP"): c.text = str(float(DAQTemp))
+                    elif (c.text == "CALIB"): c.text = str(float(PostCalibAir))
+                except: raise Exception("Error while generating the certificate")
                 paragraphs = c.paragraphs
                 paragraph = paragraphs[0]
                 run_obj = paragraph.runs
