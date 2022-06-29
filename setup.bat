@@ -1,8 +1,6 @@
 start /WAIT cmd /c deps\python-3.10.5-amd64.exe /quiet InstallAllUsers=1 PrependPath=1 Include_test=0
 
 
-
-
 @echo off
 ::
 :: RefreshEnv.cmd
@@ -80,13 +78,7 @@ goto main
 
 
 
-
-
-
-
-
-
-
-
-
-start /WAIT cmd /c python -m pip install python-docx PyInstaller python-dateutil docx2pdf
+start /WAIT cmd /c python -m pip install pipreqs
+start /WAIT cmd /c python -m pipreqs.pipreqs --force
+start /WAIT cmd /c python -m pip install -r requirements.txt
+Rem@python-docx PyInstaller python-dateutil docx2pdf
