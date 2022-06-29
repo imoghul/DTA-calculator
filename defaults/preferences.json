@@ -75,7 +75,5 @@
     "PDF Certificates": false,
     "Limit": {},
     "Avoid": {},
-    "Dates": [
-        {}
-    ]
+    "Dates": []
 }

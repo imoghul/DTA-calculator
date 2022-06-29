@@ -88,10 +88,24 @@ def moveToBeginning(l, elem):
 
 
 def getFT2SUMTitle_noCH(d):
-    return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))) 
-
+    try:
+        return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))) 
+    except:
+        raise Exception('One or more entries in FT2 SUM don\'t contain the necessary "title" field')
 def getFT2SUMTitle_config(d):
     return getFT2SUMTitle_noCH(d) if "column header" not in d else d["column header"]
+
+def getFT3Title_config(d):
+    try:
+        return d["title"]
+    except:
+        raise Exception('One or more entries in FT3 don\'t contain the necessary "title" field')
+        
+def getTitle_config(d):
+    if(d["test"]=="FT2 SUM"):
+        return getFT2SUMTitle_config(d)
+    elif(d["test"]=="FT3"):
+        return getFT3Title_config(d)
 
 def getFT2SUMTitle_raw(title, columnheader=None, region=None):
     return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)) )if columnheader == None else "column header"

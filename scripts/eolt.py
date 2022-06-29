@@ -20,8 +20,12 @@ preferencesFile = None
 
 dirNum = 0
 
-detectionList_FT2_SUM = None
-detectionList_FT3 = None
+detectionList = {
+    "FT2 SUM":[],
+    "FT3":[],
+    "FT2 RAW":[],
+    "FT1":[]
+}
 retrieveData = None
 regions = []
 data = {}
@@ -77,10 +81,13 @@ def calc(fileName):
                         region = v[0]
                         if(region not in regions):
                             regions.append(region)
-                    for i in detectionList_FT2_SUM:
-                        index = i["column"]-1
-                        dataField = i["title"]
-                        dataKey = getFT2SUMTitle_config(i)
+                    for i in detectionList["FT2 SUM"]:
+                        try:
+                            index = i["column"]-1
+                            dataField = i["title"]
+                            dataKey = getTitle_config(i)
+                        except:
+                            raise Exception("One or more required keys in an FT2 SUM preference are missing")
                         dataRegion = None if "region" not in i else i["region"]
                         if(type(dataField) != list):
                             if dataRegion == None and dataField == v[0]:
@@ -121,10 +128,11 @@ def calc(fileName):
                             data[sn]["Date"] = _date
                             data[sn]["Model ID"] = v[ft3headers.index(
                                 "Model ID")]
-                        for i in detectionList_FT3:
-                            if(i in ft3headers):
+                        for i in detectionList["FT3"]:
+                            title = getTitle_config(i)
+                            if(title in ft3headers):
                                 try:
-                                    data[sn][i] = v[ft3headers.index(i)]
+                                    data[sn][title] = v[ft3headers.index(title)]
                                 except:
                                     pass
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
@@ -137,12 +145,12 @@ def writeHeaderToFile(writer):
     # check for duplicates
     check = []
     dups = False
-    for i in detectionList_FT3:
+    for i in detectionList["FT3"]:
         if i not in check:
             check.append(i)
         else: dups = True 
-    for i in detectionList_FT2_SUM:
-        title =  getFT2SUMTitle_config(i)
+    for i in detectionList["FT2 SUM"]:
+        title =  getTitle_config(i)
         if title not in check:
             check.append(title)
         else: dups = True
@@ -184,14 +192,17 @@ def writeSummaryToFile(writer):
         for j in data[i]:
             if j not in headers:
                 headers.append(j)
-    for i in reversed(detectionList_FT3):
+    for i in reversed([getTitle_config(j) for j in detectionList["FT3"]]):
         moveToBeginning(headers, i)
-    for i in reversed([getFT2SUMTitle_config(j) for j in detectionList_FT2_SUM]):
+    for i in reversed([getTitle_config(j) for j in detectionList["FT2 SUM"]]):
         moveToBeginning(headers, i)
     moveToBeginning(headers, "File Name:FT3")
     moveToBeginning(headers, "File Name:FT2 SUM")
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "Serial Number")
+    for test in detectionList:
+        for pref in detectionList[test]:
+            if "hide" in pref and pref["hide"]: headers.remove(getTitle_config(pref))
     writer.writerow(headers)
 
     
@@ -228,7 +239,7 @@ def writeSummaryToFile(writer):
 
 
 def transferDirs(cdir, pdir):
-    global certdir, preferencesFile, detectionList_FT2_SUM, detectionList_FT3, retrieveData, genCert
+    global certdir, preferencesFile, detectionList, retrieveData, genCert
     certdir = cdir
     preferencesFile = pdir
     try:
@@ -240,10 +251,10 @@ def transferDirs(cdir, pdir):
         raise e
 
     try:
-        detectionList_FT2_SUM = retrieveData["Test Preferences"][
-            "FT2 SUM"] if "FT2 SUM" in retrieveData["Test Preferences"] else []
-        detectionList_FT3 = retrieveData["Test Preferences"]["FT3"] if "FT3" in retrieveData["Test Preferences"] else [
-        ]
+        for i in retrieveData["Test Preferences"]:
+            if(i["test"] not in detectionList): raise Exception('One or more of the "Test Preferences" has an invalid "test" name')
+            detectionList[i["test"]].append(i)
+        
     except:
         raise Exception('No "Test Preferences" key in prefences file')
     
@@ -269,7 +280,7 @@ def getSkippable(sn):
                 skip = True
     try:
         if("Dates" in retrieveData):
-            isIn = False
+            isIn = len(retrieveData["Dates"])==0
             for i in retrieveData["Dates"]:
                 snDate = dateutil.parser.parse(data[sn]["Date"])
                 snDate = {

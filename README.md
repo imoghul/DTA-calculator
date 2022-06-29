@@ -90,48 +90,70 @@ In the JSON files for this script, data is stored in "dictionaries". All of the 
 The program utilizes two configuration files that will be in the aforementioned config directory. The first one being ```locations.json```. This one does not need to be changed, though it can be. The second one is ```preferences.json```. This is where the preferences for retrieving data and other settings is stored. The syntax for these files will be discussed later.
 
 
-The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed.
+The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed. There are some default paramaters that are included regardless of what's in ```preferences.json```, these are:
+* Serial Number
+* Date
+* File Name:FT2 SUM
+* File Name:FT3
 
-A sample ```preferences.json``` is shown below
+A sample ```preferences.json``` is shown below, please refer to this for syntax, spelling, and capitalization
 ```json
 {
-    "Test Preferences": {
-        "FT2 SUM": [
-            {
-                "title": "Model ID",
-                "column": 2
-            },
-            {
-                "title": "TestResult",
-                "column": 2
-            },
-            {
-                "title": "Air2",
-                "region": "Post Calibration Data",
-                "column": 5,
-                "column header":"Modified Offset"
-            },
-            {
-                "title": "Glycol",
-                "region": "Post Calibration Data",
-                "column": 5
-            }
-        ],
-        "FT3": [
-            "Barcode 8"
-        ]
+    "Test Preferences": [
+        {
+            "test": "FT2 SUM",
+            "title": "Model ID",
+            "column": 2
+        },
+        {
+            "test": "FT2 SUM",
+            "title": "Glycol",
+            "region": "Calibration Data",
+            "column": 5,
+            "column header": "Calib:Glycol"
+        },
+        {
+            "test": "FT2 SUM",
+            "title": [
+                "PrePullDown UUT Responses",
+                "type freezer"
+            ],
+            "region": "UUT Responses",
+            "column": 5,
+            "column header": "Type Freezer"
+        },
+        {
+            "test": "FT3",
+            "title": "Barcode 8"
+        }
+    ],
+    "Generate Certificates": true,
+    "PDF Certificates": true,
+    "Limit": {
+        "Serial Number":["TR156"],
+        "TestResult":["Test Complete"]
     },
-    "Generate Certificates": false,
-    "Avoid":["TR1562152126","VL212460004"],
-    "Limit":["TR1562152132"]
+    "Avoid": {
+        "Model ID":["TSX","PF"]
+    },
+    "Dates": [
+        {
+            "Day":3,
+            "Month":3,
+            "Year":2022
+        },
+        {
+            "Year":2021
+        }
+    ]
 }
 ```
 
 ##### Test Preferences
 
-The test preferences are specifically stored in a sub dictionary under the key "Test Preferences". In this sub dictionary, data to be retrieved from a specific test is defined in a list which is assigned to the key of its test.
+The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file. In some instances this is useful, such as retrieving calibration data for the certificate. One may not want this in the output csv file, though it is necessary to include this preference to generate certificates and to not incur an error during runtime.
 
-Different tests have different syntax due to the nature of how the corresponding csv files are layed out. The keys for different tests are 
+Different tests have different syntax and required keys due to the nature of how the corresponding csv files are layed out. The spellings for different tests are 
 * FT1 - ft1 files
 * FT2 SUM - ft2 summary files
 * FT2 RAW - ft2 raw data files
@@ -141,15 +163,19 @@ The key "Generate Certificates" will either be ```false``` or ```true``` and wil
 
 ##### Avoid and Limit
 
-These are used in defining which serial numbers to look at. Both are included in the example above for the purpose of syntax, though in actual application they are mutually exclusive due to their nature. Avoid determines which serial numbers not to include in the summary, and Limit will only include certain serial numbers. The syntax of both of these are lists
+These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a dictionary of their own and will contain elements with the key being the header of the row and the data pertaining to that key being a list. In the list, exact values are not necessary, rather they only must be part the data. For example, TSX is part of Model ID TSX505GA and TSX505SA, therefore both of these Model ID's will count under TSX. In the sample configuration. Only passing devices that contain TR156 in the serial number and don't contain TSX, or PF in the Model ID will count. Essentially, this is all non TSX and PF models with passing results and TR156 in the serial number. 
+
+##### Dates
+
+Dates is used to determine which dates to look at. While Avoid and Limit can also theoretically be used for this, this is an easier and more readable way of controlling which dates are included.
 
 #### FT2 SUM
 
-The syntax for FT2 SUM test preferences is as follows: Under they key "FT2 SUM" is a list of dictionaries. Each dictionary corresponds to a data value to extract from the test file. Each dictionary has keys "title" and "column" with an option "region". The first aspect to define is region. A region starts in the csv file when there is a row with only the first cell having text. Calibration Data, Post Calibration Data, and UUT Responses are all examples of regions. This will only be included if necessary. As for the first entry, Model ID, it is not in a region therefore a region should not be included. The next value to define, title, is the value that is sought. This must be the text in the first cell in the row. After that comes the column number, which is simply the number of the column that the data actually appears in. The column numbers start at 1. An optional option is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used.
+The syntax for FT2 SUM test preferences is as follows: Each preference corresponds to a data value to extract from the test file. Each dictionary must contain keys "title", "column", "test" with optional keys  "region" and "column header". The first aspect to define is region. A region starts in the csv file when there is a row with only the first cell having text. "Calibration Data", "Post Calibration Data", and "UUT Responses" are all examples of regions. This will only be included if necessary. As for the first entry in the sample above, Model ID, it is not in a region therefore a region should not be included. The next value to define, "title", is the value that is sought. This must be the exact text in the first cell in the row. After that comes the column number, "column", which is simply the number of the column that the data actually appears in. The column numbers start at 1. An optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used.
 
 #### FT3
 
-For FT3 your list will simply contain all of the headings/columns you want to retrieve. The script will then go through all the FT3 files and pick up the Serial Number and the data in the requested headings
+For FT3 your preference will simply contain the heading/column you want to retrieve under the key "title", along with the test file type under the key "test".
 
 #### Locations
 Information about which directories to use are stored in ```locations.json``` in the config directory. The syntax for this file is included in this documentation for completion and added functionality but it need not be touched if the user does not wish to.
