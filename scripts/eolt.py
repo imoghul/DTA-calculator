@@ -80,12 +80,10 @@ def calc(fileName):
                     for i in detectionList_FT2_SUM:
                         index = i["column"]-1
                         dataField = i["title"]
-                        dataColumnHeader = i["column header"] if "column header" in i else None
                         dataKey = getFT2SUMTitle_config(i)
                         dataRegion = None if "region" not in i else i["region"]
                         if(type(dataField) != list):
                             if dataRegion == None and dataField == v[0]:
-                                # key = getFT2SUMTitle_raw(v[0],columnheader=dataColumnHeader,region = dataRegion)
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (dataField in v and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
@@ -150,7 +148,6 @@ def writeHeaderToFile(writer):
         else: dups = True
     
     if(dups):
-        sys.tracebacklimit = -1
         raise Exception("Cannot have duplicates in header. Please check your preferences.json and resolve issue")
 
 
@@ -161,13 +158,14 @@ def writeDataToFile(writer, dir, fileNames):
     length = len(fileNames)
     global certdir
     for fileName in fileNames:
+        counter += 1
+        process_bar("Retrieving from the %s directory" % ordinal(dirNum), counter, length)
         try:
             success = calc(fileName)
-            counter += 1
+            
             if(counter > length):
                 return
-            process_bar("Retrieving from the %s directory" %
-                        ordinal(dirNum), counter, length)
+            
         except Exception as e:
             print(fileName + " couldn't be read with the following error: "+str(e))
 
@@ -232,13 +230,24 @@ def transferDirs(cdir, pdir):
     global certdir, preferencesFile, detectionList_FT2_SUM, detectionList_FT3, retrieveData, genCert
     certdir = cdir
     preferencesFile = pdir
-    with open(preferencesFile) as f:
-        retrieveData = json.load(f)
-    detectionList_FT2_SUM = retrieveData["Test Preferences"][
-        "FT2 SUM"] if "FT2 SUM" in retrieveData["Test Preferences"] else []
-    detectionList_FT3 = retrieveData["Test Preferences"]["FT3"] if "FT3" in retrieveData["Test Preferences"] else [
-    ]
-    genCert = retrieveData["Generate Certificates"]
+    try:
+        with open(preferencesFile) as f:
+            retrieveData = json.load(f)
+    except(PermissionError):
+        raise Exception("Preferences file couldn't be opened. Close the file if it is open")
+    except Exception as e:
+        raise e
+
+    try:
+        detectionList_FT2_SUM = retrieveData["Test Preferences"][
+            "FT2 SUM"] if "FT2 SUM" in retrieveData["Test Preferences"] else []
+        detectionList_FT3 = retrieveData["Test Preferences"]["FT3"] if "FT3" in retrieveData["Test Preferences"] else [
+        ]
+    except:
+        raise Exception('No "Test Preferences" key in prefences file')
+    
+    
+    genCert = "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"]
 
 
 def getSkippable(sn):

@@ -1,10 +1,9 @@
-from copyreg import pickle
 import csv
 import glob
 import os
 import json
 import sys
-
+sys.tracebacklimit = -1
 from eolt import *
 from tkinter import filedialog
 from tkinter import *
@@ -51,7 +50,7 @@ if(mode == 'd'):
             dirs = [dirs]
     except:
         raise Exception(
-            "\n\nOne or more of the directories couldn't be found, please select locations manually")
+            "One or more of the directories couldn't be found, please select locations manually")
 elif(mode == 'i'):
     root = Tk()
     root.withdraw()
@@ -69,7 +68,7 @@ elif(mode == 'i'):
             _dirs = [_dirs]
     except:
         raise Exception(
-            "\n\nOne or more of the directories couldn't be found, please select ALL locations manually")
+            "One or more of the directories couldn't be found, please select ALL locations manually")
     if(outdir == "/"):
         outdir = _outdir
     if(certdir == "/"):
@@ -117,8 +116,12 @@ def createFile():
 
         writeSummaryToFile(writer)
 
-
-createFile()
+try:
+    createFile()
+except(PermissionError):
+    raise Exception("Output file couldn't be opened. Close the file if it is open")
+except Exception as e:
+    raise e
 
 lines = {}
 lines["out_dir"] = outdir + \
@@ -129,11 +132,12 @@ lines["certificate_dir"] = certdir + \
 lines["search_dirs"] = [
     d+("/" if d[-1] != "/" and d[-1] != "\\" else "") for d in dirs]
 
-
-with open(locationFile, "w") as f:
-    json.dump(lines, f, indent=4)
-
-# with open(locationFile) as f:
-#     print(json.load(f))
+try:
+    with open(locationFile, "w") as f:
+        json.dump(lines, f, indent=4)
+except(PermissionError):
+    raise Exception("Locations file couldn't be opened. Close the file if it is open")
+except Exception as e:
+    raise e
 
 os.system("pause")
