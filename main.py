@@ -4,12 +4,11 @@ import os
 import sys
 
 from click import edit
-from utils import editList
 from tkinter import filedialog
 from tkinter import *
 
 
-outdir = "CSV OUTPUT/"
+outdir = "L:/Engineering_Services/Public/EOLT/Factory Data - Vexos Ohio/Summary"
 if(sys.argv[2] == 'i'):
     root = Tk()
     root.withdraw()
@@ -33,8 +32,7 @@ def createFile():
         # dirs.insert(0, "baseline")
         # print(dirs)
         original = os.getcwd()
-        editList(detectionList)
-        
+        print(outFileName)
         for dir in dirs:
             os.chdir(dir)
             fileNames = glob.glob(globType, recursive=True)
