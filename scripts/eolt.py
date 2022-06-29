@@ -199,6 +199,15 @@ def writeSummaryToFile(writer):
         if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
             createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                               ["TestResult"] == "Test Complete" else "Fail", certdir)
+    if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"]==True):
+        counter = 0
+        docs = glob.glob(certdir+"*_certificate*.docx")
+        # print(docs)
+        length = len(docs)
+        for i in docs:
+            counter += 1
+            # process_bar("Converting to PDF", counter, length)
+            convertToPDF(i)
 
 
 def transferDirs(cdir, pdir):

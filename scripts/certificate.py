@@ -1,6 +1,8 @@
 from docx import *
 from docx.shared import *
+import contextlib
 from docx2pdf import convert
+import os,sys
 import shutil
 docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\OUTPUT\\FACTORY\\Certificates\\"
 
@@ -37,5 +39,11 @@ def createCertificate(sn,cbDate,result,path=docPath):
     
             doc.save(dest)
     
-    convert(dest)
 
+def convertToPDF(doc):
+    # with contextlib.redirect_stdout(open(os.devnull, 'w')):
+    try:
+        print('Converting %s to pdf'%doc.replace("\\","/").split("/")[-1])
+        convert(doc)
+    except:
+        print(doc+" couldn't be converted to a pdf")
