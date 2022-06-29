@@ -95,7 +95,6 @@ def calc(fileName):
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
-                                # print(sn,data[sn][dataKey])
             _date = fileName.replace(".csv", "").split("_")
             index = 1
             for i in range(len(_date)):
@@ -250,7 +249,6 @@ def getSkippable(sn):
 
                 if(snDate == i):
                     isIn = True
-                # print(i,snDate,isIn)
             if(not isIn):
                 skip = True
     except:

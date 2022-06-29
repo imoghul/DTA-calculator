@@ -1,5 +1,6 @@
 from docx import *
 from docx.shared import *
+from docx2pdf import convert
 import shutil
 docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\OUTPUT\\FACTORY\\Certificates\\"
 
@@ -35,4 +36,6 @@ def createCertificate(sn,cbDate,result,path=docPath):
                 font.name = "AvenirNext LT Pro Regular"
     
             doc.save(dest)
+    
+    convert(dest)
 

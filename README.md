@@ -16,6 +16,8 @@
 ```shell
 python -m pip install python-docx
 python -m pip install pyinstaller
+python -m pip install python-dateutil
+python -m pip install docx2pdf
 ```
 ### Automatically
 Double click on ```setup.bat```.

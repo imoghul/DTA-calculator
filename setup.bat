@@ -89,4 +89,4 @@ goto main
 
 
 
-start /WAIT cmd /c python -m pip install python-docx PyInstaller python-dateutil
+start /WAIT cmd /c python -m pip install python-docx PyInstaller python-dateutil docx2pdf
