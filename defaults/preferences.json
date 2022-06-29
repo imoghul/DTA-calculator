@@ -13,49 +13,49 @@
                 "title": "Air1",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Calib:Air1"
             },
             {
                 "title": "Air2",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Calib:Air2"
             },
             {
                 "title": "Glycol",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Calib:Glycol"
             },
             {
                 "title": "Air1",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Post Calib:Air1"
             },
             {
                 "title": "Air2",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Post Calib:Air2"
             },
             {
                 "title": "Glycol",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Post Calib:Glycol"
             },
             {
                 "title": "Air",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Post Calib:Air"
             },
             {
                 "title": "Air",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header": "Modified Offset"
+                "column header": "Calib:Air"
             },
             {
                 "title": [
@@ -63,7 +63,8 @@
                     "type freezer"
                 ],
                 "region": "UUT Responses",
-                "column": 5
+                "column": 5,
+                "column header": "Type Freezer"
             }
         ],
         "FT3": [
@@ -71,7 +72,7 @@
         ]
     },
     "Generate Certificates": false,
-    "PDF Certificates": false,
+    "PDF Certificates":false,
     "Limit": {},
     "Avoid": {},
     "Dates": [
