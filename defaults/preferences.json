@@ -72,7 +72,7 @@
         ]
     },
     "Generate Certificates": false,
-    "PDF Certificates":false,
+    "PDF Certificates": false,
     "Limit": {},
     "Avoid": {},
     "Dates": [

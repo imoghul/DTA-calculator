@@ -40,10 +40,19 @@ def createCertificate(sn,cbDate,result,path=docPath):
             doc.save(dest)
     
 
-def convertToPDF(doc):
+def convertToPDF_doc(doc):
     # with contextlib.redirect_stdout(open(os.devnull, 'w')):
     try:
         print('Converting %s to pdf'%doc.replace("\\","/").split("/")[-1])
         convert(doc)
     except:
         print(doc+" couldn't be converted to a pdf")
+
+
+def convertToPDF_path(path):
+    # with contextlib.redirect_stdout(open(os.devnull, 'w')):
+    try:
+        print('Converting certificates to pdfs')
+        convert(path)
+    except:
+        print("Some files couldn't be converted to a pdf")
