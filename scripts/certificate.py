@@ -7,7 +7,7 @@ import shutil
 docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\OUTPUT\\FACTORY\\Certificates\\"
 
 
-def createCertificate(sn,cbDate,result,path=docPath):
+def createCertificate(sn,cbDate,result,DAQTemp,PostCalibAir,path=docPath):
     dest = path+"%s_certificate.docx"%sn
     shutil.copy2(path+"TEMPLATE.docx",dest)
     doc = Document(dest)
@@ -25,9 +25,11 @@ def createCertificate(sn,cbDate,result,path=docPath):
                 font.size = Pt(30)
                 font.color.rgb = RGBColor(0x00,0x00,0x00)#RGBColor(0xff,0xff,0xff)
                 font.name = "AvenirNext LT Pro Regular"
-            elif c.text == "CALIBRATION DATE" or c.text == "RESULT": 
+            elif c.text == "CALIBRATION DATE" or c.text == "RESULT" or c.text == "DAQ TEMP" or c.text == "CALIB": 
                 if(c.text == "CALIBRATION DATE"): c.text = cbDate
                 elif (c.text == "RESULT"): c.text = result
+                elif (c.text == "DAQ TEMP"): c.text = DAQTemp
+                elif (c.text == "CALIB"): c.text = PostCalibAir
                 paragraphs = c.paragraphs
                 paragraph = paragraphs[0]
                 run_obj = paragraph.runs

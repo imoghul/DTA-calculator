@@ -17,14 +17,14 @@ globType = "**/*.csv"
 
 preferencesFile = None
 
-
+randStr = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
-    "FT2 SUM":[],
-    "FT3":[],
-    "FT2 RAW":[],
-    "FT1":[]
+    "FT2 SUM": [],
+    "FT3": [],
+    "FT2 RAW": [],
+    "FT1": []
 }
 retrieveData = None
 regions = []
@@ -87,7 +87,9 @@ def calc(fileName):
                             dataField = i["title"]
                             dataKey = getTitle_config(i)
                         except:
-                            raise Exception("One or more required keys in an FT2 SUM preference are missing")
+                            raise Exception(
+                                "One or more required keys in an FT2 SUM preference are missing")
+                        
                         dataRegion = None if "region" not in i else i["region"]
                         if(type(dataField) != list):
                             if dataRegion == None and dataField == v[0]:
@@ -132,7 +134,8 @@ def calc(fileName):
                             title = getTitle_config(i)
                             if(title in ft3headers):
                                 try:
-                                    data[sn][title] = v[ft3headers.index(title)]
+                                    data[sn][title] = v[ft3headers.index(
+                                        title)]
                                 except:
                                     pass
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
@@ -148,15 +151,18 @@ def writeHeaderToFile(writer):
     for i in detectionList["FT3"]:
         if i not in check:
             check.append(i)
-        else: dups = True 
+        else:
+            dups = True
     for i in detectionList["FT2 SUM"]:
-        title =  getTitle_config(i)
+        title = getTitle_config(i)
         if title not in check:
             check.append(title)
-        else: dups = True
-    
+        else:
+            dups = True
+
     if(dups):
-        raise Exception("Cannot have duplicates in header. Please check your preferences.json and resolve issue")
+        raise Exception(
+            "Cannot have duplicates in header. Please check your preferences.json and resolve issue")
 
 
 def writeDataToFile(writer, dir, fileNames):
@@ -167,13 +173,14 @@ def writeDataToFile(writer, dir, fileNames):
     global certdir
     for fileName in fileNames:
         counter += 1
-        process_bar("Retrieving from the %s directory" % ordinal(dirNum), counter, length)
+        process_bar("Retrieving from the %s directory" %
+                    ordinal(dirNum), counter, length)
         try:
             success = calc(fileName)
-            
+
             if(counter > length):
                 return
-            
+
         except Exception as e:
             print(fileName + " couldn't be read with the following error: "+str(e))
 
@@ -202,10 +209,9 @@ def writeSummaryToFile(writer):
     moveToBeginning(headers, "Serial Number")
     for test in detectionList:
         for pref in detectionList[test]:
-            if "hide" in pref and pref["hide"]: headers.remove(getTitle_config(pref))
+            if "hide" in pref and pref["hide"]:
+                headers.remove(getTitle_config(pref))
     writer.writerow(headers)
-
-    
 
     # writing data
     counter = 0
@@ -222,10 +228,14 @@ def writeSummaryToFile(writer):
             continue
 
         writer.writerow([data[sn][h] for h in headers])
-        if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
-            createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
-                              ["TestResult"] == "Test Complete" else "Fail", certdir)
-    if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"]==True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
+        try:
+            if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
+                createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
+                                  ["TestResult"] == "Test Complete" else "Fail", data[sn][randStr+"CERTIFICATE:DAQ TEMP"] if randStr+"CERTIFICATE:DAQ TEMP" in data[sn] else "N/A", data[sn][randStr+"CERTIFICATE:CALIB"] if randStr+"CERTIFICATE:CALIB" in data[sn] else "N/A", certdir)
+        except:
+            raise Exception(
+                "Couldn't generate certificate, check config file for correct preferences")
+    if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
         # counter = 0
         # docs = glob.glob(certdir+"*_certificate*.docx")
         # # print(docs)
@@ -246,19 +256,42 @@ def transferDirs(cdir, pdir):
         with open(preferencesFile) as f:
             retrieveData = json.load(f)
     except(PermissionError):
-        raise Exception("Preferences file couldn't be opened. Close the file if it is open")
+        raise Exception(
+            "Preferences file couldn't be opened. Close the file if it is open")
     except Exception as e:
         raise e
 
     try:
+        retrieveData["Test Preferences"].append({
+            "test": "FT2 SUM",
+            "title": "DAQ Temperature (oC)",
+            "region": "Post Calibration Data",
+            "column": 2,
+            "hide": True,
+            "column header": randStr+"CERTIFICATE:DAQ TEMP"
+        }
+        )
+
+        retrieveData["Test Preferences"].append({
+            "test": "FT2 SUM",
+            "title": "Air2",
+            "region": "Post Calibration Data",
+            "column": 5,
+            "hide": True,
+            "column header": randStr+"CERTIFICATE:CALIB"
+        }
+        )
         for i in retrieveData["Test Preferences"]:
-            if(i["test"] not in detectionList): raise Exception('One or more of the "Test Preferences" has an invalid "test" name')
+            if(i["test"] not in detectionList):
+                raise Exception(
+                    'One or more of the "Test Preferences" has an invalid "test" name')
             detectionList[i["test"]].append(i)
+
         
+
     except:
         raise Exception('No "Test Preferences" key in prefences file')
-    
-    
+
     genCert = "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"]
 
 
@@ -280,7 +313,7 @@ def getSkippable(sn):
                 skip = True
     try:
         if("Dates" in retrieveData):
-            isIn = len(retrieveData["Dates"])==0
+            isIn = len(retrieveData["Dates"]) == 0
             for i in retrieveData["Dates"]:
                 snDate = dateutil.parser.parse(data[sn]["Date"])
                 snDate = {
