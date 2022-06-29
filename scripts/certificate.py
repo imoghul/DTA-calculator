@@ -54,5 +54,5 @@ def convertToPDF_path(path):
     try:
         print('Converting certificates to pdfs')
         convert(path)
-    except:
-        print("Some files couldn't be converted to a pdf")
+    except Exception as e:
+        pass#print("Some files couldn't be converted to a pdf")
