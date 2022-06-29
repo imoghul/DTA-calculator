@@ -207,10 +207,12 @@ def writeSummaryToFile(writer):
     moveToBeginning(headers, "File Name:FT2 SUM")
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "Serial Number")
+    # print(headers)
     for test in detectionList:
         for pref in detectionList[test]:
             if "hide" in pref and pref["hide"]:
-                headers.remove(getTitle_config(pref))
+                title = getTitle_config(pref)
+                if title in headers:headers.remove(title)
     writer.writerow(headers)
 
     # writing data
@@ -229,7 +231,7 @@ def writeSummaryToFile(writer):
 
         writer.writerow([data[sn][h] for h in headers])
         try:
-            if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
+            if(genCert and "Date" in data[sn] and "TestResult" in data[sn] and randStr+"CERTIFICATE:DAQ TEMP" in data[sn] and randStr+"CERTIFICATE:CALIB" in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                                   ["TestResult"] == "Test Complete" else "Fail", data[sn][randStr+"CERTIFICATE:DAQ TEMP"] if randStr+"CERTIFICATE:DAQ TEMP" in data[sn] else "N/A", data[sn][randStr+"CERTIFICATE:CALIB"] if randStr+"CERTIFICATE:CALIB" in data[sn] else "N/A", certdir)
         except:
