@@ -1,5 +1,7 @@
 # EOLT Test Script
 
+Please read the following before attempting to use this software.
+
 ## Download Source Code
 
 1. Press: https://github.com/imoghul/EOLT-Test-Analyzer/archive/refs/heads/main.zip

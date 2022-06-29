@@ -136,7 +136,22 @@ def calc(fileName):
 
 
 def writeHeaderToFile(writer):
-    pass
+    # check for duplicates
+    check = []
+    dups = False
+    for i in detectionList_FT3:
+        if i not in check:
+            check.append(i)
+        else: dups = True 
+    for i in detectionList_FT2_SUM:
+        title =  getFT2SUMTitle_config(i)
+        if title not in check:
+            check.append(title)
+        else: dups = True
+    
+    if(dups):
+        sys.tracebacklimit = -1
+        raise Exception("Cannot have duplicates in header. Please check your preferences.json and resolve issue")
 
 
 def writeDataToFile(writer, dir, fileNames):
@@ -164,7 +179,7 @@ def writeSummaryToFile(writer):
         data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(
             str(dateutil.parser.parse(sn[1]["Date"])), "%Y-%m-%d %H:%M:%S"))}
     except:
-        print("Bad date exists, so will not sort by date")
+        print("Bad date exists, will not sort by date")
     # header calculating
     global headers
     for i in data:
@@ -180,6 +195,8 @@ def writeSummaryToFile(writer):
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "Serial Number")
     writer.writerow(headers)
+
+    
 
     # writing data
     counter = 0
@@ -199,7 +216,8 @@ def writeSummaryToFile(writer):
         if(genCert and "Date" in data[sn] and "TestResult" in data[sn]):
             createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                               ["TestResult"] == "Test Complete" else "Fail", certdir)
-    if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"]==True):
+    if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"]==True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
+        print("\n\n")
         counter = 0
         docs = glob.glob(certdir+"*_certificate*.docx")
         # print(docs)

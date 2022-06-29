@@ -13,53 +13,55 @@
                 "title": "Air1",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Air2",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Glycol",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Air1",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Air2",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Glycol",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Air",
                 "region": "Post Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
+                "column header": "Modified Offset"
             },
             {
                 "title": "Air",
                 "region": "Calibration Data",
                 "column": 5,
-                "column header":"Modified Offset"
-            }
-            ,
+                "column header": "Modified Offset"
+            },
             {
-                "title": ["PrePullDown UUT Responses","type freezer"],
+                "title": [
+                    "PrePullDown UUT Responses",
+                    "type freezer"
+                ],
                 "region": "UUT Responses",
                 "column": 5
             }
@@ -69,16 +71,10 @@
         ]
     },
     "Generate Certificates": false,
-    
-    "Limit":{
-        
-    },
-    "Avoid":{
-
-    },
-    "Dates":[
-        {
-
-        }
+    "PDF Certificates": false,
+    "Limit": {},
+    "Avoid": {},
+    "Dates": [
+        {}
     ]
-}   
+}

@@ -10,30 +10,35 @@ from tkinter import filedialog
 from tkinter import *
 
 try:
-    basePath = sys._MEIPASS
-except Exception:
-    basePath = os.path.abspath(".")
-bundle_dir = getattr(
-    sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
-configtxt = os.path.join(bundle_dir, 'configdir.txt')
+    try:
+        basePath = sys._MEIPASS
+    except Exception:
+        basePath = os.path.abspath(".")
+    bundle_dir = getattr(
+        sys, '_MEIPASS', os.path.abspath(os.path.dirname(__file__)))
+    configtxt = os.path.join(bundle_dir, 'configdir.txt')
 
+    with open(configtxt, "r") as f:
+        configdir = f.read()
+except:
+    raise Exception("Error reading config directory try re-building")
+    
 cli = False
 mode = ('d' if input("Press enter to use previous locations\nTo choose new locations enter any other character: ")
         == "" else 'i') if not cli else sys.argv[1]
-
+print()
 dirs = ""
 outdir = ""
 certdir = ""
 
-with open(configtxt, "r") as f:
-    configdir = f.read()
+
 
 preferencesFile = configdir+"\\preferences.json"
 locationFile = configdir+"\\locations.json"
 
 if (cli and len(sys.argv) < 2):
     raise Exception(
-        "usage: python EOLT-Test-Analyzer/main.py <test locations>")
+        "usage: python run.py <test locations>")
 
 if(mode == 'd'):
     try:

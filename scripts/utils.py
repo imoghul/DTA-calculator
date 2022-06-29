@@ -1,4 +1,5 @@
 # from numpy import mean
+import copy
 
 def ordinal(n):
     return "%d%s" % (n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
@@ -86,12 +87,14 @@ def moveToBeginning(l, elem):
     l.insert(0, l.pop(l.index(elem)))
 
 
-def getFT2SUMTitle_config(d):
-    return ((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))+((":"+d["column header"])if "column header" in d else "")
+def getFT2SUMTitle_noCH(d):
+    return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))) 
 
+def getFT2SUMTitle_config(d):
+    return getFT2SUMTitle_noCH(d) if "column header" not in d else d["column header"]
 
 def getFT2SUMTitle_raw(title, columnheader=None, region=None):
-    return ((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title))+((":"+columnheader)if columnheader != None else "")
+    return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)) )if columnheader == None else "column header"
 
 
 def anyIn(val, l):  # checks if any of the elements of l are in val
