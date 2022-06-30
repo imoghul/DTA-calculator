@@ -190,7 +190,7 @@ def calc(fileName):
                                         dataField)]
                                 except:
                                     raise Exception(
-                                        dataField+" couldn't be found in this file")
+                                        "Step header "+dataField+" couldn't be found in this file")
             
             data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
     return True
