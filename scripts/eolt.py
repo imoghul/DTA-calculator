@@ -161,9 +161,11 @@ def calc(fileName):
                     if("SN" in v or "Serial Number" in v):
                         sn = v[1]
                         currentSN = sn
-                        if(sn not in data.keys()):
+                        _date = fileName.replace(".csv", "").split("_")[-2]
+                        if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
+                            data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
                             continue
                     if(len(v) > 2 and ft1headers == None):
                         ft1headers = v
@@ -189,9 +191,7 @@ def calc(fileName):
                                 except:
                                     raise Exception(
                                         dataField+" couldn't be found in this file")
-            _date = fileName.replace(".csv", "").split("_")[-2]
-
-            data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
+            
             data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
     return True
 
