@@ -209,5 +209,9 @@ To determine what type of test a csv file is, the file name is observed with cer
 ### Execution
 After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode, meaning that the ```summary.csv``` file will be overwritten every time. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time. If there is a conflict between data in any of the files FT2 SUM takes preference.
 
+### Remarks on Excel Master Files
+
+There are 2 provided excel files in the defaults directory. EOLT_1 allows the user to change the summary csv file to use, while EOLT_2 requires that it be named ```summary.csv``` and be in the same directory as the EOLT_2.xlsx file. EOLT_1 does some to be buggy due to the fact that opening it for the first time on a computer with a different pathing will cause the formulas to fail. If one has the time to fix this, EOLT_1 becomes more useful. Otherwise EOLT_2 is much more stable
+
 ****
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/main
