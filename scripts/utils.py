@@ -1,6 +1,7 @@
 # from numpy import mean
 import copy
 
+
 def ordinal(n):
     return "%d%s" % (n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
 
@@ -89,35 +90,45 @@ def moveToBeginning(l, elem):
 
 def getFT2SUMTitle_noCH(d):
     try:
-        return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"]))) 
+        return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"])))
     except:
-        raise Exception('One or more entries in FT2 SUM don\'t contain the necessary "title" field')
+        raise Exception(
+            'One or more entries in FT2 SUM don\'t contain the necessary "title" field')
+
+
 def getFT2SUMTitle_config(d):
     return getFT2SUMTitle_noCH(d) if "column header" not in d else d["column header"]
+
 
 def getFT3Title_config(d):
     try:
         return d["title"] if "column header" not in d else d["column header"]
     except:
-        raise Exception('One or more entries in FT3 don\'t contain the necessary "title" field')
+        raise Exception(
+            'One or more entries in FT3 don\'t contain the necessary "title" field')
+
 
 def getFT1Title_config(d):
     try:
         return (((d["step"]+":")if "step" in d else "")+d["title"]) if "column header" not in d else d["column header"]
     except:
-        raise Exception('One or more entries in FT3 don\'t contain the necessary "title" field')
-        
+        raise Exception(
+            'One or more entries in FT3 don\'t contain the necessary "title" field')
+
+
 def getTitle_config(d):
     res = None
-    if(d["test"]=="FT2 SUM"):
+    if(d["test"] == "FT2 SUM"):
         res = getFT2SUMTitle_config(d)
-    elif(d["test"]=="FT3"):
+    elif(d["test"] == "FT3"):
         res = getFT3Title_config(d)
-    elif(d["test"]=="FT1"):
+    elif(d["test"] == "FT1"):
         res = getFT1Title_config(d)
     return res if "column header" not in d else d["column header"]
+
+
 def getFT2SUMTitle_raw(title, columnheader=None, region=None):
-    return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)) )if columnheader == None else "column header"
+    return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)))if columnheader == None else "column header"
 
 
 def anyIn(val, l):  # checks if any of the elements of l are in val

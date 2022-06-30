@@ -21,7 +21,7 @@ try:
         configdir = f.read()
 except:
     raise Exception("Error reading config directory try re-building")
-    
+
 cli = False
 mode = ('d' if input("Press enter to use previous locations\nTo choose new locations enter any other character: ")
         == "" else 'i') if not cli else sys.argv[1]
@@ -29,7 +29,6 @@ print()
 dirs = ""
 outdir = ""
 certdir = ""
-
 
 
 preferencesFile = configdir+"\\preferences.json"
@@ -117,10 +116,13 @@ def createFile():
             writeSummaryToFile(writer)
         except:
             raise Exception("Couldn't write summary file")
+
+
 try:
     createFile()
 except(PermissionError):
-    raise Exception("Output file couldn't be opened. Close the file if it is open")
+    raise Exception(
+        "Output file couldn't be opened. Close the file if it is open")
 except Exception as e:
     raise e
 
@@ -137,7 +139,8 @@ try:
     with open(locationFile, "w") as f:
         json.dump(lines, f, indent=4)
 except(PermissionError):
-    raise Exception("Locations file couldn't be opened. Close the file if it is open")
+    raise Exception(
+        "Locations file couldn't be opened. Close the file if it is open")
 except Exception as e:
     raise e
 

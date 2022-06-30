@@ -26,7 +26,7 @@ while calibKey == daqTempKey:
 testResKey = calibKey
 while testResKey == calibKey:
     testResKey = (''.join(random.choice(string.ascii_lowercase +
-                string.digits + string.ascii_uppercase) for i in range(20)))
+                                        string.digits + string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -156,7 +156,7 @@ def calc(fileName):
             for row in csv.reader(file, delimiter='\n', quotechar=','):
                 for r in row:
                     v = r.split(',')
-                    if("Model ID" in v and len(v)>1):
+                    if("Model ID" in v and len(v) > 1):
                         modelId = v[1]
                     if("SN" in v or "Serial Number" in v):
                         sn = v[1]
@@ -176,15 +176,19 @@ def calc(fileName):
                                 "One or more required keys in an FT1 preference are missing")
 
                         if(ft1headers == None):
-                            if(dataField == "Model ID"):data[sn][dataKey] = modelId
-                            elif(dataKey in v): data[sn][dataKey] = v[1]
+                            if(dataField == "Model ID"):
+                                data[sn][dataKey] = modelId
+                            elif(dataKey in v):
+                                data[sn][dataKey] = v[1]
                         elif "step" in i:
                             step = i["step"]
-                            if(v[0]==step):
+                            if(v[0] == step):
                                 try:
-                                    data[sn][dataKey] = v[ft1headers.index(dataField)]
+                                    data[sn][dataKey] = v[ft1headers.index(
+                                        dataField)]
                                 except:
-                                    raise Exception(dataField+" couldn't be found in this file")
+                                    raise Exception(
+                                        dataField+" couldn't be found in this file")
             _date = fileName.replace(".csv", "").split("_")[-2]
 
             data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
@@ -211,7 +215,8 @@ def writeHeaderToFile(writer):
     for test in detectionList:
         for i in detectionList[test]:
             title = getTitle_config(i)
-            if title not in check:check.append(title)
+            if title not in check:
+                check.append(title)
             else:
                 dups = True
 
@@ -241,7 +246,7 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
-    
+
     global data
     # sort data
     try:
@@ -275,7 +280,7 @@ def writeSummaryToFile(writer):
     # writing data
     counter = 0
     length = len(data)
-    
+
     for sn in data:
         counter += 1
         process_bar("Writing Data", counter, length)
@@ -286,9 +291,11 @@ def writeSummaryToFile(writer):
         if getSkippable(sn):
             continue
 
-        try:writer.writerow([data[sn][h] for h in headers])
-        except:pass
-            # print("Couldn't write data for %s\nMost likely due to non encodable characters in filename")
+        try:
+            writer.writerow([data[sn][h] for h in headers])
+        except:
+            pass
+           # print("Couldn't write data for %s\nMost likely due to non encodable characters in filename")
         try:
             if(genCert and "Date" in data[sn] and testResKey in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
@@ -296,7 +303,7 @@ def writeSummaryToFile(writer):
         except:
             raise Exception(
                 "Couldn't generate certificate, check config file for correct preferences")
-    
+
     if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
         # counter = 0
         # docs = glob.glob(certdir+"*_certificate*.docx")
