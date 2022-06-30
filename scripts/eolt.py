@@ -17,7 +17,8 @@ globType = "**/*.csv"
 
 preferencesFile = None
 
-randStr = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
+daqTempKey = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
+calibKey = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -35,6 +36,7 @@ certdir = None
 genCert = False
 
 
+
 def calc(fileName):
     global currentSN, data, headers
     fileType = getFileType(fileName)
@@ -46,12 +48,12 @@ def calc(fileName):
     if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW")):
         isIn = None
         if "Limit" in retrieveData:
-            if "Serial Number" in retrieveData["Limit"]:
+            if "Serial Number" in retrieveData["Limit"] and retrieveData["Limit"]["Serial Number"]!=[]:
                 if anyIn(fileName, retrieveData["Limit"]["Serial Number"]):
                     isIn = True
                 else:
                     isIn = False
-            if "Model ID" in retrieveData["Limit"]:
+            if "Model ID" in retrieveData["Limit"] and retrieveData["Limit"]["Model ID"]!=[]:
                 if anyIn(fileName, retrieveData["Limit"]["Model ID"]):
                     isIn = True
                 else:
@@ -231,9 +233,9 @@ def writeSummaryToFile(writer):
 
         writer.writerow([data[sn][h] for h in headers])
         try:
-            if(genCert and "Date" in data[sn] and "TestResult" in data[sn] and randStr+"CERTIFICATE:DAQ TEMP" in data[sn] and randStr+"CERTIFICATE:CALIB" in data[sn]):
+            if(genCert and "Date" in data[sn] and "TestResult" in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
-                                  ["TestResult"] == "Test Complete" else "Fail", data[sn][randStr+"CERTIFICATE:DAQ TEMP"] if randStr+"CERTIFICATE:DAQ TEMP" in data[sn] else "N/A", data[sn][randStr+"CERTIFICATE:CALIB"] if randStr+"CERTIFICATE:CALIB" in data[sn] else "N/A", certdir)
+                                  ["TestResult"] == "Test Complete" else "Fail", data[sn][daqTempKey] if daqTempKey in data[sn] else "N/A", data[sn][calibKey] if calibKey in data[sn] else "N/A", certdir)
         except:
             raise Exception(
                 "Couldn't generate certificate, check config file for correct preferences")
@@ -270,7 +272,7 @@ def transferDirs(cdir, pdir):
             "region": "Post Calibration Data",
             "column": 2,
             "hide": True,
-            "column header": randStr+"CERTIFICATE:DAQ TEMP"
+            "column header": daqTempKey
         }
         )
 
@@ -280,7 +282,7 @@ def transferDirs(cdir, pdir):
             "region": "Post Calibration Data",
             "column": 5,
             "hide": True,
-            "column header": randStr+"CERTIFICATE:CALIB"
+            "column header": calibKey
         }
         )
         for i in retrieveData["Test Preferences"]:
