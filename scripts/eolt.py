@@ -74,7 +74,7 @@ def calc(fileName):
 
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
-            sn = ""
+            sn = None
             region = ""
             for row in csv.reader(file, delimiter='\n', quotechar=','):
                 for r in row:
@@ -86,6 +86,8 @@ def calc(fileName):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
                             continue
+                    elif sn==None:
+                        continue
                     if(len(v) == 1):
                         region = v[0]
                         if(region not in regions):
@@ -111,14 +113,17 @@ def calc(fileName):
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
-            _date = fileName.replace(".csv", "").split("_")
-            index = 1
-            for i in range(len(_date)):
-                if("SUM" in _date[i]):
-                    index = i
-            _date = _date[index-2]
-            data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
-            data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
+            if(sn!=None):
+                _date = fileName.replace(".csv", "").split("_")
+                index = 1
+                for i in range(len(_date)):
+                    if("SUM" in _date[i]):
+                        index = i
+                _date = _date[index-2]
+                data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+                data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
+            else:
+                raise Exception("Doesn't have a serial number")
     elif(fileType == "FT3"):
         with open(fileName, newline='') as file:
             ft3headers = None
@@ -192,7 +197,10 @@ def calc(fileName):
                                     raise Exception(
                                         "Step name: \""+dataField+"\" couldn't be found in this file")
             
-            data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
+            if(sn!=None):
+                data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
+            else:
+                raise Exception("Doesn't have a serial number")
     elif(fileType == "FT2 RAW"):
         return False
     return True
@@ -242,7 +250,8 @@ def writeDataToFile(writer, dir, fileNames):
 
             if(counter > length):
                 return
-
+        except csv.Error as e:
+            pass
         except Exception as e:
             print(fileName + " couldn't be read with the following error: "+str(e))
 
