@@ -3,7 +3,7 @@ import glob
 import os
 import json
 import sys
-sys.tracebacklimit = -1
+# sys.tracebacklimit = -1
 from eolt import *
 from tkinter import filedialog
 from tkinter import *

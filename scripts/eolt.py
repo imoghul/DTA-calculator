@@ -181,7 +181,10 @@ def calc(fileName):
                         elif "step" in i:
                             step = i["step"]
                             if(v[0]==step):
-                                data[sn][dataKey] = v[ft1headers.index(dataField)]
+                                try:
+                                    data[sn][dataKey] = v[ft1headers.index(dataField)]
+                                except:
+                                    raise Exception(dataField+" couldn't be found in this file")
             _date = fileName.replace(".csv", "").split("_")[-2]
 
             data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
@@ -283,7 +286,9 @@ def writeSummaryToFile(writer):
         if getSkippable(sn):
             continue
 
-        writer.writerow([data[sn][h] for h in headers])
+        try:writer.writerow([data[sn][h] for h in headers])
+        except:pass
+            # print("Couldn't write data for %s\nMost likely due to non encodable characters in filename")
         try:
             if(genCert and "Date" in data[sn] and testResKey in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
