@@ -52,7 +52,7 @@ def calc(fileName):
     # THEORETICALLY WORKING BUT RISIKY CODE BELOW #
     # # # # # # # # # # # # # # # # # # # # # # # #
 
-    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW")):
+    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW" or fileType == "FT1")):
         isIn = None
         if "Limit" in retrieveData:
             if "Serial Number" in retrieveData["Limit"] and retrieveData["Limit"]["Serial Number"] != []:
@@ -149,7 +149,43 @@ def calc(fileName):
                                     pass
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
     elif(fileType == "FT1"):
-        return False
+        with open(fileName, newline='') as file:
+            sn = ""
+            ft1headers = None
+            modelId = None
+            for row in csv.reader(file, delimiter='\n', quotechar=','):
+                for r in row:
+                    v = r.split(',')
+                    if("Model ID" in v and len(v)>1):
+                        modelId = v[1]
+                    if("SN" in v or "Serial Number" in v):
+                        sn = v[1]
+                        currentSN = sn
+                        if(sn not in data.keys()):
+                            data[sn] = {}
+                            data[sn]["Serial Number"] = sn
+                            continue
+                    if(len(v) > 2 and ft1headers == None):
+                        ft1headers = v
+                    for i in detectionList["FT1"]:
+                        try:
+                            dataField = i["title"]
+                            dataKey = getTitle_config(i)
+                        except:
+                            raise Exception(
+                                "One or more required keys in an FT1 preference are missing")
+
+                        if(ft1headers == None):
+                            if(dataField == "Model ID"):data[sn][dataKey] = modelId
+                            elif(dataKey in v): data[sn][dataKey] = v[1]
+                        elif "step" in i:
+                            step = i["step"]
+                            if(v[0]==step):
+                                data[sn][dataKey] = v[ft1headers.index(dataField)]
+            _date = fileName.replace(".csv", "").split("_")[-2]
+
+            data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
+            data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
     return True
 
 
@@ -157,17 +193,24 @@ def writeHeaderToFile(writer):
     # check for duplicates
     check = []
     dups = False
-    for i in detectionList["FT3"]:
-        if i not in check:
-            check.append(i)
-        else:
-            dups = True
-    for i in detectionList["FT2 SUM"]:
-        title = getTitle_config(i)
-        if title not in check:
-            check.append(title)
-        else:
-            dups = True
+    # for i in detectionList["FT3"]:
+    #     title = getTitle_config(i)
+    #     if title not in check:
+    #         check.append(i)
+    #     else:
+    #         dups = True
+    # for i in detectionList["FT2 SUM"]:
+    #     title = getTitle_config(i)
+    #     if title not in check:
+    #         check.append(title)
+    #     else:
+    #         dups = True
+    for test in detectionList:
+        for i in detectionList[test]:
+            title = getTitle_config(i)
+            if title not in check:check.append(title)
+            else:
+                dups = True
 
     if(dups):
         raise Exception(
@@ -215,6 +258,7 @@ def writeSummaryToFile(writer):
         moveToBeginning(headers, i)
     moveToBeginning(headers, "File Name:FT3")
     moveToBeginning(headers, "File Name:FT2 SUM")
+    moveToBeginning(headers, "File Name:FT1")
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "Serial Number")
     # print(headers)
@@ -241,7 +285,6 @@ def writeSummaryToFile(writer):
 
         writer.writerow([data[sn][h] for h in headers])
         try:
-            
             if(genCert and "Date" in data[sn] and testResKey in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
                                   [testResKey] == "Test Complete" else "Fail", data[sn][daqTempKey] if daqTempKey in data[sn] else "N/A", data[sn][calibKey] if calibKey in data[sn] else "N/A", certdir)

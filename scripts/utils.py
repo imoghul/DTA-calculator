@@ -97,16 +97,25 @@ def getFT2SUMTitle_config(d):
 
 def getFT3Title_config(d):
     try:
-        return d["title"]
+        return d["title"] if "column header" not in d else d["column header"]
+    except:
+        raise Exception('One or more entries in FT3 don\'t contain the necessary "title" field')
+
+def getFT1Title_config(d):
+    try:
+        return (((d["step"]+":")if "step" in d else "")+d["title"]) if "column header" not in d else d["column header"]
     except:
         raise Exception('One or more entries in FT3 don\'t contain the necessary "title" field')
         
 def getTitle_config(d):
+    res = None
     if(d["test"]=="FT2 SUM"):
-        return getFT2SUMTitle_config(d)
+        res = getFT2SUMTitle_config(d)
     elif(d["test"]=="FT3"):
-        return getFT3Title_config(d)
-
+        res = getFT3Title_config(d)
+    elif(d["test"]=="FT1"):
+        res = getFT1Title_config(d)
+    return res if "column header" not in d else d["column header"]
 def getFT2SUMTitle_raw(title, columnheader=None, region=None):
     return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)) )if columnheader == None else "column header"
 
