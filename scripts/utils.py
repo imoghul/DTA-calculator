@@ -113,7 +113,7 @@ def getFT1Title_config(d):
         return (((d["step"]+":")if "step" in d else "")+d["title"]) if "column header" not in d else d["column header"]
     except:
         raise Exception(
-            'One or more entries in FT3 don\'t contain the necessary "title" field')
+            'One or more entries in FT1 don\'t contain the necessary "title" field')
 
 
 def getTitle_config(d):
