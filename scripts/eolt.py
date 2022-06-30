@@ -22,7 +22,11 @@ daqTempKey = (''.join(random.choice(string.ascii_lowercase +
 calibKey = daqTempKey
 while calibKey == daqTempKey:
     calibKey = (''.join(random.choice(string.ascii_lowercase +
-                string.digits + string.ascii_uppercase) for i in range(20))) 
+                string.digits + string.ascii_uppercase) for i in range(20)))
+testResKey = calibKey
+while testResKey == calibKey:
+    testResKey = (''.join(random.choice(string.ascii_lowercase +
+                string.digits + string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -191,6 +195,7 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
+    
     global data
     # sort data
     try:
@@ -220,14 +225,13 @@ def writeSummaryToFile(writer):
                 if title in headers:
                     headers.remove(title)
     writer.writerow(headers)
-
     # writing data
     counter = 0
     length = len(data)
+    
     for sn in data:
         counter += 1
         process_bar("Writing Data", counter, length)
-
         for h in headers:
             if(h not in data[sn]):
                 data[sn][h] = "doesn't exist"
@@ -237,12 +241,14 @@ def writeSummaryToFile(writer):
 
         writer.writerow([data[sn][h] for h in headers])
         try:
-            if(genCert and "Date" in data[sn] and "TestResult" in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
+            
+            if(genCert and "Date" in data[sn] and testResKey in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
-                                  ["TestResult"] == "Test Complete" else "Fail", data[sn][daqTempKey] if daqTempKey in data[sn] else "N/A", data[sn][calibKey] if calibKey in data[sn] else "N/A", certdir)
+                                  [testResKey] == "Test Complete" else "Fail", data[sn][daqTempKey] if daqTempKey in data[sn] else "N/A", data[sn][calibKey] if calibKey in data[sn] else "N/A", certdir)
         except:
             raise Exception(
                 "Couldn't generate certificate, check config file for correct preferences")
+    
     if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
         # counter = 0
         # docs = glob.glob(certdir+"*_certificate*.docx")
@@ -287,6 +293,15 @@ def transferDirs(cdir, pdir):
             "column": 5,
             "hide": True,
             "column header": calibKey
+        }
+        )
+
+        retrieveData["Test Preferences"].append({
+            "test": "FT2 SUM",
+            "title": "TestResult",
+            "column": 2,
+            "hide": True,
+            "column header": testResKey
         }
         )
         for i in retrieveData["Test Preferences"]:
