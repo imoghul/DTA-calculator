@@ -19,8 +19,10 @@ preferencesFile = None
 
 daqTempKey = (''.join(random.choice(string.ascii_lowercase +
               string.digits + string.ascii_uppercase) for i in range(20)))
-calibKey = (''.join(random.choice(string.ascii_lowercase +
-            string.digits + string.ascii_uppercase) for i in range(20)))
+calibKey = daqTempKey
+while calibKey == daqTempKey:
+    calibKey = (''.join(random.choice(string.ascii_lowercase +
+                string.digits + string.ascii_uppercase) for i in range(20))) 
 dirNum = 0
 
 detectionList = {
@@ -165,7 +167,7 @@ def writeHeaderToFile(writer):
 
     if(dups):
         raise Exception(
-            "Cannot have duplicates in header. Please check your preferences.json and resolve issue")
+            "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
 
 
 def writeDataToFile(writer, dir, fileNames):
