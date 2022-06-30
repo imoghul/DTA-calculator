@@ -183,7 +183,7 @@ def calc(fileName):
                                 "One or more required keys in an FT1 preference are missing")
 
                         if(ft1headers == None):
-                            if(dataField == "Model ID"):
+                            if(dataField == "Model ID" and modelId!=None):
                                 data[sn][dataKey] = modelId
                             elif(dataKey in v):
                                 data[sn][dataKey] = v[1]
