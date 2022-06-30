@@ -113,9 +113,10 @@ def createFile():
             writeDataToFile(
                 writer, dir, [f.replace("\\", "/") for f in fileNames])
             # os.chdir(original)  # return to original dir
-
-        writeSummaryToFile(writer)
-
+        try:
+            writeSummaryToFile(writer)
+        except:
+            raise Exception("Couldn't write summary file")
 try:
     createFile()
 except(PermissionError):

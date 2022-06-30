@@ -17,8 +17,10 @@ globType = "**/*.csv"
 
 preferencesFile = None
 
-daqTempKey = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
-calibKey = (''.join(random.choice(string.ascii_lowercase + string.digits +string.ascii_uppercase) for i in range(20)))
+daqTempKey = (''.join(random.choice(string.ascii_lowercase +
+              string.digits + string.ascii_uppercase) for i in range(20)))
+calibKey = (''.join(random.choice(string.ascii_lowercase +
+            string.digits + string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -36,7 +38,6 @@ certdir = None
 genCert = False
 
 
-
 def calc(fileName):
     global currentSN, data, headers
     fileType = getFileType(fileName)
@@ -48,12 +49,12 @@ def calc(fileName):
     if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW")):
         isIn = None
         if "Limit" in retrieveData:
-            if "Serial Number" in retrieveData["Limit"] and retrieveData["Limit"]["Serial Number"]!=[]:
+            if "Serial Number" in retrieveData["Limit"] and retrieveData["Limit"]["Serial Number"] != []:
                 if anyIn(fileName, retrieveData["Limit"]["Serial Number"]):
                     isIn = True
                 else:
                     isIn = False
-            if "Model ID" in retrieveData["Limit"] and retrieveData["Limit"]["Model ID"]!=[]:
+            if "Model ID" in retrieveData["Limit"] and retrieveData["Limit"]["Model ID"] != []:
                 if anyIn(fileName, retrieveData["Limit"]["Model ID"]):
                     isIn = True
                 else:
@@ -91,7 +92,7 @@ def calc(fileName):
                         except:
                             raise Exception(
                                 "One or more required keys in an FT2 SUM preference are missing")
-                        
+
                         dataRegion = None if "region" not in i else i["region"]
                         if(type(dataField) != list):
                             if dataRegion == None and dataField == v[0]:
@@ -214,7 +215,8 @@ def writeSummaryToFile(writer):
         for pref in detectionList[test]:
             if "hide" in pref and pref["hide"]:
                 title = getTitle_config(pref)
-                if title in headers:headers.remove(title)
+                if title in headers:
+                    headers.remove(title)
     writer.writerow(headers)
 
     # writing data
@@ -290,8 +292,6 @@ def transferDirs(cdir, pdir):
                 raise Exception(
                     'One or more of the "Test Preferences" has an invalid "test" name')
             detectionList[i["test"]].append(i)
-
-        
 
     except:
         raise Exception('No "Test Preferences" key in prefences file')

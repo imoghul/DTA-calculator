@@ -81,4 +81,4 @@ goto main
 start /WAIT cmd /c python -m pip install pipreqs
 start /WAIT cmd /c python -m pipreqs.pipreqs --force
 start /WAIT cmd /c python -m pip install -r requirements.txt
-Rem@python-docx PyInstaller python-dateutil docx2pdf
+@REM python-docx PyInstaller python-dateutil docx2pdf
