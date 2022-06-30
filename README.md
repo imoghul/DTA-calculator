@@ -128,6 +128,15 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
         {
             "test": "FT3",
             "title": "Barcode 8"
+        },
+        {
+            "test":"FT1",
+            "title":"StepResult",
+            "step":"Verify TEC FW version"
+        },
+        {
+            "test":"FT1",
+            "title":"PCID"
         }
     ],
     "Generate Certificates": true,
@@ -154,7 +163,7 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
 
 ##### Test Preferences
 
-The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file.
+The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file. Another optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used. If this is not included then a column header will automatically be generated for the preference
 
 Different tests have different syntax and required keys due to the nature of how the corresponding csv files are layed out. The spellings for different tests are 
 * FT1 - ft1 files
@@ -174,11 +183,15 @@ Dates is used to determine which dates to look at. While Avoid and Limit can als
 
 #### FT2 SUM
 
-The syntax for FT2 SUM test preferences is as follows: Each preference corresponds to a data value to extract from the test file. Each dictionary must contain keys "title", "column", "test" with optional keys  "region" and "column header". The first aspect to define is region. A region starts in the csv file when there is a row with only the first cell having text. "Calibration Data", "Post Calibration Data", and "UUT Responses" are all examples of regions. This will only be included if necessary. As for the first entry in the sample above, Model ID, it is not in a region therefore a region should not be included. The next value to define, "title", is the value that is sought. This must be the exact text in the first cell in the row. After that comes the column number, "column", which is simply the number of the column that the data actually appears in. The column numbers start at 1. An optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used.
+The syntax for FT2 SUM test preferences is as follows: Each preference corresponds to a data value to extract from the test file. Each dictionary must contain keys "title", "column", "test" with optional keys  "region" and "column header". The first aspect to define is region. A region starts in the csv file when there is a row with only the first cell having text. "Calibration Data", "Post Calibration Data", and "UUT Responses" are all examples of regions. This will only be included if necessary. As for the first entry in the sample above, Model ID, it is not in a region therefore a region should not be included. The next value to define, "title", is the value that is sought. This must be the exact text in the first cell in the row. After that comes the column number, "column", which is simply the number of the column that the data actually appears in. The column numbers start at 1. 
 
 #### FT3
 
 For FT3 your preference will simply contain the heading/column you want to retrieve under the key "title", along with the test file type under the key "test".
+
+#### FT1
+
+In an FT1 csv output file, there are 2 types of data. The data in the beginning of the file, and the data in the table below it. Hence, there are 2 ways of defining an FT1 preference. They key "step" defines which "Step name" to look at in the ft1 test file while "title" will be the name of the column to look at. If a step is not defined when it should be, then the data will not make it to the final summary file. If a step is not included and is not needed, this would entail it is a preference from the upper portion of the ft1 test file. In this case, "title" should be the text in the first column and the script will retrieve whatever is in the second column.
 
 #### Locations
 Information about which directories to use are stored in ```locations.json``` in the config directory. The syntax for this file is included in this documentation for completion and added functionality but it need not be touched if the user does not wish to.
