@@ -119,8 +119,6 @@ def calc(fileName):
             _date = _date[index-2]
             data[sn]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
             data[sn]["File Name:FT2 SUM"] = fileName.split("\\")[-1]
-    elif(fileType == "FT2 RAW"):
-        return False
     elif(fileType == "FT3"):
         with open(fileName, newline='') as file:
             ft3headers = None
@@ -150,7 +148,7 @@ def calc(fileName):
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
     elif(fileType == "FT1"):
         with open(fileName, newline='') as file:
-            sn = ""
+            sn = None
             ft1headers = None
             modelId = None
             for row in csv.reader(file, delimiter='\n', quotechar=','):
@@ -167,6 +165,8 @@ def calc(fileName):
                             data[sn]["Serial Number"] = sn
                             data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
                             continue
+                    elif sn==None:
+                        continue
                     if(len(v) > 2 and ft1headers == None):
                         ft1headers = v
                     for i in detectionList["FT1"]:
@@ -190,9 +190,11 @@ def calc(fileName):
                                         dataField)]
                                 except:
                                     raise Exception(
-                                        "Step header "+dataField+" couldn't be found in this file")
+                                        "Step name: \""+dataField+"\" couldn't be found in this file")
             
             data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
+    elif(fileType == "FT2 RAW"):
+        return False
     return True
 
 
