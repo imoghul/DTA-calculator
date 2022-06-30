@@ -72,7 +72,7 @@ If manual directory selection was not chosen (enter was pressed without any othe
 ### Configuration Files
 #### JSON Basics
 
-JSON is the file type used to define settings for this script, similar to how ```.xml``` and ```.INI``` files are used.
+JSON is the file type used to define settings for this script, similar to how ```.xml``` and ```.INI``` files are used. A specialized text editor such as Notepad++, which should be pre-installed on Windows, is recommened for editing these files. 
 
 
 In the JSON files for this script, data is stored in "dictionaries". All of the preferences are are stored in one big dictionary. The syntax for a dictionary is:
@@ -208,10 +208,6 @@ These values are overwritten when they are selected from the script
 To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
 ### Execution
 After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode, meaning that the ```summary.csv``` file will be overwritten every time. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time. If there is a conflict between data in any of the files FT2 SUM takes preference.
-
-### Remarks on Excel Master Files
-
-There are 2 provided excel files in the defaults directory. EOLT_1 allows the user to change the summary csv file to use, while EOLT_2 requires that it be named ```summary.csv``` and be in the same directory as the EOLT_2.xlsx file. EOLT_1 does some to be buggy due to the fact that opening it for the first time on a computer with a different pathing will cause the formulas to fail. If one has the time to fix this, EOLT_1 becomes more useful. Otherwise EOLT_2 is much more stable
 
 ****
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/main
