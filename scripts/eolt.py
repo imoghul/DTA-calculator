@@ -190,12 +190,8 @@ def calc(fileName):
                         elif "step" in i:
                             step = i["step"]
                             if(v[0] == step):
-                                try:
-                                    data[sn][dataKey] = v[ft1headers.index(
-                                        dataField)]
-                                except:
-                                    raise Exception(
-                                        "Step name: \""+dataField+"\" couldn't be found in this file")
+                                data[sn][dataKey] = v[ft1headers.index(
+                                    dataField)]
             
             if(sn!=None):
                 data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
