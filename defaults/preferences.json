@@ -79,6 +79,15 @@
         {
             "test": "FT3",
             "title": "Barcode 8"
+        },
+        {
+            "test": "FT1",
+            "title": "StepResult",
+            "step": "Verify TEC FW version"
+        },
+        {
+            "test": "FT1",
+            "title": "PCID"
         }
     ],
     "Generate Certificates": false,
