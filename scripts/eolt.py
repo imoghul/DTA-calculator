@@ -344,7 +344,6 @@ def transferDirs(cdir, pdir):
             "column header": daqTempKey
         }
         )
-
         retrieveData["Test Preferences"].append({
             "test": "FT2 SUM",
             "title": "Air2",
@@ -354,7 +353,6 @@ def transferDirs(cdir, pdir):
             "column header": calibKey
         }
         )
-
         retrieveData["Test Preferences"].append({
             "test": "FT2 SUM",
             "title": "TestResult",
@@ -363,8 +361,11 @@ def transferDirs(cdir, pdir):
             "column header": testResKey
         }
         )
+        
         for i in retrieveData["Test Preferences"]:
-            if(i["test"] not in detectionList):
+            if("test" not in i):
+                raise Exception("One or more of the \"Test Preferences\" don't contain a \"test\"")
+            elif(i["test"] not in detectionList):
                 raise Exception(
                     'One or more of the "Test Preferences" has an invalid "test" name')
             detectionList[i["test"]].append(i)
