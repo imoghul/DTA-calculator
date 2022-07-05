@@ -92,7 +92,7 @@ All text must be surrounded by quotations marks. Inside the quotation marks the 
 The program utilizes two configuration files that will be in the aforementioned config directory. The first one being ```locations.json```. This one does not need to be changed, though it can be. The second one is ```preferences.json```. This is where the preferences for retrieving data and other settings is stored. The syntax for these files will be discussed later.
 
 
-The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM and FT3 are currently the only ones supported and needed. There are some default paramaters that are included regardless of what's in ```preferences.json```, these are:
+The preferences for this script are defined in a JSON file named ```preferences.json``` in the configuration directory. In this file the parsing of the different types of files is specified. FT2 SUM, FT3, and FT1 are currently the only ones supported and needed. There are some default paramaters that are included regardless of what's in ```preferences.json```, these are:
 * Serial Number
 * Date
 * File Name:FT2 SUM
@@ -191,7 +191,7 @@ For FT3 your preference will simply contain the heading/column you want to retri
 
 #### FT1
 
-In an FT1 csv output file, there are 2 types of data. The data in the beginning of the file, and the data in the table below it. Hence, there are 2 ways of defining an FT1 preference. They key "step" defines which "Step name" to look at in the ft1 test file while "title" will be the name of the column to look at. If a step is not defined when it should be, then the data will not make it to the final summary file. If a step is not included and is not needed, this would entail it is a preference from the upper portion of the ft1 test file. In this case, "title" should be the text in the first column and the script will retrieve whatever is in the second column.
+In an FT1 csv output file, there are 2 types of data. The data in the beginning of the file, and the data in the table below it. Hence, there are 2 ways of defining an FT1 preference. They key "step" defines which "Step name" to look at in the ft1 test file while "title" will be the name of the column to look at. If a step is not in one or more of the test files the way it is in the preferences file, then the data will not make it to the final summary file. If a step is not defined in a preference, though it should be according to the layout of the test file, then the script will never find that data and will end up being ignored. If the "step" is not included and is not needed, this would entail it is a preference from the upper portion of the ft1 test file. In this case, "title" should be the text in the first column and the script will retrieve whatever is in the second column.
 
 #### Locations
 Information about which directories to use are stored in ```locations.json``` in the config directory. The syntax for this file is included in this documentation for completion and added functionality but it need not be touched if the user does not wish to.
