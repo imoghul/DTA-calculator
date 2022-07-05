@@ -215,18 +215,6 @@ def writeHeaderToFile(writer):
     # check for duplicates
     check = []
     dups = False
-    # for i in detectionList["FT3"]:
-    #     title = getTitle_config(i)
-    #     if title not in check:
-    #         check.append(i)
-    #     else:
-    #         dups = True
-    # for i in detectionList["FT2 SUM"]:
-    #     title = getTitle_config(i)
-    #     if title not in check:
-    #         check.append(title)
-    #     else:
-    #         dups = True
     for test in detectionList:
         for i in detectionList[test]:
             title = getTitle_config(i)
