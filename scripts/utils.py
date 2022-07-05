@@ -116,18 +116,20 @@ def getFT1Title_config(d):
 
 
 def getTitle_config(d):
+    res = None
     if "column header" in d:
         return d["column header"]
     elif(d["test"] == "FT2 SUM"):
-        return getFT2SUMTitle_config(d)
+        res = getFT2SUMTitle_config(d)
     elif(d["test"] == "FT3"):
-        return getFT3Title_config(d)
+        res = getFT3Title_config(d)
     elif(d["test"] == "FT1"):
-        return getFT1Title_config(d)
+        res = getFT1Title_config(d)
     
+    return d["test"]+":"+res
 
-def getFT2SUMTitle_raw(title, columnheader=None, region=None):
-    return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)))if columnheader == None else "column header"
+# def getFT2SUMTitle_raw(title, columnheader=None, region=None):
+#     return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)))if columnheader == None else "column header"
 
 
 def anyIn(val, l):  # checks if any of the elements of l are in val
