@@ -26,7 +26,7 @@ while calibKey == daqTempKey:
 testResKey = calibKey
 while testResKey == calibKey:
     testResKey = (''.join(random.choice(string.ascii_lowercase +
-                string.digits + string.ascii_uppercase) for i in range(20)))
+                                        string.digits + string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -222,12 +222,14 @@ def writeHeaderToFile(writer):
             if title not in check:
                 check.append(title)
             else:
-                if(title not in duplicates):duplicates.append(title)
+                if(title not in duplicates):
+                    duplicates.append(title)
                 dups = True
 
     if(dups):
         print("Be cautious of using duplicate headers, this may cause overwriting data:")
-        for i in duplicates:print(i)
+        for i in duplicates:
+            print(i)
         print()
         # raise Exception(
         #     "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
@@ -367,10 +369,11 @@ def transferDirs(cdir, pdir):
             "column header": testResKey
         }
         )
-        
+
         for i in retrieveData["Test Preferences"]:
             if("test" not in i):
-                raise Exception("One or more of the \"Test Preferences\" don't contain a \"test\"")
+                raise Exception(
+                    "One or more of the \"Test Preferences\" don't contain a \"test\"")
             elif(i["test"] not in detectionList):
                 raise Exception(
                     'One or more of the "Test Preferences" has an invalid "test" name')
