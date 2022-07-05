@@ -135,18 +135,18 @@ def calc(fileName):
                         ft3headers = v
                     else:
                         sn = v[ft3headers.index("Serial Number")]
-                        try:
-                            _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
-                        except:
-                            pass
+                        if(sn=="TR203500084BB3"):print(ft3headers)
                         if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
+                        if (sn in data and "Date" not in data[sn]):
+                            try:data[sn]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                            except:pass
+                        if(sn in data and "Model ID" not in data[sn]):
                             try:
-                                data[sn]["Date"] = _date
                                 data[sn]["Model ID"] = v[ft3headers.index(
                                     "Model ID")]
-                            except: pass
+                            except:pass
                         for i in detectionList["FT3"]:
                             title = getTitle_config(i)
                             if(title in ft3headers):
@@ -169,14 +169,16 @@ def calc(fileName):
                     if("SN" in v or "Serial Number" in v):
                         sn = v[1]
                         currentSN = sn
-                        _date = fileName.replace(".csv", "").split("_")[-2]
                         if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
-                            data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
+                            
                             continue
                     elif sn==None:
                         continue
+                    if(sn in data and "Date" not in sn):
+                        _date = fileName.replace(".csv", "").split("_")[-2]
+                        data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
                     if(len(v) > 2 and ft1headers == None):
                         ft1headers = v
                     for i in detectionList["FT1"]:
