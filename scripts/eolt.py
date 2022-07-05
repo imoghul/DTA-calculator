@@ -189,7 +189,7 @@ def calc(fileName):
                                 data[sn][dataKey] = v[1]
                         elif "step" in i:
                             step = i["step"]
-                            if(v[0] == step):
+                            if(v[0] == step and dataKey in ft1headers):
                                 data[sn][dataKey] = v[ft1headers.index(
                                     dataField)]
             

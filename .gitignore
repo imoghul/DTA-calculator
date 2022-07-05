@@ -1,0 +1,11 @@
+**/*.csv
+**/__pycache__
+**/empty_locations.json
+**/*.swp
+**/dist
+**/build
+**/*.spec
+**/*.exe
+**/*.txt
+scripts/configdir.txt
+*.exe
