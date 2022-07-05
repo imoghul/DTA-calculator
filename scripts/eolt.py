@@ -26,7 +26,7 @@ while calibKey == daqTempKey:
 testResKey = calibKey
 while testResKey == calibKey:
     testResKey = (''.join(random.choice(string.ascii_lowercase +
-                                        string.digits + string.ascii_uppercase) for i in range(20)))
+                string.digits + string.ascii_uppercase) for i in range(20)))
 dirNum = 0
 
 detectionList = {
@@ -69,7 +69,7 @@ def calc(fileName):
             return
 
     # # # # # # # # # # # # # # # # # # # # # # # #
-    #                                             #
+    # THEORETICALLY WORKING BUT RISIKY CODE ABOVE #
     # # # # # # # # # # # # # # # # # # # # # # # #
 
     if(fileType == "FT2 SUM"):
@@ -331,7 +331,9 @@ def transferDirs(cdir, pdir):
         raise Exception(
             "Preferences file couldn't be opened. Close the file if it is open")
     except Exception as e:
-        raise e
+        # raise e
+        print("Invalid preferences JSON file, check syntax: "+str(e))
+        exit()
 
     try:
         retrieveData["Test Preferences"].append({
