@@ -116,15 +116,15 @@ def getFT1Title_config(d):
 
 
 def getTitle_config(d):
-    res = None
-    if(d["test"] == "FT2 SUM"):
-        res = getFT2SUMTitle_config(d)
+    if "column header" in d:
+        return d["column header"]
+    elif(d["test"] == "FT2 SUM"):
+        return getFT2SUMTitle_config(d)
     elif(d["test"] == "FT3"):
-        res = getFT3Title_config(d)
+        return getFT3Title_config(d)
     elif(d["test"] == "FT1"):
-        res = getFT1Title_config(d)
-    return res if "column header" not in d else d["column header"]
-
+        return getFT1Title_config(d)
+    
 
 def getFT2SUMTitle_raw(title, columnheader=None, region=None):
     return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)))if columnheader == None else "column header"
