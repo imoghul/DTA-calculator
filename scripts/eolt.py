@@ -273,7 +273,6 @@ def writeSummaryToFile(writer):
     moveToBeginning(headers, "File Name:FT1")
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "Serial Number")
-    # print(headers)
     for test in detectionList:
         for pref in detectionList[test]:
             if "hide" in pref and pref["hide"]:

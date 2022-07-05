@@ -72,10 +72,6 @@ elif(mode == 'i'):
         outdir = _outdir
     if(certdir == "/"):
         certdir = _certdir
-    # if(preferencesFile==""): preferencesFile = _preferencesFile
-    # print(outdir,certdir,preferencesFile)
-
-# print(outdir, certdir, preferencesFile)
 
 transferDirs(certdir, preferencesFile)
 
@@ -88,7 +84,6 @@ def createFile():
         writeHeaderToFile(writer)
         # get list of directories to run
 
-        # if cli and len(sys.argv) < 2:
         if(mode == 'i'):
             root = Tk()
             root.withdraw()
@@ -101,17 +96,13 @@ def createFile():
         elif(not cli and mode != 'd'):
             raise Exception("\n\nUse valid arguments")
 
-        # print(dirs)
         original = os.getcwd()
 
         for dir in dirs:
-            # try:os.chdir(dir)
-            # except: raise Exception(f"Invalid directory: {dir}")
             fileNames = glob.glob(dir+globType, recursive=True)
             # runs for every directory
             writeDataToFile(
                 writer, dir, [f.replace("\\", "/") for f in fileNames])
-            # os.chdir(original)  # return to original dir
         try:
             writeSummaryToFile(writer)
         except:
@@ -129,7 +120,6 @@ except Exception as e:
 lines = {}
 lines["out_dir"] = outdir + \
     ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
-# lines["preferences_file"] = preferencesFile
 lines["certificate_dir"] = certdir + \
     ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
 lines["search_dirs"] = [

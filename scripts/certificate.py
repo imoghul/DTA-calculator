@@ -24,7 +24,6 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path=docPath):
                 run = run_obj[0]
                 font = run.font
                 font.size = Pt(30)
-                # RGBColor(0xff,0xff,0xff)
                 font.color.rgb = RGBColor(0x00, 0x00, 0x00)
                 font.name = "AvenirNext LT Pro Regular"
             elif c.text == "CALIBRATION DATE" or c.text == "RESULT" or c.text == "DAQ TEMP" or c.text == "CALIB":
@@ -45,7 +44,6 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path=docPath):
                 run = run_obj[0]
                 font = run.font
                 font.size = Pt(12)
-                # RGBColor(0xff,0xff,0xff)
                 font.color.rgb = RGBColor(0x00, 0x00, 0x00)
                 font.name = "AvenirNext LT Pro Regular"
 
@@ -67,4 +65,4 @@ def convertToPDF_path(path):
         print('Converting certificates to pdfs')
         convert(path)
     except Exception as e:
-        pass  # print("Some files couldn't be converted to a pdf")
+        print("Some files couldn't be converted to a pdf")

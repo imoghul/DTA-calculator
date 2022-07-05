@@ -59,7 +59,6 @@ def process_bar(process, current, total, message="", bar_length=25, bar_pos=40*"
     padTable = ""
     while(len(f'{process}:'+padTable)) < len(bar_pos):
         padTable += " "
-    # print(padTable+"test")
     print(
         f'{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}', end=ending)
 
