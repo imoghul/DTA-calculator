@@ -86,7 +86,7 @@ def calc(fileName):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
                             continue
-                    elif sn==None:
+                    elif sn == None:
                         continue
                     if(len(v) == 1):
                         region = v[0]
@@ -113,7 +113,7 @@ def calc(fileName):
                                 data[sn][dataKey] = v[index]
                             if dataRegion != None and (allIn and region == dataRegion):
                                 data[sn][dataKey] = v[index] if v[index] != "" else "0"
-            if(sn!=None):
+            if(sn != None):
                 _date = fileName.replace(".csv", "").split("_")
                 index = 1
                 for i in range(len(_date)):
@@ -139,8 +139,11 @@ def calc(fileName):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
                         if (sn in data and "Date" not in data[sn]):
-                            try:data[sn]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
-                            except:pass
+                            try:
+                                data[sn]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[
+                                    0]
+                            except:
+                                pass
                         # if(sn in data and "Model ID" not in data[sn]):
                         #     try:
                         #         data[sn]["Model ID"] = v[ft3headers.index(
@@ -171,13 +174,13 @@ def calc(fileName):
                         if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
-                            
                             continue
-                    elif sn==None:
+                    elif sn == None:
                         continue
-                    if(sn in data and "Date" not in sn):
+                    if(sn in data and "Date" not in data[sn]):
                         _date = fileName.replace(".csv", "").split("_")[-2]
-                        data[sn]["Date"] = _date[2:4]+"/"+_date[4:6]+"/20"+_date[0:2]
+                        data[sn]["Date"] = _date[2:4] + \
+                            "/"+_date[4:6]+"/20"+_date[0:2]
                     if(len(v) > 2 and ft1headers == None):
                         ft1headers = v
                     for i in detectionList["FT1"]:
@@ -189,7 +192,7 @@ def calc(fileName):
                                 "One or more required keys in an FT1 preference are missing")
 
                         if(ft1headers == None):
-                            if(dataField == "Model ID" and modelId!=None):
+                            if(dataField == "Model ID" and modelId != None):
                                 data[sn][dataKey] = modelId
                             elif(dataKey in v):
                                 data[sn][dataKey] = v[1]
@@ -198,8 +201,8 @@ def calc(fileName):
                             if(v[0] == step and dataKey in ft1headers):
                                 data[sn][dataKey] = v[ft1headers.index(
                                     dataField)]
-            
-            if(sn!=None):
+
+            if(sn != None):
                 data[sn]["File Name:FT1"] = fileName.split("\\")[-1]
             else:
                 raise Exception("Doesn't have a serial number")
