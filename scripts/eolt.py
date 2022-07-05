@@ -214,6 +214,7 @@ def calc(fileName):
 def writeHeaderToFile(writer):
     # check for duplicates
     check = []
+    duplicates = []
     dups = False
     for test in detectionList:
         for i in detectionList[test]:
@@ -221,11 +222,15 @@ def writeHeaderToFile(writer):
             if title not in check:
                 check.append(title)
             else:
+                if(title not in duplicates):duplicates.append(title)
                 dups = True
 
     if(dups):
-        raise Exception(
-            "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
+        print("Be cautious of using duplicate headers, this may cause overwriting data:")
+        for i in duplicates:print(i)
+        print()
+        # raise Exception(
+        #     "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
 
 
 def writeDataToFile(writer, dir, fileNames):
