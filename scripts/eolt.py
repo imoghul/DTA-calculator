@@ -141,11 +141,11 @@ def calc(fileName):
                         if (sn in data and "Date" not in data[sn]):
                             try:data[sn]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
                             except:pass
-                        if(sn in data and "Model ID" not in data[sn]):
-                            try:
-                                data[sn]["Model ID"] = v[ft3headers.index(
-                                    "Model ID")]
-                            except:pass
+                        # if(sn in data and "Model ID" not in data[sn]):
+                        #     try:
+                        #         data[sn]["Model ID"] = v[ft3headers.index(
+                        #             "Model ID")]
+                        #     except:pass
                         for i in detectionList["FT3"]:
                             title = getTitle_config(i)
                             if(title in ft3headers):
