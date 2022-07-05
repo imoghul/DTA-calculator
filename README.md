@@ -166,10 +166,10 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
 The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file. Another optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used. If this is not included then a column header will automatically be generated for the preference
 
 Different tests have different syntax and required keys due to the nature of how the corresponding csv files are layed out. The spellings for different tests are 
-* FT1 - ft1 files
-* FT2 SUM - ft2 summary files
-* FT2 RAW - ft2 raw data files
-* FT3 - ft3 files
+* FT1 - FT1 files
+* FT2 SUM - FT2 SUMmary files
+* FT2 RAW - FT2 raw data files
+* FT3 - FT3 files
 ##### Generate Certificates
 The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and the column entery for Test Preferences.
 
@@ -191,7 +191,7 @@ For FT3 your preference will simply contain the heading/column you want to retri
 
 #### FT1
 
-In an FT1 csv output file, there are 2 types of data. The data in the beginning of the file, and the data in the table below it. Hence, there are 2 ways of defining an FT1 preference. They key "step" defines which "Step name" to look at in the ft1 test file while "title" will be the name of the column to look at. If a step is not in one or more of the test files the way it is in the preferences file, then the data will not make it to the final summary file. If a step is not defined in a preference, though it should be according to the layout of the test file, then the script will never find that data and will end up being ignored. If the "step" key is not included and is not needed, this would entail it is a preference from the upper portion of the ft1 test file. In this case, "title" should be the text in the first column and the script will retrieve whatever is in the second column.
+In an FT1 csv output file, there are 2 types of data. The data in the beginning of the file, and the data in the table below it. Hence, there are 2 ways of defining an FT1 preference. They key "step" defines which "Step name" to look at in the FT1 test file while "title" will be the name of the column to look at. If a step is not in one or more of the test files the way it is in the preferences file, then the data will not make it to the final summary file. If a step is not defined in a preference, though it should be according to the layout of the test file, then the script will never find that data and will end up being ignored. If the "step" key is not included and is not needed, this would entail it is a preference from the upper portion of the FT1 test file. In this case, "title" should be the text in the first column and the script will retrieve whatever is in the second column.
 
 #### Locations
 Information about which directories to use are stored in ```locations.json``` in the config directory. The syntax for this file is included in this documentation for completion and added functionality but it need not be touched if the user does not wish to.
