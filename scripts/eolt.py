@@ -135,7 +135,6 @@ def calc(fileName):
                         ft3headers = v
                     else:
                         sn = v[ft3headers.index("Serial Number")]
-                        if(sn=="TR203500084BB3"):print(ft3headers)
                         if(sn not in data):
                             data[sn] = {}
                             data[sn]["Serial Number"] = sn
