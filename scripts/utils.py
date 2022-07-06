@@ -125,7 +125,7 @@ def getTitle_config(d):
         res = getFT3Title_config(d)
     elif(d["test"] == "FT1"):
         res = getFT1Title_config(d)
-    
+
     return d["test"]+":"+res
 
 # def getFT2SUMTitle_raw(title, columnheader=None, region=None):
@@ -134,5 +134,7 @@ def getTitle_config(d):
 
 def anyIn(val, l):  # checks if any of the elements of l are in val
     return True in [(i in val) for i in l]
-def allIn(val,l):
+
+
+def allIn(val, l):
     return all([(i in val) for i in l])

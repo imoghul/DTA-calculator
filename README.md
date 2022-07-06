@@ -130,39 +130,57 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
             "title": "Barcode 8"
         },
         {
-            "test":"FT1",
-            "title":"StepResult",
-            "step":"Verify TEC FW version"
+            "test": "FT1",
+            "title": "StepResult",
+            "step": "Verify TEC FW version"
         },
         {
-            "test":"FT1",
-            "title":"PCID"
+            "test": "FT1",
+            "title": "PCID"
         }
     ],
     "Generate Certificates": true,
     "PDF Certificates": true,
-    "Avoid":[{
-        "FT2 SUM:Model ID":["TSX","GA"]
-    },
-    {
-        "FT2 SUM:Model ID":["PF","P20"],
-        "Type Freezer":["TRUE"]
-    }],
-    "Limit":[{
-        "FT2 SUM:Model ID":["TSX"],
-        "FT2 SUM:TestResult":["Test Complete"]
-    },
-    {
-        "FT2 SUM:Model ID":["PF"]
-    }],
-    "Dates": [
+    "Avoid": [
         {
-            "Day":3,
-            "Month":3,
-            "Year":2022
+            "FT2 SUM:Model ID": [
+                "TSX",
+                "GA"
+            ]
         },
         {
-            "Year":2021
+            "FT2 SUM:Model ID": [
+                "PF",
+                "P20"
+            ],
+            "Type Freezer": [
+                "TRUE"
+            ]
+        }
+    ],
+    "Limit": [
+        {
+            "FT2 SUM:Model ID": [
+                "TSX"
+            ],
+            "FT2 SUM:TestResult": [
+                "Test Complete"
+            ]
+        },
+        {
+            "FT2 SUM:Model ID": [
+                "PF"
+            ]
+        }
+    ],
+    "Dates": [
+        {
+            "Day": 3,
+            "Month": 3,
+            "Year": 2022
+        },
+        {
+            "Year": 2021
         }
     ]
 }
@@ -182,7 +200,7 @@ The key "Generate Certificates" will either be ```false``` or ```true``` and wil
 
 ##### Avoid and Limit
 
-These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a list of dictionaries of their own. Each dictionary in these lists will contain data with the key being the header of the row and the data pertaining to that key being a list. Each key will have a list of text enclosed by quotation marks. These lists define all of the contents that must be in the key pertaining to the list. The dictionaries in each define a certain type of device to limit or avoid. Only one of these dictionaries must be fulfilled in order to be avoided or limited. In the above sample
+These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a list of dictionaries of their own. Each dictionary in these lists will contain data with the key being the header of the row and the data pertaining to that key being a list. Each key will have a list of text enclosed by quotation marks. These lists define all of the contents that must be in the key pertaining to the list. The dictionaries in each define a certain type of device to limit or avoid. Only one of these dictionaries must be fulfilled in order to be avoided or limited. In the above sample, all "TSX" models that don't contain "GA", and have "Test Complete" for the test result will be included. Also all devices with "PF" in the Model ID, ignoring the ones with "P20" and "TRUE" for freezer type, will be included.
 
 ##### Dates
 

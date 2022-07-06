@@ -357,17 +357,21 @@ def getSkippable(sn):
 
     if("Limit" in retrieveData):
         limFound = None
-        if(type(retrieveData["Limit"])!=list):retrieveData["Limit"]=[retrieveData["Limit"]]
-        if(len(retrieveData["Limit"]) and type(retrieveData["Limit"][0])==dict):
-            for i in retrieveData["Limit"]: # looping through list of limits    
-                curr = [] # checks if the current key is fully part of said data field
-                for lim in i: # looping through keys in limits
-                    if(limFound == None):limFound = False
+        if(type(retrieveData["Limit"]) != list):
+            retrieveData["Limit"] = [retrieveData["Limit"]]
+        if(len(retrieveData["Limit"]) and type(retrieveData["Limit"][0]) == dict):
+            for i in retrieveData["Limit"]:  # looping through list of limits
+                curr = []  # checks if the current key is fully part of said data field
+                for lim in i:  # looping through keys in limits
+                    if(limFound == None):
+                        limFound = False
                     if lim not in data[sn]:
-                        curr.append(False) # if the current is not in the data fields then it doesn't need to be limited, therefore it is not fully part of the data field 
+                        # if the current is not in the data fields then it doesn't need to be limited, therefore it is not fully part of the data field
+                        curr.append(False)
                     else:
                         curr.append(allIn(data[sn][lim], i[lim]))
-                    if(not all(curr)):break # if the current key is not fully in the data field, then it doesn't need to be limited 
+                    if(not all(curr)):
+                        break  # if the current key is not fully in the data field, then it doesn't need to be limited
                 if(all(curr)):
                     limFound = True
             if(limFound == False):
@@ -375,23 +379,27 @@ def getSkippable(sn):
                 skip = True
 
     if("Avoid" in retrieveData):
-        if(type(retrieveData["Avoid"])!=list):retrieveData["Avoid"]=[retrieveData["Avoid"]]
-        if(len(retrieveData["Avoid"]) and type(retrieveData["Avoid"][0])==dict):
+        if(type(retrieveData["Avoid"]) != list):
+            retrieveData["Avoid"] = [retrieveData["Avoid"]]
+        if(len(retrieveData["Avoid"]) and type(retrieveData["Avoid"][0]) == dict):
             skipAv = False
-            for i in retrieveData["Avoid"]: # looping through list of avoids
-                if(not skipAv):    
-                    curr = [] # checks if the current key is fully part of said data field
-                    for av in i: # looping through keys in avoids
+            for i in retrieveData["Avoid"]:  # looping through list of avoids
+                if(not skipAv):
+                    curr = []  # checks if the current key is fully part of said data field
+                    for av in i:  # looping through keys in avoids
                         if av not in data[sn]:
-                            curr.append(False) # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field 
+                            # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
+                            curr.append(False)
                         else:
-                            curr.append(allIn(data[sn][av], i[av]))    
-                        if(not all(curr)):break # if the current key is not fully in the data field, then it doesn't need to be avoided 
-                    if(all(curr) and curr!=[]):skipAv = True
+                            curr.append(allIn(data[sn][av], i[av]))
+                        if(not all(curr)):
+                            break  # if the current key is not fully in the data field, then it doesn't need to be avoided
+                    if(all(curr) and curr != []):
+                        skipAv = True
                 if(skipAv):
                     skip = True
                     break
-    
+
     try:
         if("Dates" in retrieveData):
             isIn = len(retrieveData["Dates"]) == 0
