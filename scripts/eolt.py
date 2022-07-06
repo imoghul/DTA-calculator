@@ -375,7 +375,6 @@ def getSkippable(sn):
                 if(all(curr)):
                     limFound = True
             if(limFound == False):
-                print(sn)
                 skip = True
 
     if("Avoid" in retrieveData):
