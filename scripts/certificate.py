@@ -5,10 +5,9 @@ from docx2pdf import convert
 import os
 import sys
 import shutil
-docPath = "C:\\Users\\Ibrahim.Moghul\\Desktop\\Data Analysis Scripts\\OUTPUT\\FACTORY\\Certificates\\"
 
 
-def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path=docPath):
+def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
     dest = path+"%s_certificate.docx" % sn
     shutil.copy2(path+"TEMPLATE.docx", dest)
     doc = Document(dest)
