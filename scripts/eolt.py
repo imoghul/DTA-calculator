@@ -48,30 +48,6 @@ def calc(fileName):
     global currentSN, data, headers
     fileType = getFileType(fileName)
 
-    # # # # # # # # # # # # # # # # # # # # # # # #
-    # THEORETICALLY WORKING BUT RISIKY CODE BELOW #
-    # # # # # # # # # # # # # # # # # # # # # # # #
-
-    if("s p e e d" in retrieveData and retrieveData["s p e e d"] and (fileType == "FT2 SUM" or fileType == "FT2 RAW" or fileType == "FT1")):
-        isIn = None
-        if "Limit" in retrieveData:
-            if "Serial Number" in retrieveData["Limit"] and retrieveData["Limit"]["Serial Number"] != []:
-                if anyIn(fileName, retrieveData["Limit"]["Serial Number"]):
-                    isIn = True
-                else:
-                    isIn = False
-            if "Model ID" in retrieveData["Limit"] and retrieveData["Limit"]["Model ID"] != []:
-                if anyIn(fileName, retrieveData["Limit"]["Model ID"]):
-                    isIn = True
-                else:
-                    isIn = False
-        if isIn == False:
-            return
-
-    # # # # # # # # # # # # # # # # # # # # # # # #
-    # THEORETICALLY WORKING BUT RISIKY CODE ABOVE #
-    # # # # # # # # # # # # # # # # # # # # # # # #
-
     if(fileType == "FT2 SUM"):
         with open(fileName, newline='') as file:
             sn = None
@@ -379,18 +355,38 @@ def getSkippable(sn):
     global data, retrieveData
     skip = False
     if("Avoid" in retrieveData):
-        for i in retrieveData["Avoid"]:
-            if i not in data[sn]:
-                continue
-            if anyIn(data[sn][i], retrieveData["Avoid"][i]):
-                skip = True
+        if(type(retrieveData["Avoid"])!=list):retrieveData["Avoid"]=[retrieveData["Avoid"]]
+        if(len(retrieveData["Avoid"]) and type(retrieveData["Avoid"][0])==dict):
+            skipAv = False
+            for i in retrieveData["Avoid"]: # looping through list of avoids
+                if(not skipAv):    
+                    curr = [] # checks if the current key is fully part of said data field
+                    for av in i: # looping through keys in avoids
+                        if av not in data[sn]:
+                            curr.append(False) # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field 
+                        else:
+                            curr.append(allIn(data[sn][av], i[av]))    
+                        if(not all(curr)):break # if the current key is not fully in the data field, then it doesn't need to be avoided 
+                    if(all(curr) and curr!=[]):skipAv = True
+                if(skipAv):
+                    skip = True
+                    break
     if("Limit" in retrieveData):
-        for i in retrieveData["Limit"]:
-            if i not in data[sn]:
-                skip = True
-                continue
-            if not anyIn(data[sn][i], retrieveData["Limit"][i]):
-                skip = True
+        limFound = None
+        if(type(retrieveData["Limit"])!=list):retrieveData["Limit"]=[retrieveData["Limit"]]
+        if(len(retrieveData["Limit"]) and type(retrieveData["Limit"][0])==dict):
+            for i in retrieveData["Limit"]: # looping through list of limits    
+                curr = [] # checks if the current key is fully part of said data field
+                for lim in i: # looping through keys in limits
+                    if(limFound == None):limFound = False
+                    if lim not in data[sn]:
+                        curr.append(False) # if the current is not in the data fields then it doesn't need to be limited, therefore it is not fully part of the data field 
+                    else:
+                        curr.append(allIn(data[sn][lim], i[lim]))
+                    if(not all(curr)):break # if the current key is not fully in the data field, then it doesn't need to be limited 
+                if(all(curr)):
+                    limFound = True
+            if(limFound == False):skip = True
     try:
         if("Dates" in retrieveData):
             isIn = len(retrieveData["Dates"]) == 0
