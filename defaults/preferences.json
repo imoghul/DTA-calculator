@@ -92,7 +92,7 @@
     ],
     "Generate Certificates": false,
     "PDF Certificates": false,
-    "Limit": {},
-    "Avoid": {},
+    "Limit": [{}],
+    "Avoid": [{}],
     "Dates": []
 }

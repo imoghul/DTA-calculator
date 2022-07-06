@@ -141,13 +141,20 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
     ],
     "Generate Certificates": true,
     "PDF Certificates": true,
-    "Limit": {
-        "Serial Number":["TR156","VL212"],
-        "TestResult":["Test Complete"]
+    "Avoid":[{
+        "FT2 SUM:Model ID":["TSX","GA"]
     },
-    "Avoid": {
-        "Model ID":["TSX","PF"]
+    {
+        "FT2 SUM:Model ID":["PF","P20"],
+        "Type Freezer":["TRUE"]
+    }],
+    "Limit":[{
+        "FT2 SUM:Model ID":["TSX"],
+        "FT2 SUM:TestResult":["Test Complete"]
     },
+    {
+        "FT2 SUM:Model ID":["PF"]
+    }],
     "Dates": [
         {
             "Day":3,
