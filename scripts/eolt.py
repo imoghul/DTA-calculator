@@ -305,7 +305,7 @@ def writeSummaryToFile(writer):
             writer.writerow([data[sn][h] for h in headers])
         except:
             pass
-           # print("Couldn't write data for %s\nMost likely due to non encodable characters in filename")
+           # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
         try:
             if(genCert and "Date" in data[sn] and testResKey in data[sn] and daqTempKey in data[sn] and calibKey in data[sn]):
                 createCertificate(sn, data[sn]["Date"], "Pass" if data[sn]
@@ -315,15 +315,6 @@ def writeSummaryToFile(writer):
                 "Couldn't generate certificate, check config file for correct preferences")
 
     if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
-        # counter = 0
-        # docs = glob.glob(certdir+"*_certificate*.docx")
-        # # print(docs)
-        # length = len(docs)
-        # for i in docs:
-        #     counter += 1
-        #     # process_bar("Converting to PDF", counter, length)
-        #     convertToPDF_doc(i)
-
         convertToPDF_path(certdir)
 
 
@@ -338,7 +329,6 @@ def transferDirs(cdir, pdir):
         raise Exception(
             "Preferences file couldn't be opened. Close the file if it is open")
     except Exception as e:
-        # raise e
         print("Invalid preferences JSON file, check syntax: "+str(e))
         exit()
 
