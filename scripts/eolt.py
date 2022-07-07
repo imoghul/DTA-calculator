@@ -227,6 +227,7 @@ def calc(fileName, dud):
         # print(fileName + " couldn't be read with the following error: "+str(e))
 
 
+
 def writeHeaderToFile(writer):
     # check for duplicates
     check = []
