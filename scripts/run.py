@@ -101,8 +101,7 @@ def createFile():
         for dir in dirs:
             fileNames = glob.glob(dir+globType, recursive=True)
             # runs for every directory
-            writeDataToFile(
-                writer, dir, [f.replace("\\", "/") for f in fileNames])
+            writeDataToFile(writer, dir, [f.replace("\\", "/") for f in fileNames])     
         try:
             writeSummaryToFile(writer)
         except:

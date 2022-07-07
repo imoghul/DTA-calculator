@@ -175,11 +175,13 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
     ],
     "Dates": [
         {
+            "test": "FT1",
             "Day": 3,
             "Month": 3,
             "Year": 2022
         },
         {
+            "test": "FT3",
             "Year": 2021
         }
     ]
@@ -204,7 +206,7 @@ These are used in defining which values to avoid and limit to. Avoid meaning it 
 
 ##### Dates
 
-Dates is used to determine which dates to look at. While Avoid and Limit can also theoretically be used for this, this is an easier and more readable way of controlling which dates are included.
+Dates is used to determine which dates to look at. While Avoid and Limit can also theoretically be used for this, this is an easier and more readable way of controlling which dates are included. "Dates" is a list of dictionaries each containing "test" which will determine the test type. They may also include "Year", "Monty", and "Day". Not including one implies the user is fine with it being ignored.
 
 #### FT2 SUM
 

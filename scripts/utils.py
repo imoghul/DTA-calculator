@@ -138,3 +138,21 @@ def anyIn(val, l):  # checks if any of the elements of l are in val
 
 def allIn(val, l):
     return all([(i in val) for i in l])
+
+
+
+def getFromData(data,title): # takes data[sn]
+    vals = []
+    for i in data:
+        if i in data: vals.append(data[title])
+    return vals if vals!=[] else None
+
+def addToData(data, title,val,sn):
+    added = False
+    for i in data:
+        if title not in i:
+            i[title] = val
+            added = True
+            break
+    if not added:
+        data.append({"Serial Number":sn,title:val})
