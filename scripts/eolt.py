@@ -84,10 +84,11 @@ def calc(fileName, dud):
                             _date = _date[index-2]
                             data[sn][fileName]["Serial Number"] = sn
                             # addToData(data[sn], "Serial Number", sn, sn)
-                            data[sn][fileName]["FT2 SUM:Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+                            data[sn][fileName]["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
                             # addToData(data[sn], "FT2 SUM:Date",
                                     # _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4], sn)
-                            data[sn][fileName]["FT2 SUM:File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["Test Type"] = fileType
                             # addToData(data[sn], "FT2 SUM:File Name",
                             #         fileName.split("\\")[-1], sn)
                             continue
@@ -166,11 +167,12 @@ def calc(fileName, dud):
                                         #     data[sn], title, v[ft3headers.index(dataField)], sn)
                                     except:
                                         pass
-                            data[sn][fileName]["FT3:File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
                             # addToData(data[sn], "FT3:File Name",
                             #           fileName.split("\\")[-1], sn)
-                            data[sn][fileName]["FT3:Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                            data[sn][fileName]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
                             # addToData(data[sn], "FT3:Date", _date, sn)
+                            data[sn][fileName]["Test Type"] = fileType
                 
         elif(fileType == "FT1"):
             with open(fileName, newline='') as file:
@@ -191,13 +193,14 @@ def calc(fileName, dud):
                                 data[sn][fileName] = {}
                             data[sn][fileName]["Serial Number"] = sn
                             # addToData(data[sn], "Serial Number", sn, sn)
-                            data[sn][fileName]["FT1:File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
                             # addToData(data[sn], "FT1:File Name",
                                     # fileName.split("\\")[-1], sn)
                             _date = fileName.replace(".csv", "").split("_")[-2]
-                            data[sn][fileName]["FT1:Date"] = _date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2]
+                            data[sn][fileName]["Date"] = _date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2]
                             # addToData(data[sn], "FT1:Date", _date[2:4] +
                             #         "/"+_date[4:6]+"/20"+_date[0:2], sn)
+                            data[sn][fileName]["Test Type"] = fileType
                             continue
                         elif sn == None:
                             continue
@@ -324,12 +327,9 @@ def writeSummaryToFile(writer):
         moveToBeginning(headers, i)
     for i in reversed([getTitle_config(j) for j in detectionList["FT1"]]):
         moveToBeginning(headers, i)
-    moveToBeginning(headers, "FT3:File Name")
-    moveToBeginning(headers, "FT2 SUM:File Name")
-    moveToBeginning(headers, "FT1:File Name")
-    moveToBeginning(headers, "FT3:Date")
-    moveToBeginning(headers, "FT2 SUM:Date")
-    moveToBeginning(headers, "FT1:Date")
+    moveToBeginning(headers, "Date")
+    moveToBeginning(headers, "File Name")
+    moveToBeginning(headers, "Test Type")
     moveToBeginning(headers, "Serial Number")
     for test in detectionList:
         for pref in detectionList[test]:
@@ -345,7 +345,6 @@ def writeSummaryToFile(writer):
         counter += 1
         process_bar("Writing Data", counter, length)
         for test in data[sn]:
-            if(sn=="TR1562152124"):print(data[sn][test])
             for h in headers:
                 if(h not in data[sn][test]):
                     data[sn][test][h] = " "  # "doesn't exist"
