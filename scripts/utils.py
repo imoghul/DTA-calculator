@@ -156,7 +156,11 @@ def addToData(data, title, val, sn):
             added = True
             break
     if not added:
-        data.append({"Serial Number": sn, title: val})
+        if(title == "Serial Number"):
+            data.append({"Serial Number": sn})
+        else:
+            data.append({"Serial Number": sn, title: val})
+
 
 
 def runThreads(threads, max, message):
@@ -177,3 +181,14 @@ def runThreads(threads, max, message):
                 dead.append(processing.pop(processing.index(i)))
     for t in dead+processing:
         t.join()
+
+
+def getRows(headers,sndata):
+    pass
+    #  snData = copy.deepcopy(sndata)
+    # lists = []
+    # for h in headers:
+    #     current = [True for h in headers]
+    #     for test in snData:
+    #         data = snData[test][h] if h in snData[test] else "missing"
+    #         current[headers.index(h)] = data
