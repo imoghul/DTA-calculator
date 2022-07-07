@@ -32,7 +32,6 @@ while testResKey == calibKey:
 # calibKey = "calibKey"
 # testResKey = "testResKey"
 
-
 dirNum = 0
 
 isThreading = True
@@ -201,7 +200,7 @@ def calc(fileName, dud):
                                     addToData(data[sn], dataKey, v[1], sn)
                             elif "step" in i:
                                 step = i["step"]
-                                if(v[0] == step and dataKey in ft1headers):
+                                if(v[0] == step and dataField in ft1headers):
                                     # data[sn][dataKey] = v[ft1headers.index(dataField)]
                                     addToData(
                                         data[sn], dataKey, v[ft1headers.index(dataField)], sn)
@@ -213,7 +212,7 @@ def calc(fileName, dud):
                     _date = fileName.replace(".csv", "").split("_")[-2]
                     # data[sn]["FT1:Date"] = _date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2]
                     addToData(data[sn], "FT1:Date", _date[2:4] +
-                                "/"+_date[4:6]+"/20"+_date[0:2], sn)
+                              "/"+_date[4:6]+"/20"+_date[0:2], sn)
                 else:
                     raise Exception("Doesn't have a serial number")
         elif(fileType == "FT2 RAW"):
