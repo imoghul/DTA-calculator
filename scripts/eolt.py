@@ -114,8 +114,6 @@ def calc(fileName, dud):
                                     # addToData(data[sn], dataKey, v[index], sn)
                                 elif dataRegion != None and (dataField in v and region == dataRegion):
                                     data[sn][fileName][dataKey] = v[index] if v[index] != "" else "0"
-                                    if(sn=="TR1562152124" and dataKey=="Calib:Air2"):
-                                        _=5#print(fileName)
                                     # addToData(
                                         # data[sn], dataKey, v[index] if v[index] != "" else "0", sn)
 
