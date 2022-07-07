@@ -38,7 +38,7 @@ dirNum = 0
 isThreading = True
 threads = []
 processing = []
-max = 200
+max = 5000
 threadCount = 0
 
 detectionList = {
@@ -56,6 +56,7 @@ certdir = None
 genCert = False
 errors = []
 
+
 def calc(fileName, dud):
     global currentSN, data, headers, errors
     try:
@@ -72,8 +73,9 @@ def calc(fileName, dud):
                             sn = v[1]
                             currentSN = sn
                             if(sn not in data.keys()):
-                                data[sn] = [{}]# data[sn] = {}
-                                addToData(data[sn],"Serial Number",sn,sn)# data[sn]["Serial Number"] = sn
+                                data[sn] = [{}]  # data[sn] = {}
+                                # data[sn]["Serial Number"] = sn
+                                addToData(data[sn], "Serial Number", sn, sn)
                                 continue
                         elif sn == None:
                             continue
@@ -93,15 +95,21 @@ def calc(fileName, dud):
                             dataRegion = None if "region" not in i else i["region"]
                             if(type(dataField) != list):
                                 if dataRegion == None and dataField == v[0]:
-                                    addToData(data[sn],dataKey,v[index],sn)# data[sn][dataKey] = v[index]
+                                    # data[sn][dataKey] = v[index]
+                                    addToData(data[sn], dataKey, v[index], sn)
                                 if dataRegion != None and (dataField in v and region == dataRegion):
-                                    addToData(data[sn],dataKey,v[index] if v[index]!="" else "0",sn)# data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                                    # data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                                    addToData(
+                                        data[sn], dataKey, v[index] if v[index] != "" else "0", sn)
                             elif type(dataField) == list:
                                 allIn = all([i in v for i in dataField])
                                 if dataRegion == None and allIn:
-                                    addToData(data[sn],dataKey,v[index],sn)# data[sn][dataKey] = v[index]
+                                    # data[sn][dataKey] = v[index]
+                                    addToData(data[sn], dataKey, v[index], sn)
                                 if dataRegion != None and (allIn and region == dataRegion):
-                                    addToData(data[sn],dataKey,v[index] if v[index]!="" else "0",sn)# data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                                    # data[sn][dataKey] = v[index] if v[index] != "" else "0"
+                                    addToData(
+                                        data[sn], dataKey, v[index] if v[index] != "" else "0", sn)
                 if(sn != None):
                     _date = fileName.replace(".csv", "").split("_")
                     index = 1
@@ -109,13 +117,23 @@ def calc(fileName, dud):
                         if("SUM" in _date[i]):
                             index = i
                     _date = _date[index-2]
-                    addToData(data[sn],"FT2 SUM:Date",_date[4:6]+"/"+_date[6:8]+"/"+_date[0:4],sn)# data[sn]["FT2 SUM:Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
-                    addToData(data[sn],"FT2 SUM:File Name",fileName.split("\\")[-1],sn)# data[sn]["FT2 SUM:File Name"] = fileName.split("\\")[-1]
+                    # data[sn]["FT2 SUM:Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+                    addToData(data[sn], "FT2 SUM:Date",
+                              _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4], sn)
+                    # data[sn]["FT2 SUM:File Name"] = fileName.split("\\")[-1]
+                    addToData(data[sn], "FT2 SUM:File Name",
+                              fileName.split("\\")[-1], sn)
                 else:
                     raise Exception(
                         "Doesn't have a serial number")
         elif(fileType == "FT3"):
             with open(fileName, newline='') as file:
+                _date = "couldn't parse"
+                try:
+                    _date = v[ft3headers.index("TimeStamp")].split(" ")[
+                        0]
+                except:
+                    pass
                 ft3headers = None
                 sn = None
                 for row in csv.reader(file, delimiter='\n', quotechar=','):
@@ -127,20 +145,22 @@ def calc(fileName, dud):
                             sn = v[ft3headers.index("Serial Number")]
                             if(sn not in data):
                                 data[sn] = [{}]
-                                addToData(data[sn],"Serial Number",sn,sn)# data[sn]["Serial Number"] = sn
+                                # data[sn]["Serial Number"] = sn
+                                addToData(data[sn], "Serial Number", sn, sn)
                             for i in detectionList["FT3"]:
                                 title = getTitle_config(i)
                                 if(title in ft3headers):
                                     try:
-                                        addToData(data[sn],title,v[ft3headers.index(title)],sn)# data[sn][title] = v[ft3headers.index(title)]
+                                        # data[sn][title] = v[ft3headers.index(title)]
+                                        addToData(
+                                            data[sn], title, v[ft3headers.index(title)], sn)
                                     except:
                                         pass
-                            addToData(data[sn],"FT3:File Name",fileName.split("\\")[-1],sn)# data[sn]["FT3:File Name"] = fileName.split("\\")[-1]
-                            _date = "couldn't parse"
-                            try:
-                                _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
-                            except: pass                        
-                            addToData(data[sn],"FT3:Date" , _date,sn)# data[sn]["FT3:Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                            # data[sn]["FT3:File Name"] = fileName.split("\\")[-1]
+                            addToData(data[sn], "FT3:File Name",
+                                      fileName.split("\\")[-1], sn)
+                            # data[sn]["FT3:Date"] = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                            addToData(data[sn], "FT3:Date", _date, sn)
         elif(fileType == "FT1"):
             with open(fileName, newline='') as file:
                 sn = None
@@ -156,13 +176,11 @@ def calc(fileName, dud):
                             currentSN = sn
                             if(sn not in data):
                                 data[sn] = [{}]
-                                addToData(data[sn],"Serial Number",sn,sn)# data[sn]["Serial Number"] = sn
+                                # data[sn]["Serial Number"] = sn
+                                addToData(data[sn], "Serial Number", sn, sn)
                                 continue
                         elif sn == None:
                             continue
-                        if(sn in data and "FT1:Date" not in data[sn]):
-                            _date = fileName.replace(".csv", "").split("_")[-2]
-                            addToData(data[sn],"FT1:Date",_date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2],sn)# data[sn]["FT1:Date"] = _date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2]
                         if(len(v) > 2 and ft1headers == None):
                             ft1headers = v
                         for i in detectionList["FT1"]:
@@ -175,16 +193,26 @@ def calc(fileName, dud):
 
                             if(ft1headers == None):
                                 if(dataField == "Model ID" and modelId != None):
-                                    addToData(data[sn],dataKey,modelId,sn)# data[sn][dataKey] = modelId
+                                    # data[sn][dataKey] = modelId
+                                    addToData(data[sn], dataKey, modelId, sn)
                                 elif(dataKey in v):
-                                    addToData(data[sn],dataKey,v[1],sn)# data[sn][dataKey] = v[1]
+                                    # data[sn][dataKey] = v[1]
+                                    addToData(data[sn], dataKey, v[1], sn)
                             elif "step" in i:
                                 step = i["step"]
                                 if(v[0] == step and dataKey in ft1headers):
-                                    addToData(data[sn],dataKey,v[ft1headers.index(dataField)],sn)# data[sn][dataKey] = v[ft1headers.index(dataField)]
+                                    # data[sn][dataKey] = v[ft1headers.index(dataField)]
+                                    addToData(
+                                        data[sn], dataKey, v[ft1headers.index(dataField)], sn)
 
                 if(sn != None):
-                    addToData(data[sn],"FT1:File Name",fileName.split("\\")[-1],sn)# data[sn]["FT1:File Name"] = fileName.split("\\")[-1]
+                    # data[sn]["FT1:File Name"] = fileName.split("\\")[-1]
+                    addToData(data[sn], "FT1:File Name",
+                              fileName.split("\\")[-1], sn)
+                    _date = fileName.replace(".csv", "").split("_")[-2]
+                    # data[sn]["FT1:Date"] = _date[2:4] + "/"+_date[4:6]+"/20"+_date[0:2]
+                    addToData(data[sn], "FT1:Date", _date[2:4] +
+                                "/"+_date[4:6]+"/20"+_date[0:2], sn)
                 else:
                     raise Exception("Doesn't have a serial number")
         elif(fileType == "FT2 RAW"):
@@ -193,9 +221,11 @@ def calc(fileName, dud):
     except csv.Error as e:
         pass
     except Exception as e:
-        errors.append(fileName + " couldn't be read with the following error: "+str(e))
+        errors.append(
+            fileName + " couldn't be read with the following error: "+str(e))
         pass
         # print(fileName + " couldn't be read with the following error: "+str(e))
+
 
 def writeHeaderToFile(writer):
     # check for duplicates
@@ -222,7 +252,7 @@ def writeHeaderToFile(writer):
 
 
 def writeDataToFile(writer, dir, fileNames):
-    global dirNum,threads,processing,max,threadCount
+    global dirNum, threads, processing, max, threadCount
     dirNum += 1
     counter = 0
     length = len(fileNames)
@@ -233,49 +263,49 @@ def writeDataToFile(writer, dir, fileNames):
         if(not isThreading):
             process_bar("Retrieving from the %s directory" %
                         ordinal(dirNum), counter, length)
-            success = calc(fileName,0)
+            success = calc(fileName, 0)
         ###
         if(isThreading):
-            process_bar("Initializing for the %s directory"%ordinal(dirNum), counter, length)
-            threads.append(threading.Thread(target = calc,args=(fileName,0)))
+            process_bar("Initializing for the %s directory" %
+                        ordinal(dirNum), counter, length)
+            threads.append(threading.Thread(target=calc, args=(fileName, 0)))
         ###
         if(counter > length):
             return
     counter = 0
-        
-
 
 
 def writeSummaryToFile(writer):
-    global data,threads,processing,max,threadCount
+    global data, threads, processing, max, threadCount
     # DESIRED: 1531
     # execute up threads
     counter = 0
     length = len(threads)
-    
+
     if(isThreading):
-        while len(threads)>0 or len(processing)>0:
+        while len(threads) > 0 or len(processing) > 0:
             # print(len(processing))
-            if(len(processing)<max and len(threads)):
+            if(len(processing) < max and len(threads)):
                 t = threads.pop(0)
                 t.start()
                 processing.append(t)
             elif(len(processing) and not processing[0].is_alive()):
                 counter += 1
-                process_bar("Retrieving data", counter, length)    
+                process_bar("Retrieving data", counter, length)
                 processing.pop(0)
         for t in processing:
             t.join()
 
-    with open(certdir+f'/data.json',"w") as f:
-        json.dump(data,f)
+    # with open(certdir+f'/data{"Thread" if isThreading else "Normal"}.json', "w") as f:
+    #     json.dump(data, f)
 
     # sort data
+    print("Attempting to sort by date")
     try:
         data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(
             str(dateutil.parser.parse(sn[1]["FT2 SUM:Date"])), "%Y-%m-%d %H:%M:%S"))}
     except:
-        pass#print("Bad date exists, will not sort by date")
+        pass  # print("Bad date exists, will not sort by date")
     # header calculating
     counter = 0
     length = len(data)
@@ -314,11 +344,10 @@ def writeSummaryToFile(writer):
         for row in data[sn]:
             for h in headers:
                 if(h not in row):
-                    row[h] = ""#"doesn't exist"
+                    row[h] = ""  # "doesn't exist"
 
             if getSkippable(row):
                 continue
-
             try:
                 writer.writerow([row[h] for h in headers])
             except:
@@ -327,7 +356,7 @@ def writeSummaryToFile(writer):
             try:
                 if(genCert and "FT2 SUM:Date" in row and testResKey in row and daqTempKey in row and calibKey in row):
                     createCertificate(sn, row["FT2 SUM:Date"], "Pass" if row
-                                    [testResKey] == "Test Complete" else "Fail", row[daqTempKey] if daqTempKey in row else "N/A", row[calibKey] if calibKey in row else "N/A", certdir)
+                                      [testResKey] == "Test Complete" else "Fail", row[daqTempKey] if daqTempKey in row else "N/A", row[calibKey] if calibKey in row else "N/A", certdir)
             except:
                 raise Exception(
                     "Couldn't generate certificate, check config file for correct preferences")
@@ -336,6 +365,7 @@ def writeSummaryToFile(writer):
     print("\nErrors: ")
     for i in errors:
         print(i)
+
 
 def transferDirs(cdir, pdir):
     global certdir, preferencesFile, detectionList, retrieveData, genCert
