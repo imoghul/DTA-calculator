@@ -149,11 +149,12 @@ def calc(fileName, dud):
                                 addToData(data[sn], "Serial Number", sn, sn)
                             for i in detectionList["FT3"]:
                                 title = getTitle_config(i)
-                                if(title in ft3headers):
+                                dataField = i["title"]
+                                if(dataField in ft3headers):
                                     try:
                                         # data[sn][title] = v[ft3headers.index(title)]
                                         addToData(
-                                            data[sn], title, v[ft3headers.index(title)], sn)
+                                            data[sn], title, v[ft3headers.index(dataField)], sn)
                                     except:
                                         pass
                             # data[sn]["FT3:File Name"] = fileName.split("\\")[-1]
@@ -195,7 +196,7 @@ def calc(fileName, dud):
                                 if(dataField == "Model ID" and modelId != None):
                                     # data[sn][dataKey] = modelId
                                     addToData(data[sn], dataKey, modelId, sn)
-                                elif(dataKey in v):
+                                elif(dataField in v):
                                     # data[sn][dataKey] = v[1]
                                     addToData(data[sn], dataKey, v[1], sn)
                             elif "step" in i:
@@ -320,6 +321,8 @@ def writeSummaryToFile(writer):
     for i in reversed([getTitle_config(j) for j in detectionList["FT3"]]):
         moveToBeginning(headers, i)
     for i in reversed([getTitle_config(j) for j in detectionList["FT2 SUM"]]):
+        moveToBeginning(headers, i)
+    for i in reversed([getTitle_config(j) for j in detectionList["FT1"]]):
         moveToBeginning(headers, i)
     moveToBeginning(headers, "FT3:File Name")
     moveToBeginning(headers, "FT2 SUM:File Name")
