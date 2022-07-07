@@ -8,7 +8,7 @@ import shutil
 
 
 def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
-    dest = path+"%s_certificate.docx" % sn
+    dest = path+"%s_%s_certificate.docx" % (sn,cbDate.replace("/",""))
     shutil.copy2(path+"TEMPLATE.docx", dest)
     doc = Document(dest)
 

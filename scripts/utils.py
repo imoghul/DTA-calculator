@@ -138,3 +138,42 @@ def anyIn(val, l):  # checks if any of the elements of l are in val
 
 def allIn(val, l):
     return all([(i in val) for i in l])
+
+
+def getFromData(data, title):  # takes data[sn]
+    vals = []
+    for i in data:
+        if i in data:
+            vals.append(data[title])
+    return vals if vals != [] else None
+
+
+def addToData(data, title, val, sn):
+    added = False
+    for i in data:
+        if title not in i:
+            i[title] = val
+            added = True
+            break
+    if not added:
+        data.append({"Serial Number": sn, title: val})
+
+
+def runThreads(threads, max, message):
+    processing = []
+    dead = []
+    length = len(threads)
+    counter = 0
+    while counter<length:
+        while(len(processing) < max and len(threads)):
+            t = threads.pop(0)
+            t.start()
+            processing.append(t)
+
+        for i in processing:
+            if(not i.is_alive()):
+                counter += 1
+                process_bar(message, counter, length)
+                dead.append(processing.pop(processing.index(i)))
+    for t in dead+processing:
+        t.join()
