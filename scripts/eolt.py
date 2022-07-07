@@ -36,9 +36,7 @@ dirNum = 0
 
 isThreading = True
 threads = []
-processing = []
-max = 5000
-threadCount = 0
+certThreads = []
 
 detectionList = {
     "FT2 SUM": [],
@@ -356,11 +354,17 @@ def writeSummaryToFile(writer):
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
             try:
                 if(genCert and "FT2 SUM:Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
-                    createCertificate(sn, data[sn][test]["FT2 SUM:Date"], "Pass" if data[sn][test]
-                                      [testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
+                    if(not isThreading):createCertificate(sn, data[sn][test]["FT2 SUM:Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
+                    if(isThreading):
+                        certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["FT2 SUM:Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
             except:
                 raise Exception(
                     "Couldn't generate certificate, check config file for correct preferences")
+    if(isThreading):
+        import time
+        start = time.time()
+        runThreads(certThreads,2000,"Generating Certificates")
+        print("Retrieved in "+str(time.time()-start)+" seconds")
     if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
         convertToPDF_path(certdir)
     if(errors!=[]):
