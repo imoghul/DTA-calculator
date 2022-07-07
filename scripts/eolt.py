@@ -127,10 +127,11 @@ def calc(fileName):
                         #     except:pass
                         for i in detectionList["FT3"]:
                             title = getTitle_config(i)
-                            if(title in ft3headers):
+                            dataField = i["title"]
+                            if(dataField in ft3headers):
                                 try:
                                     data[sn][title] = v[ft3headers.index(
-                                        title)]
+                                        dataField)]
                                 except:
                                     pass
                         data[sn]["File Name:FT3"] = fileName.split("\\")[-1]
@@ -170,11 +171,11 @@ def calc(fileName):
                         if(ft1headers == None):
                             if(dataField == "Model ID" and modelId != None):
                                 data[sn][dataKey] = modelId
-                            elif(dataKey in v):
+                            elif(dataField in v):
                                 data[sn][dataKey] = v[1]
                         elif "step" in i:
                             step = i["step"]
-                            if(v[0] == step and dataKey in ft1headers):
+                            if(v[0] == step and dataField in ft1headers):
                                 data[sn][dataKey] = v[ft1headers.index(
                                     dataField)]
 
