@@ -277,25 +277,14 @@ def writeDataToFile(writer, dir, fileNames):
 
 def writeSummaryToFile(writer):
     global data, threads, processing, max, threadCount
-    # DESIRED: 1531
-    # execute up threads
-    counter = 0
-    length = len(threads)
+
+    # execute threads
 
     if(isThreading):
-        while len(threads) > 0 or len(processing) > 0:
-            # print(len(processing))
-            if(len(processing) < max and len(threads)):
-                t = threads.pop(0)
-                t.start()
-                processing.append(t)
-            elif(len(processing) and not processing[0].is_alive()):
-                counter += 1
-                process_bar("Retrieving data", counter, length)
-                processing.pop(0)
-        for t in processing:
-            t.join()
-
+        import time
+        start = time.time()
+        runThreads(threads,2000,"Retrieving Data")
+        print("Processed in "+str(time.time()-start)+" seconds")
     # with open(certdir+f'/data{"Thread" if isThreading else "Normal"}.json', "w") as f:
     #     json.dump(data, f)
 
