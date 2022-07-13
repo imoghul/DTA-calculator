@@ -111,10 +111,8 @@ def createFile(sumType):
 try:
     with open(preferencesFile) as f:
         retrieveData = json.load(f)
-    try:
-        createFile(retrieveData["Master Summary File Tests"])
-    except:
-        raise Exception("Couldn't retrieve \"Master Summary File Tests\" from preferences")
+    createFile(retrieveData["Master Summary File Tests"])
+    
 except(PermissionError):
     raise Exception(
         "Output file couldn't be opened. Close the file if it is open")

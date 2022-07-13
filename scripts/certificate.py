@@ -6,11 +6,14 @@ import os
 import sys
 import shutil
 
-
+def docPath(sn,cbDate,path):
+    return path + sn + "_" + cbDate.replace("/","") + "_certificate.docx"#path+"%s_%s_certificate.docx" % (sn,cbDate.replace("/",""))
+def createCopy(sn,cbDate,path):
+    dest = docPath(sn,cbDate,path)
+    shutil.copy2(path+"TEMPLATE.docx", dest)
 def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
     try:
-        dest = path+"%s_%s_certificate.docx" % (sn,cbDate.replace("/",""))
-        shutil.copy2(path+"TEMPLATE.docx", dest)
+        dest = docPath(sn,cbDate,path)
         doc = Document(dest)
 
         for t in doc.tables:
@@ -48,8 +51,8 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
                     font.name = "AvenirNext LT Pro Regular"
 
                 doc.save(dest)
-    except:
-        print("Couldn't generate certificate for "+sn)
+    except Exception as e:
+        print(str(e))# print("Couldn't generate certificate for "+sn)
 
 def convertToPDF_doc(doc):
     # with contextlib.redirect_stdout(open(os.devnull, 'w')):
