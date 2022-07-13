@@ -76,9 +76,9 @@ elif(mode == 'i'):
 transferDirs(certdir, preferencesFile)
 
 
-def createFile():
+def createFile(sumType):
     global dirs
-    with open(outdir+outFileName, mode="w", newline='') as out:
+    with open(outdir+outFileName+"_"+'_'.join(sumType)+".csv", mode="w", newline='') as out:
         writer = csv.writer(out)
         # output header to csv
         writeHeaderToFile(writer)
@@ -109,7 +109,10 @@ def createFile():
 
 
 try:
-    createFile()
+    with open(preferencesFile) as f:
+        retrieveData = json.load(f)
+    createFile(retrieveData["Master Summary File Tests"])
+    
 except(PermissionError):
     raise Exception(
         "Output file couldn't be opened. Close the file if it is open")
