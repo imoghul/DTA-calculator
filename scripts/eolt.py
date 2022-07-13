@@ -456,7 +456,7 @@ def getSkippable(row):
                 if(not skipAv):
                     curr = []  # checks if the current key is fully part of said data field
                     for av in i:  # looping through keys in avoids
-                        if av not in row:
+                        if av not in row and lim!="*":
                             # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
                             curr.append(False)
                         else:
