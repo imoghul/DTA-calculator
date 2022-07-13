@@ -210,7 +210,7 @@ These are used in defining which values to avoid and limit to. Avoid meaning it 
 
 ##### Dates
 
-Dates is used to determine which dates to look at. While Avoid and Limit can also theoretically be used for this, this is an easier and more readable way of controlling which dates are included. "Dates" is a list of dictionaries each containing "test" which will determine the test type. They may also include "Year", "Monty", and "Day". Not including one implies the user is fine with it being ignored.
+Dates is used to determine which dates to look at. While Avoid and Limit can also theoretically be used for this, this is an easier and more readable way of controlling which dates are included. "Dates" is a list of dictionaries each containing "test" which will determine the test type. They may also include "Year", "Monty", and "Day". Not including one implies the user is fine with it being ignored. Though this is technically possible with avoid and limit, it is discouraged as desired results may not be achieved due to zero padding of dates
 
 #### FT2 SUM
 
