@@ -219,7 +219,6 @@ def calc(fileName, dud):
         # print(fileName + " couldn't be read with the following error: "+str(e))
 
 
-
 def writeHeaderToFile(writer):
     # check for duplicates
     check = []
@@ -413,7 +412,8 @@ def transferDirs(cdir, pdir):
             detectionList[i["test"]].append(i)
 
     except Exception as e:
-        raise e#raise Exception('No "Test Preferences" key in prefences file')
+        # raise Exception('No "Test Preferences" key in prefences file')
+        raise e
 
     genCert = "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"]
 
@@ -432,14 +432,14 @@ def getSkippable(row):
                 for lim in i:  # looping through keys in limits
                     if(limFound == None):
                         limFound = False
-                    if lim not in row and lim!="*":
+                    if lim not in row and lim != "*":
                         # if the current is not in the data fields then it doesn't need to be limited, therefore it is not fully part of the data field
                         curr.append(False)
                     else:
-                        if(lim!="*"):
+                        if(lim != "*"):
                             curr.append(allIn(row[lim], i[lim]))
                         else:
-                            curr.append(allInSome(row.values(),i[lim]))
+                            curr.append(allInSome(row.values(), i[lim]))
                     if(not all(curr)):
                         break  # if the current key is not fully in the data field, then it doesn't need to be limited
                 if(all(curr)):
@@ -456,14 +456,14 @@ def getSkippable(row):
                 if(not skipAv):
                     curr = []  # checks if the current key is fully part of said data field
                     for av in i:  # looping through keys in avoids
-                        if av not in row and lim!="*":
+                        if av not in row and av != "*":
                             # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
                             curr.append(False)
                         else:
-                            if(lim!="*"):
+                            if(lim != "*"):
                                 curr.append(allIn(row[av], i[av]))
                             else:
-                                curr.append(allInSome(row.values(),i[av]))
+                                curr.append(allInSome(row.values(), i[av]))
                         if(not all(curr)):
                             break  # if the current key is not fully in the data field, then it doesn't need to be avoided
                     if(all(curr) and curr != []):
