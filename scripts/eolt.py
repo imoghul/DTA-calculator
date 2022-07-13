@@ -1,5 +1,3 @@
-from argparse import FileType
-from audioop import add
 import csv
 from datetime import datetime
 import json
@@ -72,7 +70,7 @@ def calc(fileName, dud):
                             sn = v[1]
                             currentSN = sn
                             if(sn not in data):
-                                data[sn] = {}  # data[sn] = {}
+                                data[sn] = {}
                             if(fileName not in data[sn]):
                                 data[sn][fileName] = {}
                             else:
@@ -84,16 +82,11 @@ def calc(fileName, dud):
                                     index = i
                             _date = _date[index-2]
                             data[sn][fileName]["Serial Number"] = sn
-                            # addToData(data[sn], "Serial Number", sn, sn)
                             data[sn][fileName]["Date"] = _date[4:6] + \
                                 "/"+_date[6:8]+"/"+_date[0:4]
-                            # addToData(data[sn], "FT2 SUM:Date",
-                            # _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4], sn)
                             data[sn][fileName]["File Name"] = fileName.split(
                                 "\\")[-1]
                             data[sn][fileName]["Test Type"] = fileType
-                            # addToData(data[sn], "FT2 SUM:File Name",
-                            #         fileName.split("\\")[-1], sn)
                             continue
                         elif sn == None:
                             continue
@@ -114,21 +107,15 @@ def calc(fileName, dud):
                             if(type(dataField) != list):
                                 if dataRegion == None and dataField == v[0]:
                                     data[sn][fileName][dataKey] = v[index]
-                                    # addToData(data[sn], dataKey, v[index], sn)
                                 elif dataRegion != None and (dataField in v and region == dataRegion):
                                     data[sn][fileName][dataKey] = v[index] if v[index] != "" else "0"
-                                    # addToData(
-                                    # data[sn], dataKey, v[index] if v[index] != "" else "0", sn)
 
                             elif type(dataField) == list:
                                 allIn = all([i in v for i in dataField])
                                 if dataRegion == None and allIn:
                                     data[sn][fileName][dataKey] = v[index]
-                                    # addToData(data[sn], dataKey, v[index], sn)
                                 elif dataRegion != None and (allIn and region == dataRegion):
                                     data[sn][fileName][dataKey] = v[index] if v[index] != "" else "0"
-                                    # addToData(
-                                    #     data[sn], dataKey, v[index] if v[index] != "" else "0", sn)
 
                 if(sn == None):
                     raise Exception(
@@ -155,7 +142,6 @@ def calc(fileName, dud):
                             if(fileName not in data[sn]):
                                 data[sn][fileName] = {}
                             data[sn][fileName]["Serial Number"] = sn
-                            # addToData(data[sn], "Serial Number", sn, sn)
                             for i in detectionList["FT3"]:
                                 title = getTitle_config(i)
                                 dataField = i["title"]
@@ -163,17 +149,12 @@ def calc(fileName, dud):
                                     try:
                                         data[sn][fileName][title] = v[ft3headers.index(
                                             title)]
-                                        # addToData(
-                                        #     data[sn], title, v[ft3headers.index(dataField)], sn)
                                     except:
                                         pass
                             data[sn][fileName]["File Name"] = fileName.split(
                                 "\\")[-1]
-                            # addToData(data[sn], "FT3:File Name",
-                            #           fileName.split("\\")[-1], sn)
                             data[sn][fileName]["Date"] = v[ft3headers.index("TimeStamp")].split(" ")[
                                 0]
-                            # addToData(data[sn], "FT3:Date", _date, sn)
                             data[sn][fileName]["Test Type"] = fileType
 
         elif(fileType == "FT1"):
@@ -194,16 +175,11 @@ def calc(fileName, dud):
                             if(fileName not in data[sn]):
                                 data[sn][fileName] = {}
                             data[sn][fileName]["Serial Number"] = sn
-                            # addToData(data[sn], "Serial Number", sn, sn)
                             data[sn][fileName]["File Name"] = fileName.split(
                                 "\\")[-1]
-                            # addToData(data[sn], "FT1:File Name",
-                            # fileName.split("\\")[-1], sn)
                             _date = fileName.replace(".csv", "").split("_")[-2]
                             data[sn][fileName]["Date"] = _date[2:4] + \
                                 "/"+_date[4:6]+"/20"+_date[0:2]
-                            # addToData(data[sn], "FT1:Date", _date[2:4] +
-                            #         "/"+_date[4:6]+"/20"+_date[0:2], sn)
                             data[sn][fileName]["Test Type"] = fileType
                             continue
                         elif sn == None:
@@ -221,17 +197,13 @@ def calc(fileName, dud):
                             if(ft1headers == None):
                                 if(dataField == "Model ID" and modelId != None):
                                     data[sn][fileName][dataKey] = modelId
-                                    # addToData(data[sn], dataKey, modelId, sn)
                                 elif(dataField in v):
                                     data[sn][fileName][dataKey] = v[1]
-                                    # addToData(data[sn], dataKey, v[1], sn)
                             elif "step" in i:
                                 step = i["step"]
                                 if(v[0] == step and dataField in ft1headers):
                                     data[sn][fileName][dataKey] = v[ft1headers.index(
                                         dataField)]
-                                    # addToData(
-                                    #     data[sn], dataKey, v[ft1headers.index(dataField)], sn)
 
                 if(sn == None):
                     raise Exception("Doesn't have a serial number")
