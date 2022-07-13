@@ -198,8 +198,11 @@ Different tests have different syntax and required keys due to the nature of how
 * FT2 SUM - FT2 SUMmary files
 * FT2 RAW - FT2 raw data files
 * FT3 - FT3 files
-##### Generate Certificates
-The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and the column entery for Test Preferences.
+##### Generate Certificates and PDF Certificates
+The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and the numbers. "PDF Certificates" will all the certificates in the certificate directory to pdfs after generating the docx format. 
+
+##### Master Summary File Tests
+This key contains a list with the test types to include in the master summary file.
 
 ##### Avoid and Limit
 
