@@ -138,6 +138,9 @@ def anyIn(val, l):  # checks if any of the elements of l are in val
 
 def allIn(val, l):
     return all([(i in val) for i in l])
+def allInSome(targets, finds):
+    return True in [allIn(i,finds) for i in targets]
+    
 
 
 def getFromData(data, title):  # takes data[sn]

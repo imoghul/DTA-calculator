@@ -412,8 +412,8 @@ def transferDirs(cdir, pdir):
                     'One or more of the "Test Preferences" has an invalid "test" name')
             detectionList[i["test"]].append(i)
 
-    except:
-        raise Exception('No "Test Preferences" key in prefences file')
+    except Exception as e:
+        raise e#raise Exception('No "Test Preferences" key in prefences file')
 
     genCert = "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"]
 
@@ -432,11 +432,14 @@ def getSkippable(row):
                 for lim in i:  # looping through keys in limits
                     if(limFound == None):
                         limFound = False
-                    if lim not in row:
+                    if lim not in row and lim!="*":
                         # if the current is not in the data fields then it doesn't need to be limited, therefore it is not fully part of the data field
                         curr.append(False)
                     else:
-                        curr.append(allIn(row[lim], i[lim]))
+                        if(lim!="*"):
+                            curr.append(allIn(row[lim], i[lim]))
+                        else:
+                            curr.append(allInSome(row.values(),i[lim]))
                     if(not all(curr)):
                         break  # if the current key is not fully in the data field, then it doesn't need to be limited
                 if(all(curr)):
@@ -457,7 +460,10 @@ def getSkippable(row):
                             # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
                             curr.append(False)
                         else:
-                            curr.append(allIn(row[av], i[av]))
+                            if(lim!="*"):
+                                curr.append(allIn(row[av], i[av]))
+                            else:
+                                curr.append(allInSome(row.values(),i[av]))
                         if(not all(curr)):
                             break  # if the current key is not fully in the data field, then it doesn't need to be avoided
                     if(all(curr) and curr != []):

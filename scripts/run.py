@@ -111,7 +111,7 @@ def createFile(sumType):
 try:
     with open(preferencesFile) as f:
         retrieveData = json.load(f)
-    moveToBeginning(retrieveData["Master Summary File Tests"],"FT3")
+    moveToBeginning(retrieveData["Master Summary File Tests"],"FT")
     moveToBeginning(retrieveData["Master Summary File Tests"],"FT2 RAW")
     moveToBeginning(retrieveData["Master Summary File Tests"],"FT2 SUM")
     moveToBeginning(retrieveData["Master Summary File Tests"],"FT1")
