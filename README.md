@@ -184,7 +184,8 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
             "test": "FT3",
             "Year": 2021
         }
-    ]
+    ],
+    "Master Summary File Tests":["FT1","FT2 SUM","FT3"],
 }
 ```
 

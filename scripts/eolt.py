@@ -1,9 +1,11 @@
+from argparse import FileType
 from audioop import add
 import csv
 from datetime import datetime
 import json
 import glob
 import os
+import time
 import sys
 from utils import *
 import random
@@ -13,7 +15,7 @@ import threading
 import re
 import dateutil.parser
 
-outFileName = "summary.csv"
+outFileName = "summary"
 globType = "**/*.csv"
 
 preferencesFile = None
@@ -274,12 +276,14 @@ def writeDataToFile(writer, dir, fileNames):
         if(not isThreading):
             process_bar("Retrieving from the %s directory" %
                         ordinal(dirNum), counter, length)
-            success = calc(fileName, 0)
+            if(getFileType(fileName) in retrieveData["Master Summary File Tests"]):
+                success = calc(fileName, 0)
         ###
         if(isThreading):
             process_bar("Initializing for the %s directory" %
                         ordinal(dirNum), counter, length)
-            threads.append(threading.Thread(target=calc, args=(fileName, 0)))
+            if(getFileType(fileName) in retrieveData["Master Summary File Tests"]):
+                threads.append(threading.Thread(target=calc, args=(fileName, 0)))
         ###
         if(counter > length):
             return
@@ -287,12 +291,12 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
-    global data, threads, processing, max, threadCount
+    global data, threads, certThreads
 
     # execute threads
 
     if(isThreading):
-        import time
+        
         start = time.time()
         runThreads(threads,2000,"Retrieving Data")
         print("Retrieved in "+str(time.time()-start)+" seconds")
@@ -353,18 +357,18 @@ def writeSummaryToFile(writer):
                 pass
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
             try:
-                if(genCert and "FT2 SUM:Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
+                if(genCert and "Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
                     if(not isThreading):createCertificate(sn, data[sn][test]["FT2 SUM:Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
                     if(isThreading):
                         certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["FT2 SUM:Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
             except:
                 raise Exception(
                     "Couldn't generate certificate, check config file for correct preferences")
-    if(isThreading):
-        import time
+    if(genCert and isThreading):
         start = time.time()
         runThreads(certThreads,2000,"Generating Certificates")
-        print("Retrieved in "+str(time.time()-start)+" seconds")
+        print("Certificates Generated in "+str(time.time()-start)+" seconds")
+
     if("PDF Certificates" in retrieveData and retrieveData["PDF Certificates"] == True and "Generate Certificates" in retrieveData and retrieveData["Generate Certificates"] == True):
         convertToPDF_path(certdir)
     if(errors!=[]):
