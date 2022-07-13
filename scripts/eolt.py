@@ -460,7 +460,7 @@ def getSkippable(row):
                             # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
                             curr.append(False)
                         else:
-                            if(lim != "*"):
+                            if(av != "*"):
                                 curr.append(allIn(row[av], i[av]))
                             else:
                                 curr.append(allInSome(row.values(), i[av]))
@@ -476,7 +476,7 @@ def getSkippable(row):
         if("Dates" in retrieveData):
             isIn = len(retrieveData["Dates"]) == 0
             for i in retrieveData["Dates"]:
-                snDate = dateutil.parser.parse(row[i["test"]+":Date"])
+                snDate = dateutil.parser.parse(row["Date"])
                 snDate = {
                     "Day": snDate.day,
                     "Month": snDate.month,
