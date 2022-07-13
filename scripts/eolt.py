@@ -148,7 +148,7 @@ def calc(fileName, dud):
                                 if(dataField in ft3headers):
                                     try:
                                         data[sn][fileName][title] = v[ft3headers.index(
-                                            title)]
+                                            dataField)]
                                     except:
                                         pass
                             data[sn][fileName]["File Name"] = fileName.split(
