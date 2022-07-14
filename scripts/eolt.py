@@ -276,13 +276,11 @@ def writeDataToFile(writer, dir, fileNames):
 def writeSummaryToFile(writer):
     global data, threads, certThreads, startTime
 
-
     # execute threads
     if(isThreading):
         startTime = time.time()
         runThreads(threads, 2000, "Retrieving Data")
     print("Retrieved in "+str(time.time()-startTime)+" seconds")
-    
 
     # sort data
     try:
@@ -488,22 +486,25 @@ def getSkippable(row):
                     del snDate["Month"]
                 if("Year" not in i):
                     del snDate["Year"]
-                
+
                 same = True
 
                 try:
-                    same = same and snDate["Year"]==i["Year"]
-                except:pass
+                    same = same and snDate["Year"] == i["Year"]
+                except:
+                    pass
 
                 try:
-                    same = same and snDate["Day"]==i["Day"]
-                except:pass
+                    same = same and snDate["Day"] == i["Day"]
+                except:
+                    pass
 
                 try:
-                    same = same and snDate["Month"]==i["Month"]
-                except:pass
+                    same = same and snDate["Month"] == i["Month"]
+                except:
+                    pass
 
-                if(same and  (i["test"]==row["Test Type"] if "test" in i else True)):
+                if(same and (i["test"] == row["Test Type"] if "test" in i else True)):
                     isIn = True
             if(not isIn):
                 skip = True

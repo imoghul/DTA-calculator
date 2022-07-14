@@ -99,9 +99,11 @@ def createFile(sumType):
         original = os.getcwd()
 
         for dir in dirs:
+            print("Gathering File Names...")
             fileNames = glob.glob(dir+globType, recursive=True)
             # runs for every directory
-            writeDataToFile(writer, dir, [f.replace("\\", "/") for f in fileNames])     
+            writeDataToFile(
+                writer, dir, [f.replace("\\", "/") for f in fileNames])
         try:
             writeSummaryToFile(writer)
         except:
@@ -111,12 +113,12 @@ def createFile(sumType):
 try:
     with open(preferencesFile) as f:
         retrieveData = json.load(f)
-    moveToBeginning(retrieveData["Master Summary File Tests"],"FT")
-    moveToBeginning(retrieveData["Master Summary File Tests"],"FT2 RAW")
-    moveToBeginning(retrieveData["Master Summary File Tests"],"FT2 SUM")
-    moveToBeginning(retrieveData["Master Summary File Tests"],"FT1")
+    moveToBeginning(retrieveData["Master Summary File Tests"], "FT")
+    moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 RAW")
+    moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 SUM")
+    moveToBeginning(retrieveData["Master Summary File Tests"], "FT1")
     createFile(retrieveData["Master Summary File Tests"])
-    
+
 except(PermissionError):
     raise Exception(
         "Output file couldn't be opened. Close the file if it is open")

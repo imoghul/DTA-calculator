@@ -138,9 +138,10 @@ def anyIn(val, l):  # checks if any of the elements of l are in val
 
 def allIn(val, l):
     return all([(i in val) for i in l])
+
+
 def allInSome(targets, finds):
-    return True in [allIn(i,finds) for i in targets]
-    
+    return True in [allIn(i, finds) for i in targets]
 
 
 def getFromData(data, title):  # takes data[sn]
@@ -165,14 +166,13 @@ def addToData(data, title, val, sn):
             data.append({"Serial Number": sn, title: val})
 
 
-
 def runThreads(threads, max, message):
     originalMax = max
     processing = []
     dead = []
     length = len(threads)
     counter = 0
-    while counter<length:
+    while counter < length:
         allAlive = True
         while(len(processing) < max and len(threads)):
             t = threads.pop(0)
@@ -187,10 +187,9 @@ def runThreads(threads, max, message):
                 allAlive = False
 
         if(allAlive):
-            max+=10
-        elif max>originalMax: max-=1
-
+            max += 10
+        elif max > originalMax:
+            max -= 1
 
     for t in dead+processing:
         t.join()
-
