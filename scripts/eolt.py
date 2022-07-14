@@ -33,6 +33,7 @@ while testResKey == calibKey:
 # testResKey = "testResKey"
 
 dirNum = 0
+startTime = 0
 
 isThreading = True
 threads = []
@@ -244,7 +245,9 @@ def writeHeaderToFile(writer):
 
 
 def writeDataToFile(writer, dir, fileNames):
-    global dirNum, threads, processing, max, threadCount
+    global dirNum, threads, startTime
+    if(not isThreading and dirNum == 0):
+        startTime = time.time()
     dirNum += 1
     counter = 0
     length = len(fileNames)
@@ -271,17 +274,15 @@ def writeDataToFile(writer, dir, fileNames):
 
 
 def writeSummaryToFile(writer):
-    global data, threads, certThreads
+    global data, threads, certThreads, startTime
+
 
     # execute threads
-
     if(isThreading):
-
-        start = time.time()
+        startTime = time.time()
         runThreads(threads, 2000, "Retrieving Data")
-        print("Retrieved in "+str(time.time()-start)+" seconds")
-    # with open(certdir+f'/data{"Thread" if isThreading else "Normal"}.json', "w") as f:
-    #     json.dump(data, f)
+    print("Retrieved in "+str(time.time()-startTime)+" seconds")
+    
 
     # sort data
     try:
