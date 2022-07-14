@@ -199,7 +199,7 @@ Different tests have different syntax and required keys due to the nature of how
 * FT2 RAW - FT2 raw data files
 * FT3 - FT3 files
 ##### Generate Certificates and PDF Certificates
-The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and numbers. "PDF Certificates" will all the certificates in the certificate directory to pdfs after generating the docx format. "Generate Certificates" must be ```true``` for pdf conversion to be able to take place
+The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and numbers. "PDF Certificates" will all the certificates in the certificate directory to pdfs after generating the docx format. "Generate Certificates" must be ```true``` for pdf conversion to be able to take place.
 
 ##### Master Summary File Tests
 This key contains a list with the test types to include in the master summary file.
@@ -207,6 +207,8 @@ This key contains a list with the test types to include in the master summary fi
 ##### Avoid and Limit
 
 These are used in defining which values to avoid and limit to. Avoid meaning it will not include them, and Limit meaning it will only include them. Each of these are a list of dictionaries of their own. Each dictionary in these lists will contain data with the key being the header of the column and the data pertaining to that key being a list. Each key will have a list of text enclosed by quotation marks. These lists define all of the contents that must be in the key pertaining to the list. The dictionaries in each define a certain type of device to limit or avoid. Only one of these dictionaries must be fulfilled in order to be avoided or limited. The key may also be "*" in which case it will look through all of the headers instead of just one. In the above sample, all "TSX" models that don't contain "GA", and have "Test Complete" for the test result will be included. Also all devices with "PF" in the Model ID, ignoring the ones with "P20" and "TRUE" for freezer type, will be included.
+
+If you choose to avoid or limit, be aware of the fact that certain certificates may not be generated. For example if avoid and limit weild only FT3 results then certificates will not be generated since they require FT2 SUM data. If you would like certificates for the devices, it is recommended to run again, limiting to those serial numbers
 
 ##### Dates
 
