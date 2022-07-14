@@ -167,11 +167,13 @@ def addToData(data, title, val, sn):
 
 
 def runThreads(threads, max, message):
+    originalMax = max
     processing = []
     dead = []
     length = len(threads)
     counter = 0
     while counter<length:
+        allAlive = True
         while(len(processing) < max and len(threads)):
             t = threads.pop(0)
             t.start()
@@ -182,6 +184,13 @@ def runThreads(threads, max, message):
                 counter += 1
                 process_bar(message, counter, length)
                 dead.append(processing.pop(processing.index(i)))
+                allAlive = False
+
+        if(allAlive):
+            max+=10
+        elif max>originalMax: max-=1
+
+
     for t in dead+processing:
         t.join()
 
