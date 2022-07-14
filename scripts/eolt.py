@@ -44,7 +44,8 @@ detectionList = {
     "FT2 SUM": [],
     "FT3": [],
     "FT2 RAW": [],
-    "FT1": []
+    "FT1": [],
+    "CALIB_DATA": []
 }
 retrieveData = None
 regions = []
@@ -96,7 +97,7 @@ def calc(fileName, dud):
                             region = v[0]
                             if(region not in regions):
                                 regions.append(region)
-                        for i in detectionList["FT2 SUM"]:
+                        for i in detectionList["FT2 SUM"] + detectionList["CALIB_DATA"]:
                             try:
                                 index = i["column"]-1
                                 dataField = i["title"]
@@ -259,15 +260,15 @@ def writeDataToFile(writer, dir, fileNames):
         if(not isThreading):
             process_bar("Retrieving from the %s directory" %
                         ordinal(dirNum), counter, length)
-            if(getFileType(fileName) in retrieveData["Master Summary File Tests"]):
-                success = calc(fileName, 0)
+            
+            success = calc(fileName, 0)
         ###
         if(isThreading):
             process_bar("Initializing for the %s directory" %
                         ordinal(dirNum), counter, length)
-            if(getFileType(fileName) in retrieveData["Master Summary File Tests"]):
-                threads.append(threading.Thread(
-                    target=calc, args=(fileName, 0)))
+            
+            threads.append(threading.Thread(
+                target=calc, args=(fileName, 0)))
         ###
         if(counter > length):
             return
@@ -286,7 +287,7 @@ def writeSummaryToFile(writer):
     # sort data
     try:
         data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(
-            str(dateutil.parser.parse(sn[1]["FT2 SUM:Date"])), "%Y-%m-%d %H:%M:%S"))}
+            str(dateutil.parser.parse(sn[1]["Date"])), "%Y-%m-%d %H:%M:%S"))}
     except:
         pass  # print("Bad date exists, will not sort by date")
     # header calculating
@@ -331,28 +332,28 @@ def writeSummaryToFile(writer):
 
             if getSkippable(data[sn][test]):
                 continue
-            else:
-                validSn.append(sn)
+            validSn.append(sn)
             try:
-                writer.writerow([data[sn][test][h] for h in headers])
+                if(data[sn][test]["Test Type"] in retrieveData["Master Summary File Tests"]):
+                    writer.writerow([data[sn][test][h] for h in headers])
             except:
                 pass
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
-        if(genCert):
-            for sn in data:
-                if(sn not in validSn): continue
-                for test in data[sn]:
-                    try:
-                        if("Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
-                            createCopy(sn, data[sn][test]["Date"], certdir)
-                            # if(not isThreading):
-                            createCertificate(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test]
-                                            [daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
-                            # if(isThreading):
-                            #     certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
-                    except:
-                        raise Exception(
-                            "Couldn't generate certificate, check config file for correct preferences")
+    if(genCert):
+        for sn in data:
+            if(sn not in validSn): continue
+            for test in data[sn]:
+                try:
+                    if("Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
+                        createCopy(sn, data[sn][test]["Date"], certdir)
+                        # if(not isThreading):
+                        createCertificate(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test]
+                                        [daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
+                        # if(isThreading):
+                        #     certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
+                except:
+                    raise Exception(
+                        "Couldn't generate certificate, check config file for correct preferences")
     # if(genCert and isThreading):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")
@@ -373,6 +374,7 @@ def transferDirs(cdir, pdir):
     try:
         with open(preferencesFile) as f:
             retrieveData = json.load(f)
+            retrieveData["Master Summary File Tests"]
     except(PermissionError):
         raise Exception(
             "Preferences file couldn't be opened. Close the file if it is open")
@@ -382,7 +384,7 @@ def transferDirs(cdir, pdir):
 
     try:
         retrieveData["Test Preferences"].append({
-            "test": "FT2 SUM",
+            "test": "CALIB_DATA",
             "title": "DAQ Temperature (oC)",
             "region": "Post Calibration Data",
             "column": 2,
@@ -391,7 +393,7 @@ def transferDirs(cdir, pdir):
         }
         )
         retrieveData["Test Preferences"].append({
-            "test": "FT2 SUM",
+            "test": "CALIB_DATA",
             "title": "Air2",
             "region": "Post Calibration Data",
             "column": 5,
@@ -400,7 +402,7 @@ def transferDirs(cdir, pdir):
         }
         )
         retrieveData["Test Preferences"].append({
-            "test": "FT2 SUM",
+            "test": "CALIB_DATA",
             "title": "TestResult",
             "column": 2,
             "hide": True,
