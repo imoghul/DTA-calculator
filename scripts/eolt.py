@@ -284,7 +284,6 @@ def writeSummaryToFile(writer):
     #     json.dump(data, f)
 
     # sort data
-    print("Attempting to sort by date")
     try:
         data = {k: v for k, v in sorted(data.items(), key=lambda sn: datetime.strptime(
             str(dateutil.parser.parse(sn[1]["FT2 SUM:Date"])), "%Y-%m-%d %H:%M:%S"))}
