@@ -85,7 +85,7 @@ In the JSON files for this script, data is stored in "dictionaries". All of the 
 ```
 Lists are used in many different instances in these json files. The syntax for a list is: ```[element1, element2, element3]```. 
 
-All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" 
+All text must be surrounded by quotations marks. Inside the quotation marks the character "\\" must become "\\\\" , " " " must become " \\\" "
 
 #### JSON In This Script
 
@@ -191,11 +191,11 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
 
 ##### Test Preferences
 
-The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file. Another optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used. If this is not included then a column header will automatically be generated for the preference
+The test preferences are specifically stored in a list under the key "Test Preferences". In this list, test preferences are stored in dictionaries of their own. Each dictionary has 2 required keys and additional ones depending on test type. The 2 that are required are "test" and "title". The key "test" corresponds to the type of test file type the preference applies to. The key "title" corresponds to the name of the data field that you want to retrieve with the exact same spelling it appears in the document. Each preference also contains an optional key "hide", which determines whether or not to include it in the summary file. Another optional key is the "column header". This will be added to the column header in the summary file and should describe what the data in that header indicates. It is also used to retrieve more than 1 data field from a row. Since it is optional, the text itself will not be used to retrieve the data, instead the column number will be used. If this is not included then a column header will automatically be generated for the preference.
 
 Different tests have different syntax and required keys due to the nature of how the corresponding csv files are layed out. The spellings for different tests are 
 * FT1 - FT1 files
-* FT2 SUM - FT2 SUMmary files
+* FT2 SUM - FT2 summary files
 * FT2 RAW - FT2 raw data files
 * FT3 - FT3 files
 ##### Generate Certificates and PDF Certificates

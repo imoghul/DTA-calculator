@@ -488,8 +488,22 @@ def getSkippable(row):
                     del snDate["Month"]
                 if("Year" not in i):
                     del snDate["Year"]
+                
+                same = True
 
-                if(snDate == i):
+                try:
+                    same = same and snDate["Year"]==i["Year"]
+                except:pass
+
+                try:
+                    same = same and snDate["Day"]==i["Day"]
+                except:pass
+
+                try:
+                    same = same and snDate["Month"]==i["Month"]
+                except:pass
+
+                if(same and  (i["test"]==row["Test Type"] if "test" in i else True)):
                     isIn = True
             if(not isIn):
                 skip = True
