@@ -1,99 +1,17 @@
 {
-    "Test Preferences": [
-        {
-            "test": "FT2 SUM",
-            "title": "Model ID",
-            "column": 2
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "TestResult",
-            "column": 2
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air1",
-            "region": "Calibration Data",
-            "column": 5,
-            "column header": "Calib:Air1"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air2",
-            "region": "Calibration Data",
-            "column": 5,
-            "column header": "Calib:Air2"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Glycol",
-            "region": "Calibration Data",
-            "column": 5,
-            "column header": "Calib:Glycol"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air1",
-            "region": "Post Calibration Data",
-            "column": 5,
-            "column header": "Post Calib:Air1"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air2",
-            "region": "Post Calibration Data",
-            "column": 5,
-            "column header": "Post Calib:Air2"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Glycol",
-            "region": "Post Calibration Data",
-            "column": 5,
-            "column header": "Post Calib:Glycol"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air",
-            "region": "Post Calibration Data",
-            "column": 5,
-            "column header": "Post Calib:Air"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": "Air",
-            "region": "Calibration Data",
-            "column": 5,
-            "column header": "Calib:Air"
-        },
-        {
-            "test": "FT2 SUM",
-            "title": [
-                "PrePullDown UUT Responses",
-                "type freezer"
-            ],
-            "region": "UUT Responses",
-            "column": 5,
-            "column header": "Type Freezer"
-        },
-        {
-            "test": "FT3",
-            "title": "Barcode 8"
-        },
-        {
-            "test": "FT1",
-            "title": "StepResult",
-            "step": "Verify TEC FW version"
-        },
-        {
-            "test": "FT1",
-            "title": "PCID"
-        }
-    ],
+    "Test Preferences": [],
     "Generate Certificates": false,
     "PDF Certificates": false,
-    "Limit": [{}],
-    "Avoid": [{}],
-    "Master Summary File Tests":["FT1","FT2 SUM","FT3"],
+    "Limit": [
+        {}
+    ],
+    "Avoid": [
+        {}
+    ],
+    "Master Summary File Tests": [
+        "FT1",
+        "FT2 SUM",
+        "FT3"
+    ],
     "Dates": []
 }

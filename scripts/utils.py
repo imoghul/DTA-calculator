@@ -146,7 +146,7 @@ def allInSome(targets, finds):
 def getFromData(data, title):  # takes data[sn]
     vals = []
     for i in data:
-        if i in data:
+        if title in data:
             vals.append(data[title])
     return vals if vals != [] else None
 
