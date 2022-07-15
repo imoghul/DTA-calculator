@@ -298,8 +298,7 @@ def writeSummaryToFile(writer):
         process_bar("Processing Data", counter, length)
         for test in data[sn]:
             for header in data[sn][test]:
-                if header not in headers:
-                    headers.append(header)
+                if header not in headers and (data[sn][test]["Test Type"] in retrieveData["Master Summary File Tests"]):headers.append(header)
     for i in reversed([getTitle_config(j) for j in detectionList["FT3"]]):
         moveToBeginning(headers, i)
     for i in reversed([getTitle_config(j) for j in detectionList["FT2 SUM"]]):
@@ -333,26 +332,28 @@ def writeSummaryToFile(writer):
                 continue
             validSn.append(sn)
             try:
-                if(data[sn][test]["Test Type"] in retrieveData["Master Summary File Tests"]):
-                    writer.writerow([data[sn][test][h] for h in headers])
+                writer.writerow([data[sn][test][h] for h in headers])
             except:
                 pass
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
-    # if(genCert):
-    #     for sn in data:
-    #         if(sn not in validSn): continue
-            # for test in data[sn]:
-            try:
-                if("Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
-                    createCopy(sn, data[sn][test]["Date"], certdir)
-                    # if(not isThreading):
-                    createCertificate(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test]
-                                    [daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
-                    # if(isThreading):
-                    #     certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
-            except:
-                raise Exception(
-                    "Couldn't generate certificate, check config file for correct preferences")
+    if(genCert):
+        counter = 0
+        length = len(data)
+        for sn in validSn:
+            for test in data[sn]:
+                counter+=1
+                process_bar("Generating Certificates", counter, length)
+                try:
+                    if("Date" in data[sn][test] and testResKey in data[sn][test] and daqTempKey in data[sn][test] and calibKey in data[sn][test]):
+                        createCopy(sn, data[sn][test]["Date"], certdir)
+                        # if(not isThreading):
+                        createCertificate(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test]
+                                        [daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)
+                        # if(isThreading):
+                        #     certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
+                except:
+                    raise Exception(
+                        "Couldn't generate certificate, check config file for correct preferences")
     # if(genCert and isThreading):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")

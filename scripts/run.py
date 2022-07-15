@@ -31,8 +31,8 @@ outdir = ""
 certdir = ""
 
 
-preferencesFile = configdir+"\\preferences.json"
-locationFile = configdir+"\\locations.json"
+preferencesFile = configdir+"/preferences.json"
+locationFile = configdir+"/locations.json"
 
 if (cli and len(sys.argv) < 2):
     raise Exception(
