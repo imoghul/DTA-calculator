@@ -299,18 +299,18 @@ def writeSummaryToFile(writer):
     print("Retrieved in " + str(time.time() - startTime) + " seconds")
 
     # sort data
-    try:
-        data = {
-            k: v
-            for k, v in sorted(
-                data.items(),
-                key=lambda sn: datetime.strptime(
-                    str(dateutil.parser.parse(sn[1]["Date"])), "%Y-%m-%d %H:%M:%S"
-                ),
-            )
-        }
-    except:
-        pass  # print("Bad date exists, will not sort by date")
+    # try:
+    #     data = {
+    #         k: v
+    #         for k, v in sorted(
+    #             data.items(),
+    #             key=lambda sn: datetime.strptime(
+    #                 str(dateutil.parser.parse(sn[1]["Date"])), "%Y-%m-%d %H:%M:%S"
+    #             ),
+    #         )
+    #     }
+    # except:
+    #     pass  # print("Bad date exists, will not sort by date")
     # header calculating
     counter = 0
     length = len(data)
