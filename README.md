@@ -119,7 +119,7 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
             "test": "FT2 SUM",
             "title": [
                 "PrePullDown UUT Responses",
-                "type freezer"
+                "check board type is freezer"
             ],
             "region": "UUT Responses",
             "column": 5,
