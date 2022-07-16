@@ -13,7 +13,6 @@ from certificate import *
 import threading
 import re
 import dateutil.parser
-from parsing import *
 
 outFileName = "summary"
 globType = "**/*.csv"
