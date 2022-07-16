@@ -4,7 +4,7 @@ import os
 import json
 import sys
 
-# sys.tracebacklimit = -1
+sys.tracebacklimit = -1
 from eolt import *
 from tkinter import filedialog
 from tkinter import *
@@ -112,7 +112,10 @@ def createFile(sumType):
         original = os.getcwd()
 
         for dir in dirs:
-            print("Gathering File Names From The %s Directory..."%ordinal(dirs.index(dir)+1))
+            print(
+                "Gathering File Names From The %s Directory..."
+                % ordinal(dirs.index(dir) + 1)
+            )
             fileNames = glob.glob(dir + globType, recursive=True)
             # runs for every directory
             writeDataToFile(writer, dir, [f.replace("\\", "/") for f in fileNames])

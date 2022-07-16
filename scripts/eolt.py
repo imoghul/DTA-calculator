@@ -257,6 +257,10 @@ def writeHeaderToFile(writer):
         print()
         # raise Exception(
         #     "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
+    for limav in retrieveData["Avoid"] + retrieveData["Limit"]:
+        for i in limav:
+            if i == "Test Type":
+                raise Exception('Cannot have "Test Type" as a "Limit" or "Avoid"')
 
 
 def writeDataToFile(writer, dir, fileNames):
@@ -501,9 +505,6 @@ def getSkippable(row):
             ):  # looping through list of limits
                 curr = []  # checks if the current key is fully part of said data field
                 for lim in i:  # looping through keys in limits
-                    if(lim=="Test Type"):
-                        print("Cannot have \"Test Type\" as a \"Limit\"")
-                        continue
                     if limFound == None:
                         limFound = False
                     if lim not in row and lim != "*":
@@ -536,9 +537,6 @@ def getSkippable(row):
                         []
                     )  # checks if the current key is fully part of said data field
                     for av in i:  # looping through keys in avoids
-                        if(av=="Test Type"):
-                            print("Cannot have \"Test Type\" as an \"Avoid\"")
-                            continue
                         if av not in row and av != "*":
                             # if the current is not in the data fields then it doesn't need to be avoided, therefore it is not fully part of the data field
                             curr.append(False)
