@@ -167,7 +167,6 @@ def calc(fileName, dud):
                                 ft3headers.index("TimeStamp")
                             ].split(" ")[0]
                             data[sn][fileName]["Test Type"] = fileType
-
         elif fileType == "FT1":
             with open(fileName, newline="") as file:
                 sn = None
