@@ -366,6 +366,7 @@ def writeSummaryToFile(writer):
             except:
                 pass
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
+
     if genCert:
         counter = 0
         length = len(data)
@@ -406,6 +407,7 @@ def writeSummaryToFile(writer):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")
     #     print("Certificates Generated in "+str(time.time()-start)+" seconds")
+
 
     if (
         "PDF Certificates" in retrieveData
