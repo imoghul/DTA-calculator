@@ -242,7 +242,7 @@ def writeHeaderToFile(writer):
             title = getTitle_config(i)
             if title not in check:
                 check.append(title)
-            else:
+            elif title!=daqTempKey and title!=calibKey and title!=testResKey:
                 if title not in duplicates:
                     duplicates.append(title)
                 dups = True
@@ -453,6 +453,16 @@ def transferDirs(cdir, pdir):
             {
                 "test": "FT2 SUM",
                 "title": "Air2",
+                "region": "Post Calibration Data",
+                "column": 5,
+                "hide": True,
+                "column header": calibKey,
+            }
+        )
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
+                "title": "Air",
                 "region": "Post Calibration Data",
                 "column": 5,
                 "hide": True,
