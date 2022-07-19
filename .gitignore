@@ -7,3 +7,5 @@
 **/*.spec
 **/*.txt
 scripts/configdir.txt
+*.exe
+**/*.exe
