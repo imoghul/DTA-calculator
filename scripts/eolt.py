@@ -133,11 +133,7 @@ def calc(fileName, dud):
                     raise Exception("Doesn't have a serial number")
         elif fileType == "FT3":
             with open(fileName, newline="") as file:
-                _date = "couldn't parse"
-                try:
-                    _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
-                except:
-                    pass
+                
                 ft3headers = None
                 sn = None
                 for row in csv.reader(file, delimiter="\n", quotechar=","):
@@ -146,6 +142,12 @@ def calc(fileName, dud):
                         if ft3headers == None:
                             ft3headers = v
                         else:
+                            _date = "couldn't parse"
+                            try:
+                                _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                                
+                            except:
+                                pass
                             sn = v[ft3headers.index("Serial Number")]
                             if sn not in data:
                                 data[sn] = {}
