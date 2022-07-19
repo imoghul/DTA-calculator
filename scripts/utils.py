@@ -199,7 +199,7 @@ def runThreads(threads, max, message):
                 dead.append(processing.pop(processing.index(i)))
                 allAlive = False
 
-        if allAlive and max<upperMax:
+        if allAlive and max < upperMax:
             max += 10
         elif max > originalMax:
             max -= 1
