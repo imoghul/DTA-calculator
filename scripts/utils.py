@@ -3,7 +3,7 @@ import copy
 
 
 def ordinal(n):
-    return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10 :: 4])
+    return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10:: 4])
 
 
 def empty():
@@ -199,8 +199,9 @@ def runThreads(threads, max, message):
                 dead.append(processing.pop(processing.index(i)))
                 allAlive = False
 
-        if allAlive and max < upperMax:
-            max += 10
+        if allAlive:  # and max < upperMax:
+            if(max < upperMax):
+                max += 10
         elif max > originalMax:
             max -= 1
 

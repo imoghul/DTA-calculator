@@ -61,13 +61,14 @@ def calc(fileName, dud):
     global currentSN, data, headers, errors
     try:
         fileType = getFileType(fileName)
-
+        wasIn = False
         if fileType == "FT2 SUM":
             with open(fileName, newline="") as file:
                 sn = None
                 region = ""
                 for row in csv.reader(file, delimiter="\n", quotechar=","):
                     for r in row:
+                        
                         v = r.split(",")
                         if "SN" in v or "Serial Number" in v:
                             sn = v[1]
@@ -110,10 +111,12 @@ def calc(fileName, dud):
                             dataRegion = None if "region" not in i else i["region"]
                             if type(dataField) != list:
                                 if dataRegion == None and dataField == v[0]:
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = v[index]
                                 elif dataRegion != None and (
                                     dataField in v and region == dataRegion
                                 ):
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = (
                                         v[index] if v[index] != "" else "0"
                                     )
@@ -121,10 +124,12 @@ def calc(fileName, dud):
                             elif type(dataField) == list:
                                 allIn = all([i in v for i in dataField])
                                 if dataRegion == None and allIn:
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = v[index]
                                 elif dataRegion != None and (
                                     allIn and region == dataRegion
                                 ):
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = (
                                         v[index] if v[index] != "" else "0"
                                     )
@@ -159,6 +164,7 @@ def calc(fileName, dud):
                                 dataField = i["title"]
                                 if dataField in ft3headers:
                                     try:
+                                        wasIn = (title in data[sn][fileName])
                                         data[sn][fileName][title] = v[
                                             ft3headers.index(dataField)
                                         ]
@@ -207,20 +213,27 @@ def calc(fileName, dud):
 
                             if ft1headers == None:
                                 if dataField == "Model ID" and modelId != None:
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = modelId
                                 elif dataField in v:
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = v[1]
                             elif "step" in i:
                                 step = i["step"]
                                 if v[0] == step and dataField in ft1headers:
+                                    wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = v[
                                         ft1headers.index(dataField)
                                     ]
 
                 if sn == None:
-                    raise Exception("Doesn't have a serial number")
+                    raise Exception("Doesn't have a serial number, possibly not a test file")
         elif fileType == "FT2 RAW":
             return False
+
+        # if(wasIn):
+        #     raise Exception("Overwriting has occured")
+        
         return True
     except csv.Error as e:
         pass
