@@ -180,6 +180,7 @@ def addToData(data, title, val, sn):
 
 def runThreads(threads, max, message):
     originalMax = max
+    upperMax = 15000
     processing = []
     dead = []
     length = len(threads)
@@ -198,7 +199,7 @@ def runThreads(threads, max, message):
                 dead.append(processing.pop(processing.index(i)))
                 allAlive = False
 
-        if allAlive:
+        if allAlive and max<upperMax:
             max += 10
         elif max > originalMax:
             max -= 1
