@@ -226,7 +226,7 @@ def calc(fileName, dud):
         pass
     except Exception as e:
         errors.append(
-            fileName + " couldn't be read with the following error: " + str(e)
+            fileName + " couldn't be read with the following error:\n\n\t" + str(e) + "\n\n"
         )
         pass
         # print(fileName + " couldn't be read with the following error: "+str(e))
