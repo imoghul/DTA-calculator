@@ -133,7 +133,7 @@ def calc(fileName, dud):
                     raise Exception("Doesn't have a serial number")
         elif fileType == "FT3":
             with open(fileName, newline="") as file:
-                
+
                 ft3headers = None
                 sn = None
                 for row in csv.reader(file, delimiter="\n", quotechar=","):
@@ -145,7 +145,7 @@ def calc(fileName, dud):
                             _date = "couldn't parse"
                             try:
                                 _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
-                                
+
                             except:
                                 pass
                             sn = v[ft3headers.index("Serial Number")]
@@ -226,7 +226,10 @@ def calc(fileName, dud):
         pass
     except Exception as e:
         errors.append(
-            fileName + " couldn't be read with the following error:\n\n\t" + str(e) + "\n\n"
+            fileName
+            + " couldn't be read with the following error:\n\n\t"
+            + str(e)
+            + "\n\n"
         )
         pass
         # print(fileName + " couldn't be read with the following error: "+str(e))
@@ -242,7 +245,7 @@ def writeHeaderToFile(writer):
             title = getTitle_config(i)
             if title not in check:
                 check.append(title)
-            elif title!=daqTempKey and title!=calibKey and title!=testResKey:
+            elif title != daqTempKey and title != calibKey and title != testResKey:
                 if title not in duplicates:
                     duplicates.append(title)
                 dups = True
@@ -256,7 +259,9 @@ def writeHeaderToFile(writer):
         print()
         # raise Exception(
         #     "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
-    for limav in (retrieveData["Avoid"] if "Avoid" in retrieveData else []) + (retrieveData["Limit"] if "Limit" in retrieveData else []):
+    for limav in (retrieveData["Avoid"] if "Avoid" in retrieveData else []) + (
+        retrieveData["Limit"] if "Limit" in retrieveData else []
+    ):
         for i in limav:
             if i == "Test Type":
                 raise Exception('Cannot have "Test Type" as a "Limit" or "Avoid"')
@@ -407,7 +412,6 @@ def writeSummaryToFile(writer):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")
     #     print("Certificates Generated in "+str(time.time()-start)+" seconds")
-
 
     if (
         "PDF Certificates" in retrieveData
