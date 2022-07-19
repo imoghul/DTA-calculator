@@ -14,16 +14,16 @@ Double click ```run.exe```
 ## Usage
 
 ### Directory Selection
-The first time the program is run, it will prompt you to choose a config directory, choose the directory in which you wish to put your config files. This can be changed by editing or deleting ```configdir.txt``` in your home directory
+The first time the program is run, it will prompt you to choose a config directory, choose the directory in which you wish to put your config files. This can be changed by editing or deleting ```configdir.txt``` in your home directory. This prompt will also appear anytime ```configdir.txt``` is destroyed.
 
-When the program launches you will be prompted with this:
+After this, you will be prompted with this:
 ```
 Press enter to use previous locations
 To choose new locations enter any other character:
 ```
 When running the first time you must manually select the directories and files. To do this, type any character and press enter. This will lead to a series of windows opening, asking for directories. If you have already entered directories in a previous run, or entered them [manually](#locations)  in ```locations.json``` and want to keep the default then click cancel
 
-1. The first directory to choose will be the output directory. This is the directory in which the output "summary.csv" will be placed.
+1. The first directory to choose will be the output directory. This is the directory in which the output summary file will be placed.
 
 2. The second one will be the directory in which certificates go. This directory must contain ```TEMPLATE.docx``` which is the template word document for the other certificates.
 
@@ -204,7 +204,7 @@ The default ```locations.json``` provided is shown below
 }
 ```
 
-* Under the key "out_dir", the directory for the output ```summary.csv``` is stored
+* Under the key "out_dir", the directory for the output summary file is stored
 * Under the key "certificate_dir" is where the directory with the ```TEMPLATE.docx``` and the other output certificates is stored. 
 * Under the key "search_dirs" is a list of directories. These are the directories that will be searched recursively for test files to read. If using the graphical selection in the runtime of the script, only one directory can be selected. If one wishes to select more than one, they must resort to adding them here.
 
@@ -216,7 +216,7 @@ These values are overwritten when they are selected from the script
 
 To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise it is FT1.
 ### Execution
-After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in ```summary.csv```. Note that this script uses replace mode instead of append mode, meaning that the ```summary.csv``` file will be overwritten every time. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time. If there is a conflict between data in any of the files FT2 SUM takes preference.
+After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in the summary file. Note that this script uses replace mode instead of append mode, meaning that the summary file will be overwritten every time, rather than added to. If the script comes across the same serial number more the once in the tests, it will take the last one, sorted by time. If there is a conflict between data in any of the files FT2 SUM takes preference.
 
 ****
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/main
