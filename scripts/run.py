@@ -2,6 +2,7 @@ import csv
 import glob
 import os
 import json
+from os.path import expanduser
 import sys
 
 sys.tracebacklimit = -1
@@ -9,18 +10,31 @@ from eolt import *
 from tkinter import filedialog
 from tkinter import *
 
-try:
-    try:
-        basePath = sys._MEIPASS
-    except Exception:
-        basePath = os.path.abspath(".")
-    bundle_dir = getattr(sys, "_MEIPASS", os.path.abspath(os.path.dirname(__file__)))
-    configtxt = os.path.join(bundle_dir, "configdir.txt")
 
-    with open(configtxt, "r") as f:
+home = expanduser("~")+"/"
+
+try:
+    with open(home+"configdir.txt") as f:
         configdir = f.read()
 except:
-    raise Exception("Error reading config directory try re-building")
+    from saveConfigDir import writeConfigDir
+    writeConfigDir()
+    with open(home+"configdir.txt") as f:
+        configdir = f.read()
+
+
+# try:
+#     try:
+#         basePath = sys._MEIPASS
+#     except Exception:
+#         basePath = os.path.abspath(".")
+#     bundle_dir = getattr(sys, "_MEIPASS", os.path.abspath(os.path.dirname(__file__)))
+#     configtxt = os.path.join(bundle_dir, "configdir.txt")
+
+#     with open(configtxt, "r") as f:
+#         configdir = f.read()
+# except:
+#     raise Exception("Error reading config directory try re-building")
 
 cli = False
 mode = (
