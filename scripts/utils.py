@@ -3,7 +3,7 @@ import copy
 
 
 def ordinal(n):
-    return "%d%s" % (n, "tsnrhtdd"[(n//10 % 10 != 1)*(n % 10 < 4)*n % 10::4])
+    return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10 :: 4])
 
 
 def empty():
@@ -14,7 +14,7 @@ def mean(x):
     sum = 0
     for i in x:
         sum += i
-    return sum/len(x)
+    return sum / len(x)
 
 
 def average(x):
@@ -23,8 +23,8 @@ def average(x):
     return mean(x)
 
 
-def dtToMin(y, mon, d, h, m, s): return (525600 * y + 43800 * mon + 1440 * d + 60
-                                         * h + m + s / 60)
+def dtToMin(y, mon, d, h, m, s):
+    return 525600 * y + 43800 * mon + 1440 * d + 60 * h + m + s / 60
 
 
 def closestTo(arr, val):
@@ -35,7 +35,7 @@ def closestTo(arr, val):
 def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     dt = dt.split(" ")
     d = dt[2]
-    d_arr = (d.split("/"))
+    d_arr = d.split("/")
     t = dt[0]
     year = int(d_arr[2])
     month = int(d_arr[0])
@@ -50,32 +50,34 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
-def process_bar(process, current, total, message="", bar_length=25, bar_pos=40*" "):
-    fraction = current/total
-    arrow = int(fraction*bar_length-1)*'-'+'>'
-    padding = int(bar_length-len(arrow))*' '
-    ending = '\n' if current == total else '\r'
+def process_bar(process, current, total, message="", bar_length=25, bar_pos=40 * " "):
+    fraction = current / total
+    arrow = int(fraction * bar_length - 1) * "-" + ">"
+    padding = int(bar_length - len(arrow)) * " "
+    ending = "\n" if current == total else "\r"
 
     padTable = ""
-    while(len(f'{process}:'+padTable)) < len(bar_pos):
+    while (len(f"{process}:" + padTable)) < len(bar_pos):
         padTable += " "
     print(
-        f'{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}', end=ending)
+        f"{process}:{padTable}[{arrow}{padding}] {int(fraction*100)}%  :  {current}/{total} ; {message}",
+        end=ending,
+    )
 
 
 def parseSUMfileName(fileName):
     data = {}
     _date = fileName.split("_")[-3]
-    data["Date"] = _date[4:6]+"/"+_date[6:8]+"/"+_date[0:4]
+    data["Date"] = _date[4:6] + "/" + _date[6:8] + "/" + _date[0:4]
     return data
 
 
 def getFileType(fileName):
-    if("_SUM" in fileName):
+    if "_SUM" in fileName:
         return "FT2 SUM"
-    elif("_RAW" in fileName):
+    elif "_RAW" in fileName:
         return "FT2 RAW"
-    elif("FT3_" in fileName or "ft3_" in fileName):
+    elif "FT3_" in fileName or "ft3_" in fileName:
         return "FT3"
     else:
         return "FT1"
@@ -89,10 +91,13 @@ def moveToBeginning(l, elem):
 
 def getFT2SUMTitle_noCH(d):
     try:
-        return (((d["region"]+":") if "region" in d else "")+(("_".join(d["title"]) if type(d["title"]) == list else d["title"])))
+        return ((d["region"] + ":") if "region" in d else "") + (
+            ("_".join(d["title"]) if type(d["title"]) == list else d["title"])
+        )
     except:
         raise Exception(
-            'One or more entries in FT2 SUM don\'t contain the necessary "title" field')
+            'One or more entries in FT2 SUM don\'t contain the necessary "title" field'
+        )
 
 
 def getFT2SUMTitle_config(d):
@@ -104,29 +109,36 @@ def getFT3Title_config(d):
         return d["title"] if "column header" not in d else d["column header"]
     except:
         raise Exception(
-            'One or more entries in FT3 don\'t contain the necessary "title" field')
+            'One or more entries in FT3 don\'t contain the necessary "title" field'
+        )
 
 
 def getFT1Title_config(d):
     try:
-        return (((d["step"]+":")if "step" in d else "")+d["title"]) if "column header" not in d else d["column header"]
+        return (
+            (((d["step"] + ":") if "step" in d else "") + d["title"])
+            if "column header" not in d
+            else d["column header"]
+        )
     except:
         raise Exception(
-            'One or more entries in FT1 don\'t contain the necessary "title" field')
+            'One or more entries in FT1 don\'t contain the necessary "title" field'
+        )
 
 
 def getTitle_config(d):
     res = None
     if "column header" in d:
         return d["column header"]
-    elif(d["test"] == "FT2 SUM"):
+    elif d["test"] == "FT2 SUM":
         res = getFT2SUMTitle_config(d)
-    elif(d["test"] == "FT3"):
+    elif d["test"] == "FT3":
         res = getFT3Title_config(d)
-    elif(d["test"] == "FT1"):
+    elif d["test"] == "FT1":
         res = getFT1Title_config(d)
 
-    return d["test"]+":"+res
+    return d["test"] + ":" + res
+
 
 # def getFT2SUMTitle_raw(title, columnheader=None, region=None):
 #     return (((region+":") if region != None else "")+(("_".join(title) if type(title) == list else title)))if columnheader == None else "column header"
@@ -160,7 +172,7 @@ def addToData(data, title, val, sn):
             added = True
             break
     if not added:
-        if(title == "Serial Number"):
+        if title == "Serial Number":
             data.append({"Serial Number": sn})
         else:
             data.append({"Serial Number": sn, title: val})
@@ -174,22 +186,22 @@ def runThreads(threads, max, message):
     counter = 0
     while counter < length:
         allAlive = True
-        while(len(processing) < max and len(threads)):
+        while len(processing) < max and len(threads):
             t = threads.pop(0)
             t.start()
             processing.append(t)
 
         for i in processing:
-            if(not i.is_alive()):
+            if not i.is_alive():
                 counter += 1
                 process_bar(message, counter, length)
                 dead.append(processing.pop(processing.index(i)))
                 allAlive = False
 
-        if(allAlive):
+        if allAlive:
             max += 10
         elif max > originalMax:
             max -= 1
 
-    for t in dead+processing:
+    for t in dead + processing:
         t.join()

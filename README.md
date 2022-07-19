@@ -119,7 +119,7 @@ A sample ```preferences.json``` is shown below, please refer to this for syntax,
             "test": "FT2 SUM",
             "title": [
                 "PrePullDown UUT Responses",
-                "type freezer"
+                "check board type is freezer"
             ],
             "region": "UUT Responses",
             "column": 5,
@@ -199,7 +199,7 @@ Different tests have different syntax and required keys due to the nature of how
 * FT2 RAW - FT2 raw data files
 * FT3 - FT3 files
 ##### Generate Certificates and PDF Certificates
-The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and numbers. "PDF Certificates" will all the certificates in the certificate directory to pdfs after generating the docx format. "Generate Certificates" must be ```true``` for pdf conversion to be able to take place.
+The key "Generate Certificates" will either be ```false``` or ```true``` and will determine whether or not certificates should be generated. Note the lack of quotation marks, this only applies to this entry and numbers. "PDF Certificates" will convert all the certificates in the certificate directory to pdfs after generating the docx format. "Generate Certificates" must be ```true``` for pdf conversion to be able to take place.
 
 ##### Master Summary File Tests
 This key contains a list with the test types to include in the master summary file.
