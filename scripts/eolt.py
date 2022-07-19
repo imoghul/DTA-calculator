@@ -256,7 +256,7 @@ def writeHeaderToFile(writer):
         print()
         # raise Exception(
         #     "Cannot have duplicates in header. Please check your preferences.json and resolve issue. If there are not issues run the script again")
-    for limav in retrieveData["Avoid"] + retrieveData["Limit"]:
+    for limav in (retrieveData["Avoid"] if "Avoid" in retrieveData else []) + (retrieveData["Limit"] if "Limit" in retrieveData else []):
         for i in limav:
             if i == "Test Type":
                 raise Exception('Cannot have "Test Type" as a "Limit" or "Avoid"')
