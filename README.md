@@ -2,40 +2,12 @@
 
 Please read the following before attempting to use this software.
 
-## Download Source Code
+## Download 
 
-1. Press: https://github.com/imoghul/EOLT-Test-Analyzer/archive/refs/heads/main.zip
-2. Extract Contents
-
-## Install Dependencies
-### Manually
-* Install python (last tested on version 3.10.5)
-  * Windows Store (recommended)
-  * https://www.python.org/downloads/
-* Simultaneously press Win+R
-* Type cmd and press enter
-* Install following modules by pasting into the command line:
-```shell
-python -m pip install docx==0.2.4 docx2pdf==0.1.8 python_dateutil==2.8.2 python_docx==0.8.11
-```
-### Automatically
-Double click on ```setup.bat```.
+Navigate to https://github.com/imoghul/EOLT-Test-Analyzer/releases, and download executable for latest release 
 
 ## Launch
 
-### Command Line
-If you would like to use the script without using the executable you can do so by running it through the command line. 
-
-To run the script, simply enter the following into the command line. 
-
-*Command to run the script*
-```shell
-python run.py
-``` 
-
-Keep in mind that this is unnessary if you choose to use the executable
-
-### Executable
 Double click ```run.exe```
 
 
