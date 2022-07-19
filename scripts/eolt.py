@@ -163,9 +163,7 @@ def calc(fileName, dud):
                                     except:
                                         pass
                             data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
-                            data[sn][fileName]["Date"] = v[
-                                ft3headers.index("TimeStamp")
-                            ].split(" ")[0]
+                            data[sn][fileName]["Date"] = _date
                             data[sn][fileName]["Test Type"] = fileType
         elif fileType == "FT1":
             with open(fileName, newline="") as file:
