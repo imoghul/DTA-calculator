@@ -1,6 +1,6 @@
 # from numpy import mean
 import copy
-
+from tqdm import tqdm
 
 def ordinal(n):
     return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10:: 4])
@@ -185,25 +185,27 @@ def runThreads(threads, max, message):
     dead = []
     length = len(threads)
     counter = 0
-    while counter < length:
-        allAlive = True
-        while len(processing) < max and len(threads):
-            t = threads.pop(0)
-            t.start()
-            processing.append(t)
+    print(message)
+    with tqdm(total=length) as pbar:
+        while counter < length:
+            allAlive = True
+            while len(processing) < max and len(threads):
+                t = threads.pop(0)
+                t.start()
+                processing.append(t)
 
-        for i in processing:
-            if not i.is_alive():
-                counter += 1
-                process_bar(message, counter, length)
-                dead.append(processing.pop(processing.index(i)))
-                allAlive = False
+            for i in processing:
+                if not i.is_alive():
+                    counter += 1
+                    pbar.update(1)
+                    dead.append(processing.pop(processing.index(i)))
+                    allAlive = False
 
-        if allAlive:  # and max < upperMax:
-            if(max < upperMax):
-                max += 10
-        elif max > originalMax:
-            max -= 1
+            if allAlive:  # and max < upperMax:
+                if(max < upperMax):
+                    max += 10
+            elif max > originalMax:
+                max -= 1
 
     for t in dead + processing:
         t.join()

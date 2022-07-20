@@ -12,6 +12,7 @@ import string
 from certificate import *
 import threading
 import re
+from tqdm import tqdm
 import dateutil.parser
 
 outFileName = "summary"
@@ -289,20 +290,18 @@ def writeDataToFile(writer, dir, fileNames):
     counter = 0
     length = len(fileNames)
     global certdir
-    for fileName in fileNames:
+    if(not isThreading):
+        print("Retrieving from the %s directory" % ordinal(dirNum))
+    else:
+        print("Initializing for the %s directory" % ordinal(dirNum))
+    for fileName in tqdm(fileNames):
         counter += 1
         ###
         if not isThreading:
-            process_bar(
-                "Retrieving from the %s directory" % ordinal(dirNum), counter, length
-            )
 
             success = calc(fileName, 0)
         ###
         if isThreading:
-            process_bar(
-                "Initializing for the %s directory" % ordinal(dirNum), counter, length
-            )
 
             threads.append(threading.Thread(target=calc, args=(fileName, 0)))
         ###
@@ -337,9 +336,9 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     global headers
-    for sn in data:
+    print("Processing Data")
+    for sn in tqdm(data):
         counter += 1
-        process_bar("Processing Data", counter, length)
         for test in data[sn]:
             for header in data[sn][test]:
                 if header not in headers and (
@@ -368,9 +367,9 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     validSn = []
-    for sn in data:
+    print("Writing Data")
+    for sn in tqdm(data):
         counter += 1
-        process_bar("Writing Data", counter, length)
         for test in data[sn]:
             for h in headers:
                 if h not in data[sn][test]:
@@ -391,9 +390,9 @@ def writeSummaryToFile(writer):
     if genCert:
         counter = 0
         length = len(data)
+        print("Generating Certificates")
         for sn in validSn:
             counter += 1
-            process_bar("Generating Certificates", counter, length)
             for test in data[sn]:
                 try:
                     if (
@@ -418,8 +417,8 @@ def writeSummaryToFile(writer):
                             else "N/A",
                             certdir,
                         )
-                        # if(isThreading):
-                        #     certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
+                        if(isThreading):
+                            certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
                 except:
                     raise Exception(
                         "Couldn't generate certificate, check config file for correct preferences"
