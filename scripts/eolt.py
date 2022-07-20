@@ -25,19 +25,22 @@ noDataStr = " "
 logger = logging.getLogger(__name__)
 
 daqTempKey = "".join(
-    random.choice(string.ascii_lowercase + string.digits + string.ascii_uppercase)
+    random.choice(string.ascii_lowercase +
+                  string.digits + string.ascii_uppercase)
     for i in range(20)
 )
 calibKey = daqTempKey
 while calibKey == daqTempKey:
     calibKey = "".join(
-        random.choice(string.ascii_lowercase + string.digits + string.ascii_uppercase)
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
         for i in range(20)
     )
 testResKey = calibKey
 while testResKey == calibKey:
     testResKey = "".join(
-        random.choice(string.ascii_lowercase + string.digits + string.ascii_uppercase)
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
         for i in range(20)
     )
 # daqTempKey = "daqTempKey"
@@ -73,7 +76,7 @@ def calc(fileName, dud):
                 region = ""
                 for row in csv.reader(file, delimiter="\n", quotechar=","):
                     for r in row:
-                        
+
                         v = r.split(",")
                         if "SN" in v or "Serial Number" in v:
                             sn = v[1]
@@ -92,9 +95,11 @@ def calc(fileName, dud):
                             _date = _date[index - 2]
                             data[sn][fileName]["Serial Number"] = sn
                             data[sn][fileName]["Date"] = (
-                                _date[4:6] + "/" + _date[6:8] + "/" + _date[0:4]
+                                _date[4:6] + "/" +
+                                _date[6:8] + "/" + _date[0:4]
                             )
-                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split(
+                                "\\")[-1]
                             data[sn][fileName]["Test Type"] = fileType
                             continue
                         elif sn == None:
@@ -154,7 +159,8 @@ def calc(fileName, dud):
                         else:
                             _date = "couldn't parse"
                             try:
-                                _date = v[ft3headers.index("TimeStamp")].split(" ")[0]
+                                _date = v[ft3headers.index("TimeStamp")].split(" ")[
+                                    0]
 
                             except:
                                 pass
@@ -175,7 +181,8 @@ def calc(fileName, dud):
                                         ]
                                     except:
                                         pass
-                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split(
+                                "\\")[-1]
                             data[sn][fileName]["Date"] = _date
                             data[sn][fileName]["Test Type"] = fileType
         elif fileType == "FT1":
@@ -196,10 +203,12 @@ def calc(fileName, dud):
                             if fileName not in data[sn]:
                                 data[sn][fileName] = {}
                             data[sn][fileName]["Serial Number"] = sn
-                            data[sn][fileName]["File Name"] = fileName.split("\\")[-1]
+                            data[sn][fileName]["File Name"] = fileName.split(
+                                "\\")[-1]
                             _date = fileName.replace(".csv", "").split("_")[-2]
                             data[sn][fileName]["Date"] = (
-                                _date[2:4] + "/" + _date[4:6] + "/20" + _date[0:2]
+                                _date[2:4] + "/" + _date[4:6] +
+                                "/20" + _date[0:2]
                             )
                             data[sn][fileName]["Test Type"] = fileType
                             continue
@@ -232,13 +241,14 @@ def calc(fileName, dud):
                                     ]
 
                 if sn == None:
-                    raise Exception("Doesn't have a serial number, possibly not a test file")
+                    raise Exception(
+                        "Doesn't have a serial number, possibly not a test file")
         elif fileType == "FT2 RAW":
             return False
 
         # if(wasIn):
         #     raise Exception("Overwriting has occured")
-        
+
         return True
     except csv.Error as e:
         pass
@@ -249,7 +259,7 @@ def calc(fileName, dud):
             + str(e)
             + "\n\n"
         ))
-        
+
         # print(fileName + " couldn't be read with the following error: "+str(e))
 
 
@@ -282,7 +292,8 @@ def writeHeaderToFile(writer):
     ):
         for i in limav:
             if i == "Test Type":
-                raise Exception('Cannot have "Test Type" as a "Limit" or "Avoid"')
+                raise Exception(
+                    'Cannot have "Test Type" as a "Limit" or "Avoid"')
 
 
 def writeDataToFile(writer, dir, fileNames):
@@ -293,13 +304,15 @@ def writeDataToFile(writer, dir, fileNames):
     counter = 0
     length = len(fileNames)
     global certdir
-    
+
     bar = tqdm(fileNames)
     if(not isThreading):
-        bar.set_description("Retrieving from the %s directory" % ordinal(dirNum))
+        bar.set_description(
+            "Retrieving from the %s directory" % ordinal(dirNum))
     else:
-        bar.set_description("Initializing for the %s directory" % ordinal(dirNum))
-    
+        bar.set_description(
+            "Initializing for the %s directory" % ordinal(dirNum))
+
     for fileName in bar:
         counter += 1
         ###
@@ -425,9 +438,11 @@ def writeSummaryToFile(writer):
                             if calibKey in data[sn][test]
                             else "N/A",
                             certdir,
+                            logger
                         )
                         if(isThreading):
-                            certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
+                            certThreads.append(threading.Thread(target=createCertificate, args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[
+                                               sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir, logger)))
                 except:
                     logger.error(Exception(
                         "Couldn't generate certificate, check config file for correct preferences"
@@ -451,7 +466,7 @@ def writeSummaryToFile(writer):
     #             f.write(i)
 
 
-def transfer(cdir, pdir, odir,log):
+def transfer(cdir, pdir, odir, log):
     global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir, logger
     logger = log
     certdir = cdir
@@ -600,7 +615,8 @@ def getSkippable(row):
             isIn = len(retrieveData["Dates"]) == 0
             for i in retrieveData["Dates"]:
                 snDate = dateutil.parser.parse(row["Date"])
-                snDate = {"Day": snDate.day, "Month": snDate.month, "Year": snDate.year}
+                snDate = {"Day": snDate.day,
+                          "Month": snDate.month, "Year": snDate.year}
                 if "Day" not in i:
                     del snDate["Day"]
                 if "Month" not in i:

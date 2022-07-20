@@ -9,6 +9,11 @@ import logging
 from eolt import *
 from tkinter import filedialog
 from tkinter import *
+import atexit
+
+def pause():
+    os.system("pause")
+atexit.register(pause)
 
 
 home = expanduser("~")+"/"
@@ -78,7 +83,8 @@ elif mode == "i":
     root = Tk()
     root.withdraw()
     outdir = filedialog.askdirectory(title="Select the output directory") + "/"
-    certdir = filedialog.askdirectory(title="Select the certificate directory") + "/"
+    certdir = filedialog.askdirectory(
+        title="Select the certificate directory") + "/"
     # preferencesFile = filedialog.askopenfilename(title = "Select the preferences file")
     try:
         with open(locationFile) as file:
@@ -97,10 +103,10 @@ elif mode == "i":
     if certdir == "/":
         certdir = _certdir
 
-logging.basicConfig(filename=outdir+"/errors.log", level=logging.DEBUG, 
+logging.basicConfig(filename=outdir+"/errors.log", level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
-logger=logging.getLogger(__name__)
-transfer(certdir, preferencesFile, outdir,logger)
+logger = logging.getLogger(__name__)
+transfer(certdir, preferencesFile, outdir, logger)
 
 
 def createFile(sumType):
@@ -117,7 +123,8 @@ def createFile(sumType):
             root = Tk()
             root.withdraw()
             dirs = [
-                filedialog.askdirectory(title="Select the input tests directory") + "/"
+                filedialog.askdirectory(
+                    title="Select the input tests directory") + "/"
             ]
             if dirs[0] == "/":
                 dirs = _dirs
@@ -135,7 +142,8 @@ def createFile(sumType):
             )
             fileNames = glob.glob(dir + globType, recursive=True)
             # runs for every directory
-            writeDataToFile(writer, dir, [f.replace("\\", "/") for f in fileNames])
+            writeDataToFile(
+                writer, dir, [f.replace("\\", "/") for f in fileNames])
         try:
             writeSummaryToFile(writer)
         except:
@@ -152,12 +160,14 @@ try:
     createFile(retrieveData["Master Summary File Tests"])
 
 except (PermissionError):
-    logger.error(Exception("Output file couldn't be opened. Close the file if it is open"))
+    logger.error(
+        Exception("Output file couldn't be opened. Close the file if it is open"))
 except Exception as e:
     logger.error(e)
 
 lines = {}
-lines["out_dir"] = outdir + ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
+lines["out_dir"] = outdir + \
+    ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
 lines["certificate_dir"] = certdir + (
     "/" if outdir[-1] != "/" and outdir[-1] != "\\" else ""
 )
@@ -169,8 +179,7 @@ try:
     with open(locationFile, "w") as f:
         json.dump(lines, f, indent=4)
 except (PermissionError):
-    logger.error(Exception("Locations file couldn't be opened. Close the file if it is open"))
+    logger.error(
+        Exception("Locations file couldn't be opened. Close the file if it is open"))
 except Exception as e:
     logger.error(e)
-
-os.system("pause")

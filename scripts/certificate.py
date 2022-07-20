@@ -18,7 +18,7 @@ def createCopy(sn, cbDate, path):
     shutil.copy2(path + "TEMPLATE.docx", dest)
 
 
-def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
+def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger):
     try:
         dest = docPath(sn, cbDate, path)
         doc = Document(dest)
@@ -52,7 +52,8 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
                         elif c.text == "CALIB":
                             c.text = str(float(PostCalibAir))
                     except:
-                        raise Exception("Error while generating the certificate")
+                        raise Exception(
+                            "Error while generating the certificate")
                     paragraphs = c.paragraphs
                     paragraph = paragraphs[0]
                     run_obj = paragraph.runs
@@ -64,7 +65,8 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path):
 
                 doc.save(dest)
     except Exception as e:
-        print(str(e))  # print("Couldn't generate certificate for "+sn)
+        # print(str(e))  # print("Couldn't generate certificate for "+sn)
+        logger.error(e)
 
 
 def convertToPDF_doc(doc):
