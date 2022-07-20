@@ -4,7 +4,8 @@ Please read the following before attempting to use this software.
 
 ## Download 
 
-Navigate to https://github.com/imoghul/EOLT-Test-Analyzer/releases, and download executable for latest release 
+Navigate to https://github.com/imoghul/EOLT-Test-Analyzer/releases, and download executable for latest release
+Also download the source code zip file and keep the contents of the ```default``` directory 
 
 ## Launch
 
