@@ -127,17 +127,21 @@ def getFT1Title_config(d):
 
 
 def getTitle_config(d):
-    res = None
-    if "column header" in d:
-        return d["column header"]
-    elif d["test"] == "FT2 SUM":
-        res = getFT2SUMTitle_config(d)
-    elif d["test"] == "FT3":
-        res = getFT3Title_config(d)
-    elif d["test"] == "FT1":
-        res = getFT1Title_config(d)
+    try:
+        res = None
+        if "column header" in d:
+            return d["column header"]
+        elif d["test"] == "FT2 SUM":
+            res = getFT2SUMTitle_config(d)
+        elif d["test"] == "FT3":
+            res = getFT3Title_config(d)
+        elif d["test"] == "FT1":
+            res = getFT1Title_config(d)
 
-    return d["test"] + ":" + res
+        return d["test"] + ":" + res
+    except Exception as e:
+        raise e
+        return None
 
 
 # def getFT2SUMTitle_raw(title, columnheader=None, region=None):

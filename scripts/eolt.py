@@ -270,7 +270,10 @@ def writeHeaderToFile(writer):
     dups = False
     for test in detectionList:
         for i in detectionList[test]:
-            title = getTitle_config(i)
+            try:
+                title = getTitle_config(i)
+            except Exception as e:
+                logger.error(e)
             if title not in check:
                 check.append(title)
             elif title != daqTempKey and title != calibKey and title != testResKey:
@@ -366,12 +369,15 @@ def writeSummaryToFile(writer):
                     in retrieveData["Master Summary File Tests"]
                 ):
                     headers.append(header)
-    for i in reversed([getTitle_config(j) for j in detectionList["FT3"]]):
-        moveToBeginning(headers, i)
-    for i in reversed([getTitle_config(j) for j in detectionList["FT2 SUM"]]):
-        moveToBeginning(headers, i)
-    for i in reversed([getTitle_config(j) for j in detectionList["FT1"]]):
-        moveToBeginning(headers, i)
+    try:
+        for i in reversed([getTitle_config(j) for j in detectionList["FT3"]]):
+            moveToBeginning(headers, i)
+        for i in reversed([getTitle_config(j) for j in detectionList["FT2 SUM"]]):
+            moveToBeginning(headers, i)
+        for i in reversed([getTitle_config(j) for j in detectionList["FT1"]]):
+            moveToBeginning(headers, i)
+    except Exception as e:
+        logger.error(e)    
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "File Name")
     moveToBeginning(headers, "Test Type")
@@ -379,7 +385,10 @@ def writeSummaryToFile(writer):
     for test in detectionList:
         for pref in detectionList[test]:
             if "hide" in pref and pref["hide"]:
-                title = getTitle_config(pref)
+                try:
+                    title = getTitle_config(pref)
+                except Exception as e:
+                    logger.error(e)
                 if title in headers:
                     headers.remove(title)
     writer.writerow(headers)
