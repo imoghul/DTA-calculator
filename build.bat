@@ -8,4 +8,4 @@ python -m PyInstaller -F --icon="..\deps\phononic_icon.png" run.py
 @REM remove extra .spec file
 del run.spec 
 @REM copy the exe from dist to parent directory
-copy dist\run.exe ..\run.exe
+copy dist\run.exe ..\EOLT-Test-Analyzer.exe
