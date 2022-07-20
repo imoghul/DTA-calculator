@@ -228,8 +228,8 @@ def calc(fileName, dud):
                                         ft1headers.index(dataField)
                                     ]
 
-                if sn == None:
-                    raise Exception("Doesn't have a serial number, possibly not a test file")
+                # if sn == None:
+                #     raise Exception("Doesn't have a serial number, possibly not a test file")
         elif fileType == "FT2 RAW":
             return False
 
@@ -290,11 +290,14 @@ def writeDataToFile(writer, dir, fileNames):
     counter = 0
     length = len(fileNames)
     global certdir
+    
+    bar = tqdm(fileNames)
     if(not isThreading):
-        print("Retrieving from the %s directory" % ordinal(dirNum))
+        bar.set_description("Retrieving from the %s directory" % ordinal(dirNum))
     else:
-        print("Initializing for the %s directory" % ordinal(dirNum))
-    for fileName in tqdm(fileNames):
+        bar.set_description("Initializing for the %s directory" % ordinal(dirNum))
+    
+    for fileName in bar:
         counter += 1
         ###
         if not isThreading:
@@ -317,7 +320,7 @@ def writeSummaryToFile(writer):
     if isThreading:
         startTime = time.time()
         runThreads(threads, 2000, "Retrieving Data")
-    print("Retrieved in " + str(time.time() - startTime) + " seconds")
+    # print("Retrieved in " + str(time.time() - startTime) + " seconds")
 
     # sort data
     # try:
@@ -336,8 +339,9 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     global headers
-    print("Processing Data")
-    for sn in tqdm(data):
+    bar = tqdm(data)
+    bar.set_description("Processing Data")
+    for sn in bar:
         counter += 1
         for test in data[sn]:
             for header in data[sn][test]:
@@ -367,8 +371,9 @@ def writeSummaryToFile(writer):
     counter = 0
     length = len(data)
     validSn = []
-    print("Writing Data")
-    for sn in tqdm(data):
+    bar = tqdm(data)
+    bar.set_description("Writing Data")
+    for sn in bar:
         counter += 1
         for test in data[sn]:
             for h in headers:
@@ -390,8 +395,9 @@ def writeSummaryToFile(writer):
     if genCert:
         counter = 0
         length = len(data)
-        print("Generating Certificates")
-        for sn in validSn:
+        bar = tqdm(validSn)
+        bar.set_description("Generating Certificates")
+        for sn in bar:
             counter += 1
             for test in data[sn]:
                 try:

@@ -185,8 +185,8 @@ def runThreads(threads, max, message):
     dead = []
     length = len(threads)
     counter = 0
-    print(message)
     with tqdm(total=length) as pbar:
+        pbar.set_description(message)
         while counter < length:
             allAlive = True
             while len(processing) < max and len(threads):
@@ -201,7 +201,7 @@ def runThreads(threads, max, message):
                     dead.append(processing.pop(processing.index(i)))
                     allAlive = False
 
-            if allAlive:  # and max < upperMax:
+            if allAlive:
                 if(max < upperMax):
                     max += 10
             elif max > originalMax:
