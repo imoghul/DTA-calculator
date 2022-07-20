@@ -18,6 +18,7 @@ outFileName = "summary"
 globType = "**/*.csv"
 
 preferencesFile = None
+noDataStr = " "
 
 daqTempKey = "".join(
     random.choice(string.ascii_lowercase + string.digits + string.ascii_uppercase)
@@ -373,14 +374,16 @@ def writeSummaryToFile(writer):
         for test in data[sn]:
             for h in headers:
                 if h not in data[sn][test]:
-                    data[sn][test][h] = " "  # "doesn't exist"
+                    data[sn][test][h] = noDataStr  # "doesn't exist"
 
             if getSkippable(data[sn][test]):
                 continue
             if sn not in validSn:
                 validSn.append(sn)
             try:
-                writer.writerow([data[sn][test][h] for h in headers])
+                rowData = [data[sn][test][h] for h in headers]
+                if(rowData.count(noDataStr)!=len(rowData)):
+                    writer.writerow(rowData)
             except:
                 pass
                 # print("Couldn't write data for %s, Most likely due to non encodable characters in filename"%sn)
