@@ -1,5 +1,6 @@
 # from numpy import mean
-import copy
+import copy,csv
+from fileinput import filename
 from tqdm import tqdm
 
 def ordinal(n):
@@ -80,8 +81,13 @@ def getFileType(fileName):
     elif "FT3_" in fileName or "ft3_" in fileName:
         return "FT3"
     else:
-        return "FT1"
-
+        # return "FT1"
+        with open(fileName, newline="") as file:
+                for row in csv.reader(file, delimiter="\n", quotechar=","):
+                    for r in row:
+                        v = r.split(",")
+                        if(v[0]=="Model ID"): return "FT1" 
+                        else: return None   
 
 def moveToBeginning(l, elem):
     if elem not in l:

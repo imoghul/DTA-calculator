@@ -245,7 +245,8 @@ def calc(fileName, dud):
                         "Doesn't have a serial number, possibly not a test file")
         elif fileType == "FT2 RAW":
             return False
-
+        else:
+            return False
         # if(wasIn):
         #     raise Exception("Overwriting has occured")
 
@@ -377,7 +378,7 @@ def writeSummaryToFile(writer):
         for i in reversed([getTitle_config(j) for j in detectionList["FT1"]]):
             moveToBeginning(headers, i)
     except Exception as e:
-        logger.error(e)    
+        logger.error(e)
     moveToBeginning(headers, "Date")
     moveToBeginning(headers, "File Name")
     moveToBeginning(headers, "Test Type")
