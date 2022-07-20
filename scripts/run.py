@@ -4,8 +4,8 @@ import os
 import json
 from os.path import expanduser
 import sys
-
-sys.tracebacklimit = -1
+import logging
+# sys.tracebacklimit = -1
 from eolt import *
 from tkinter import filedialog
 from tkinter import *
@@ -97,7 +97,10 @@ elif mode == "i":
     if certdir == "/":
         certdir = _certdir
 
-transferDirs(certdir, preferencesFile, outdir)
+logging.basicConfig(filename=outdir+"/errors.log", level=logging.DEBUG, 
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logger=logging.getLogger(__name__)
+transfer(certdir, preferencesFile, outdir,logger)
 
 
 def createFile(sumType):
@@ -136,7 +139,7 @@ def createFile(sumType):
         try:
             writeSummaryToFile(writer)
         except:
-            raise Exception("Couldn't write summary file")
+            logger.error(Exception("Couldn't write summary file"))
 
 
 try:
@@ -149,9 +152,9 @@ try:
     createFile(retrieveData["Master Summary File Tests"])
 
 except (PermissionError):
-    raise Exception("Output file couldn't be opened. Close the file if it is open")
+    logger.error(Exception("Output file couldn't be opened. Close the file if it is open"))
 except Exception as e:
-    raise e
+    logger.error(e)
 
 lines = {}
 lines["out_dir"] = outdir + ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
@@ -166,8 +169,8 @@ try:
     with open(locationFile, "w") as f:
         json.dump(lines, f, indent=4)
 except (PermissionError):
-    raise Exception("Locations file couldn't be opened. Close the file if it is open")
+    logger.error(Exception("Locations file couldn't be opened. Close the file if it is open"))
 except Exception as e:
-    raise e
+    logger.error(e)
 
 os.system("pause")

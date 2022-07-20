@@ -14,6 +14,7 @@ import threading
 import re
 from tqdm import tqdm
 import dateutil.parser
+import logging
 
 outFileName = "summary"
 globType = "**/*.csv"
@@ -21,6 +22,7 @@ globType = "**/*.csv"
 preferencesFile = None
 outdir = None
 noDataStr = " "
+logger = logging.getLogger(__name__)
 
 daqTempKey = "".join(
     random.choice(string.ascii_lowercase + string.digits + string.ascii_uppercase)
@@ -229,8 +231,8 @@ def calc(fileName, dud):
                                         ft1headers.index(dataField)
                                     ]
 
-                # if sn == None:
-                #     raise Exception("Doesn't have a serial number, possibly not a test file")
+                if sn == None:
+                    raise Exception("Doesn't have a serial number, possibly not a test file")
         elif fileType == "FT2 RAW":
             return False
 
@@ -241,13 +243,13 @@ def calc(fileName, dud):
     except csv.Error as e:
         pass
     except Exception as e:
-        errors.append(
+        logger.error(Exception(
             fileName
             + " couldn't be read with the following error:\n\n\t"
             + str(e)
             + "\n\n"
-        )
-        pass
+        ))
+        
         # print(fileName + " couldn't be read with the following error: "+str(e))
 
 
@@ -427,9 +429,9 @@ def writeSummaryToFile(writer):
                         if(isThreading):
                             certThreads.append(threading.Thread(target=createCertificate,args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir)))
                 except:
-                    raise Exception(
+                    logger.error(Exception(
                         "Couldn't generate certificate, check config file for correct preferences"
-                    )
+                    ))
     # if(genCert and isThreading):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")
@@ -442,15 +444,16 @@ def writeSummaryToFile(writer):
         and retrieveData["Generate Certificates"] == True
     ):
         convertToPDF_path(certdir)
-    if errors != [] and outdir!=None:
-        with open(outdir+"/errorlog.txt","w") as f:
-            f.write("Errors: ")
-            for i in errors:
-                f.write(i)
+    # if errors != [] and outdir!=None:
+    #     with open(outdir+"/errorlog.txt","w") as f:
+    #         f.write("Errors:\n")
+    #         for i in errors:
+    #             f.write(i)
 
 
-def transferDirs(cdir, pdir, odir):
-    global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir
+def transfer(cdir, pdir, odir,log):
+    global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir, logger
+    logger = log
     certdir = cdir
     preferencesFile = pdir
     outdir = odir
@@ -459,9 +462,9 @@ def transferDirs(cdir, pdir, odir):
             retrieveData = json.load(f)
             retrieveData["Master Summary File Tests"]
     except (PermissionError):
-        raise Exception(
+        logger.error(Exception(
             "Preferences file couldn't be opened. Close the file if it is open"
-        )
+        ))
     except Exception as e:
         print("Invalid preferences JSON file, check syntax: " + str(e))
         exit()
@@ -509,18 +512,18 @@ def transferDirs(cdir, pdir, odir):
 
         for i in retrieveData["Test Preferences"]:
             if "test" not in i:
-                raise Exception(
+                logger.error(Exception(
                     'One or more of the "Test Preferences" don\'t contain a "test"'
-                )
+                ))
             elif i["test"] not in detectionList:
-                raise Exception(
+                logger.error(Exception(
                     'One or more of the "Test Preferences" has an invalid "test" name'
-                )
+                ))
             detectionList[i["test"]].append(i)
 
     except Exception as e:
         # raise Exception('No "Test Preferences" key in prefences file')
-        raise e
+        logger.error(e)
 
     genCert = (
         "Generate Certificates" in retrieveData
