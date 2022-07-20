@@ -382,7 +382,7 @@ def writeSummaryToFile(writer):
                 validSn.append(sn)
             try:
                 rowData = [data[sn][test][h] for h in headers]
-                if(rowData.count(noDataStr)!=len(rowData)):
+                if(data[sn][test]["Test Type"] in retrieveData["Master Summary File Tests"]):
                     writer.writerow(rowData)
             except:
                 pass
