@@ -97,7 +97,7 @@ elif mode == "i":
     if certdir == "/":
         certdir = _certdir
 
-transferDirs(certdir, preferencesFile)
+transferDirs(certdir, preferencesFile, outdir)
 
 
 def createFile(sumType):

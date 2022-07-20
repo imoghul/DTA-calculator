@@ -202,7 +202,7 @@ def runThreads(threads, max, message):
                     allAlive = False
 
             if allAlive:
-                if(max < upperMax):
+                # if(max < upperMax):
                     max += 10
             elif max > originalMax:
                 max -= 1

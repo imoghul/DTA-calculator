@@ -19,6 +19,7 @@ outFileName = "summary"
 globType = "**/*.csv"
 
 preferencesFile = None
+outdir = None
 noDataStr = " "
 
 daqTempKey = "".join(
@@ -441,16 +442,18 @@ def writeSummaryToFile(writer):
         and retrieveData["Generate Certificates"] == True
     ):
         convertToPDF_path(certdir)
-    if errors != []:
-        print("\nErrors: ")
-        for i in errors:
-            print(i)
+    if errors != [] and outdir!=None:
+        with open(outdir+"/errorlog.txt","w") as f:
+            f.write("Errors: ")
+            for i in errors:
+                f.write(i)
 
 
-def transferDirs(cdir, pdir):
-    global certdir, preferencesFile, detectionList, retrieveData, genCert
+def transferDirs(cdir, pdir, odir):
+    global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir
     certdir = cdir
     preferencesFile = pdir
+    outdir = odir
     try:
         with open(preferencesFile) as f:
             retrieveData = json.load(f)
