@@ -10,7 +10,7 @@ import threading
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
                   string.ascii_uppercase) for i in range(20)))
-outFileName = "long_summary.csv"#"SUMMARY/" + input("Output file Location (SUMMARY/): ")
+outFileName = "comprehensive_summary.csv"#"SUMMARY/" + input("Output file Location (SUMMARY/): ")
 globType = "**/*SUM*.csv"
 detectionList = []
 data = []

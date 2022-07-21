@@ -9,7 +9,7 @@ Also download the source code zip file and keep the contents of the ```default``
 
 ## Launch
 
-Double click ```run.exe```
+Double click ```EOLT-Test-Analyzer.exe```
 
 
 ## Usage
@@ -222,4 +222,9 @@ After reading ```preferences.json``` and ```locations.json``` the parsing will c
 Errors that take place during runtime will be recorded in ```errors.log``` in the output directory. Errors that occur before an output directory can be determined will appear on the script's output
 
 ****
+
+An extra script with ```EOLT-Test-Analyzer-Comprehensive.exe``` is provided with no support/documentation. This is an old script that does not utilize a config file, as it is just used to retrive all the data possible from FT2 SUM files.
+
+****
+
 For updates check: https://github.com/imoghul/EOLT-Test-Analyzer/tree/main
