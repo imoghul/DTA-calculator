@@ -105,7 +105,7 @@ def writeHeaderToFile(writer):
 def writeDataToFile(writer, dir, fileNames):
     global threads
     bar = tqdm(fileNames)
-    bar.set_description("Retrieveing Data")
+    bar.set_description("Initializing")
     for fileName in bar:
         try:
             def add(fileName,dud):
