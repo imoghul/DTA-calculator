@@ -291,7 +291,7 @@ def writeHeaderToFile(writer):
                 logger.error(e)
             if title not in check:
                 check.append(title)
-            elif title != daqTempKey and title != calibKey and title != testResKey:
+            elif title != daqTempKey and title != calibKey and title != testResKey and title != postDaqTempKey and title != postCalibKey:
                 if title not in duplicates:
                     duplicates.append(title)
                 dups = True
@@ -353,7 +353,7 @@ def writeSummaryToFile(writer):
     # execute threads
     if isThreading:
         startTime = time.time()
-        runThreads(threads, 2000, "Retrieving Data")
+        runThreads(threads, 1000, "Retrieving Data")
     # print("Retrieved in " + str(time.time() - startTime) + " seconds")
 
     # sort data
@@ -444,8 +444,8 @@ def writeSummaryToFile(writer):
                     if (
                         "Date" in data[sn][test]
                         and testResKey in data[sn][test]
-                        and daqTempKey in data[sn][test]
-                        and calibKey in data[sn][test]
+                        and (daqTempKey in data[sn][test] or postDaqTempKey in data[sn][test])
+                        and (calibKey in data[sn][test] or postCalibKey in data[sn][test])
                     ):
                         createCopy(sn, data[sn][test]["Date"], certdir)
                         # if(not isThreading):
@@ -454,6 +454,11 @@ def writeSummaryToFile(writer):
                         if calibTemp.isnumeric() and float(calibTemp) == 0:
                             calibTemp = data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A"
                             daqTemp = data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A"
+                        
+                        try:calibTemp = str(round(float(calibTemp),1))
+                        except:pass
+                        try:daqTemp = str(round(float(daqTemp),1))
+                        except:pass 
                         createCertificate(
                             sn,
                             data[sn][test]["Date"],
@@ -468,10 +473,11 @@ def writeSummaryToFile(writer):
                         if(isThreading):
                             certThreads.append(threading.Thread(target=createCertificate, args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[
                                                sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir, logger)))
-                except:
-                    logger.error(Exception(
-                        "Couldn't generate certificate, check config file for correct preferences"
-                    ))
+                except Exception as e:
+                    raise e
+                    # logger.error(Exception(
+                    #     "Couldn't generate certificate, check config file for correct preferences"
+                    # ))
     # if(genCert and isThreading):
     #     start = time.time()
     #     runThreads(certThreads,2000,"Generating Certificates")
@@ -568,6 +574,17 @@ def transfer(cdir, pdir, odir, log):
                 "column header": calibKey,
             }
         )
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
+                "title": "Air",
+                "region": "Post Calibration Data",
+                "column": 2,
+                "hide": True,
+                "column header": postCalibKey,
+            }
+        )
+
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",

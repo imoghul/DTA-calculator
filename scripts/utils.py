@@ -211,11 +211,11 @@ def runThreads(threads, max, message):
                     dead.append(processing.pop(processing.index(i)))
                     allAlive = False
 
-            if allAlive:
-                # if(max < upperMax):
-                    max += 10
-            elif max > originalMax:
-                max -= 1
+            # if allAlive:
+            #     # if(max < upperMax):
+            #         max += 10
+            # elif max > originalMax:
+            #     max -= 1
 
     for t in dead + processing:
         t.join()
