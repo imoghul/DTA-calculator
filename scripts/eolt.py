@@ -43,6 +43,20 @@ while testResKey == calibKey:
                       string.digits + string.ascii_uppercase)
         for i in range(20)
     )
+postCalibKey = daqTempKey
+while postCalibKey == daqTempKey:
+    postCalibKey = "".join(
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
+        for i in range(20)
+    )
+postDaqTempKey = calibKey
+while postDaqTempKey == calibKey:
+    postDaqTempKey = "".join(
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
+        for i in range(20)
+    )
 # daqTempKey = "daqTempKey"
 # calibKey = "calibKey"
 # testResKey = "testResKey"
@@ -435,18 +449,19 @@ def writeSummaryToFile(writer):
                     ):
                         createCopy(sn, data[sn][test]["Date"], certdir)
                         # if(not isThreading):
+                        daqTemp = data[sn][test][postDaqTempKey] if postDaqTempKey in data[sn][test] else "N/A"
+                        calibTemp = data[sn][test][postCalibKey] if postCalibKey in data[sn][test] else "N/A"
+                        if calibTemp.isnumeric() and float(calibTemp) == 0:
+                            calibTemp = data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A"
+                            daqTemp = data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A"
                         createCertificate(
                             sn,
                             data[sn][test]["Date"],
                             "Pass"
                             if data[sn][test][testResKey] == "Test Complete"
                             else "Fail",
-                            data[sn][test][daqTempKey]
-                            if daqTempKey in data[sn][test]
-                            else "N/A",
-                            data[sn][test][calibKey]
-                            if calibKey in data[sn][test]
-                            else "N/A",
+                            daqTemp,
+                            calibTemp,
                             certdir,
                             logger
                         )
@@ -508,7 +523,7 @@ def transfer(cdir, pdir, odir, log):
                 "region": "Post Calibration Data",
                 "column": 2,
                 "hide": True,
-                "column header": daqTempKey,
+                "column header": postDaqTempKey,
             }
         )
         retrieveData["Test Preferences"].append(
@@ -516,17 +531,39 @@ def transfer(cdir, pdir, odir, log):
                 "test": "FT2 SUM",
                 "title": "Air2",
                 "region": "Post Calibration Data",
-                "column": 5,
+                "column": 2,
                 "hide": True,
-                "column header": calibKey,
+                "column header": postCalibKey,
+            }
+        )
+
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
+                "title": "DAQ Temperature (oC)",
+                "region": "Calibration Data",
+                "column": 2,
+                "hide": True,
+                "column header": daqTempKey,
             }
         )
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",
+                "title": "Air2",
+                "region": "Calibration Data",
+                "column": 2,
+                "hide": True,
+                "column header": calibKey,
+            }
+        )
+        
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
                 "title": "Air",
                 "region": "Post Calibration Data",
-                "column": 5,
+                "column": 2,
                 "hide": True,
                 "column header": calibKey,
             }
