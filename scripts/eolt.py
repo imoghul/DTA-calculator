@@ -16,7 +16,7 @@ from tqdm import tqdm
 import dateutil.parser
 import logging
 
-outFileName = "summary"
+outFileName = "summary.csv"
 globType = "**/*.csv"
 
 preferencesFile = None
@@ -477,7 +477,7 @@ def writeSummaryToFile(writer):
 
 
 def transfer(cdir, pdir, odir, log):
-    global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir, logger
+    global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir, logger, outFileName
     logger = log
     certdir = cdir
     preferencesFile = pdir
@@ -495,6 +495,11 @@ def transfer(cdir, pdir, odir, log):
         exit()
 
     try:
+        moveToBeginning(retrieveData["Master Summary File Tests"], "FT3")
+        moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 RAW")
+        moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 SUM")
+        moveToBeginning(retrieveData["Master Summary File Tests"], "FT1")
+        outFileName = "summary" + "_" + "_".join(retrieveData["Master Summary File Tests"]) + ".csv"
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",
@@ -554,7 +559,10 @@ def transfer(cdir, pdir, odir, log):
         "Generate Certificates" in retrieveData
         and retrieveData["Generate Certificates"]
     )
-
+    
+    
+def getOutFileName():
+    return outFileName
 
 def getSkippable(row):
     global retrieveData

@@ -83,7 +83,18 @@ def calc(fileName):
         vals.append(offset)
         for i in range(len(titles)):
             res[titles[i]] = vals[i]
-    # print(res)
+        
+    filelist = fileName.split("_")
+    if (len(filelist) >= 5):
+        _date = filelist[len(filelist) - 3]
+        dat = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
+        tim = filelist[len(filelist) - 2]
+        tim = tim[0:2] + ":" + tim[2:4] + ":" + tim[4:6]
+    else:
+        dat = ""
+        tim = ""
+    res["Date"] = dat
+    res['Time'] = tim
     return res
 
 
@@ -92,22 +103,11 @@ def writeHeaderToFile(writer):
 
 
 def writeDataToFile(writer, dir, fileNames):
-    for fileName in tqdm(fileNames):
+    bar = tqdm(fileNames)
+    bar.set_description("Retrieveing Data")
+    for fileName in bar:
         try:
             d = calc(fileName)
-            order = ("\\".join(fileName.split("\\")[0:-1]))
-            d["Order"] = order
-            filelist = fileName.split("_")
-            if (len(filelist) >= 5):
-                _date = filelist[len(filelist) - 3]
-                dat = _date[4:6] + "/" + _date[6:] + "/" + _date[0:4]
-                tim = filelist[len(filelist) - 2]
-                tim = tim[0:2] + ":" + tim[2:4] + ":" + tim[4:6]
-            else:
-                dat = ""
-                tim = ""
-            d["Date"] = dat
-            d['Time'] = tim
             data.append(d)
         except:
             print(fileName + " couldn't be read")
@@ -115,7 +115,7 @@ def writeDataToFile(writer, dir, fileNames):
 
 def writeSummaryToFile(writer):
     keys = []
-    header = ["Order", "Date", "Time"]
+    header = ["Date", "Time"]
     temp = data.copy()
     temp.sort(reverse=True, key=lambda x: len(x.keys()))
     for i in temp:
@@ -134,3 +134,6 @@ def writeSummaryToFile(writer):
 
 
 def transfer(cdir, pdir, odir, log):pass
+
+def getOutFileName():
+    return outFileName
