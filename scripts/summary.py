@@ -6,15 +6,15 @@ from utils import *
 import random
 import string
 from tqdm import tqdm
-
+import threading
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
                   string.ascii_uppercase) for i in range(20)))
-outFileName = "long_summary"#"SUMMARY/" + input("Output file Location (SUMMARY/): ")
+outFileName = "long_summary.csv"#"SUMMARY/" + input("Output file Location (SUMMARY/): ")
 globType = "**/*SUM*.csv"
 detectionList = []
 data = []
-
+threads = []
 
 def fixDupl(arr):
     common = [i for i in arr if arr.count(i) > 1]
@@ -103,17 +103,22 @@ def writeHeaderToFile(writer):
 
 
 def writeDataToFile(writer, dir, fileNames):
+    global threads
     bar = tqdm(fileNames)
     bar.set_description("Retrieveing Data")
     for fileName in bar:
         try:
-            d = calc(fileName)
-            data.append(d)
+            def add(fileName,dud):
+                d = calc(fileName)
+                data.append(d)
+            threads.append(threading.Thread(target = add,args=(fileName,0)))
+            
         except:
             print(fileName + " couldn't be read")
 
 
 def writeSummaryToFile(writer):
+    runThreads(threads, 2000, "Retrieving Data")
     keys = []
     header = ["Date", "Time"]
     temp = data.copy()

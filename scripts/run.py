@@ -6,10 +6,10 @@ from os.path import expanduser
 import sys
 import logging
 # sys.tracebacklimit = -1
-from eolt import *
 from tkinter import filedialog
 from tkinter import *
 import atexit
+from summary import *
 
 def pause():
     os.system("pause")
@@ -151,10 +151,7 @@ def createFile():
 
 
 try:
-    with open(preferencesFile) as f:
-        retrieveData = json.load(f)
     createFile()
-
 except (PermissionError):
     logger.error(
         Exception("Output file couldn't be opened. Close the file if it is open"))
