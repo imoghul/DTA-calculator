@@ -11,8 +11,11 @@ from tkinter import *
 import atexit
 from eolt import *
 
+
 def pause():
     os.system("pause")
+
+
 atexit.register(pause)
 
 

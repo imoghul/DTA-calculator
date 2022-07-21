@@ -499,7 +499,8 @@ def transfer(cdir, pdir, odir, log):
         moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 RAW")
         moveToBeginning(retrieveData["Master Summary File Tests"], "FT2 SUM")
         moveToBeginning(retrieveData["Master Summary File Tests"], "FT1")
-        outFileName = "summary" + "_" + "_".join(retrieveData["Master Summary File Tests"]) + ".csv"
+        outFileName = "summary" + "_" + \
+            "_".join(retrieveData["Master Summary File Tests"]) + ".csv"
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",
@@ -559,10 +560,11 @@ def transfer(cdir, pdir, odir, log):
         "Generate Certificates" in retrieveData
         and retrieveData["Generate Certificates"]
     )
-    
-    
+
+
 def getOutFileName():
     return outFileName
+
 
 def getSkippable(row):
     global retrieveData

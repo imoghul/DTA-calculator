@@ -10,11 +10,13 @@ import threading
 randStr = (''.join(
     random.choice(string.ascii_lowercase + string.digits +
                   string.ascii_uppercase) for i in range(20)))
-outFileName = "comprehensive_summary.csv"#"SUMMARY/" + input("Output file Location (SUMMARY/): ")
+# "SUMMARY/" + input("Output file Location (SUMMARY/): ")
+outFileName = "comprehensive_summary.csv"
 globType = "**/*SUM*.csv"
 detectionList = []
 data = []
 threads = []
+
 
 def fixDupl(arr):
     common = [i for i in arr if arr.count(i) > 1]
@@ -83,7 +85,7 @@ def calc(fileName):
         vals.append(offset)
         for i in range(len(titles)):
             res[titles[i]] = vals[i]
-        
+
     filelist = fileName.split("_")
     if (len(filelist) >= 5):
         _date = filelist[len(filelist) - 3]
@@ -109,11 +111,11 @@ def writeDataToFile(writer, dir, fileNames):
     bar.set_description("Initializing")
     for fileName in bar:
         try:
-            def add(fileName,dud):
+            def add(fileName, dud):
                 d = calc(fileName)
                 data.append(d)
-            threads.append(threading.Thread(target = add,args=(fileName,0)))
-            
+            threads.append(threading.Thread(target=add, args=(fileName, 0)))
+
         except:
             print(fileName + " couldn't be read")
 
@@ -121,7 +123,7 @@ def writeDataToFile(writer, dir, fileNames):
 def writeSummaryToFile(writer):
     runThreads(threads, 2000, "Retrieving Data")
     keys = []
-    header = ["File Name","Date", "Time"]
+    header = ["File Name", "Date", "Time"]
     temp = data.copy()
     temp.sort(reverse=True, key=lambda x: len(x.keys()))
     for i in temp:
@@ -139,7 +141,8 @@ def writeSummaryToFile(writer):
         writer.writerow(outlist)
 
 
-def transfer(cdir, pdir, odir, log):pass
+def transfer(cdir, pdir, odir, log): pass
+
 
 def getOutFileName():
     return outFileName
