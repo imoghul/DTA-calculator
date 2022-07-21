@@ -94,6 +94,7 @@ def calc(fileName):
         dat = ""
         tim = ""
     res["Date"] = dat
+    res["File Name"] = fileName
     res['Time'] = tim
     return res
 
@@ -120,7 +121,7 @@ def writeDataToFile(writer, dir, fileNames):
 def writeSummaryToFile(writer):
     runThreads(threads, 2000, "Retrieving Data")
     keys = []
-    header = ["Date", "Time"]
+    header = ["File Name","Date", "Time"]
     temp = data.copy()
     temp.sort(reverse=True, key=lambda x: len(x.keys()))
     for i in temp:

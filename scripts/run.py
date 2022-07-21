@@ -9,7 +9,7 @@ import logging
 from tkinter import filedialog
 from tkinter import *
 import atexit
-from summary import *
+from eolt import *
 
 def pause():
     os.system("pause")
