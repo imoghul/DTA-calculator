@@ -9,3 +9,5 @@
 scripts/configdir.txt
 *.exe
 **/*.exe
+**/*.html
+*.html
