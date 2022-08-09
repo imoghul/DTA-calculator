@@ -215,7 +215,7 @@ These values are overwritten when they are selected from the script
 
 ### Determining The Test
 
-To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise, if cell A1 of the test file is "Model ID", it is FT1.
+To determine what type of test a csv file is, the file name is observed with certain assumptions. If it contains "\_SUM" then it is FT2 SUM. Otherwise if it contains "\_RAW" it is FT2 RAW. Otherwise if it contains "FT3\_" or "ft3\_" it is FT3. Otherwise, if cell A1 of the test file is "Model ID" or "Traveller ID", it is FT1.
 ### Execution
 After reading ```preferences.json``` and ```locations.json``` the parsing will commence, and data will be stored at the output folder in the summary file. Note that this script uses replace mode instead of append mode, meaning that the summary file will be overwritten every time, rather than added to. It is important to make sure that none of the "Test Preferences" config entries have duplicate headers. This will cause the script to overwrite data on the last one it sees. This should only be used if it is known that a certain the config entries won't all appear in the same files. For example, Post Calibration Air2 (for larger units) and Post Calibratoin Air (for tote units) won't appear in the same file, therefore putting them under the same header won't cause any overwriting to occur
 ### Errors
