@@ -204,11 +204,14 @@ def calc(fileName, dud):
                 sn = None
                 ft1headers = None
                 modelId = None
+                travId = None
                 for row in csv.reader(file, delimiter="\n", quotechar=","):
                     for r in row:
                         v = r.split(",")
                         if "Model ID" in v and len(v) > 1:
                             modelId = v[1]
+                        if "Traveller ID" in v and len(v) > 1:
+                            travId = v[1]
                         if "SN" in v or "Serial Number" in v:
                             sn = v[1]
                             currentSN = sn
@@ -243,6 +246,9 @@ def calc(fileName, dud):
                                 if dataField == "Model ID" and modelId != None:
                                     wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = modelId
+                                elif dataField == "Traveller ID" and modelId != None:
+                                    wasIn = (dataKey in data[sn][fileName])
+                                    data[sn][fileName][dataKey] = travId
                                 elif dataField in v:
                                     wasIn = (dataKey in data[sn][fileName])
                                     data[sn][fileName][dataKey] = v[1]
@@ -454,11 +460,15 @@ def writeSummaryToFile(writer):
                         if calibTemp.isnumeric() and float(calibTemp) == 0:
                             calibTemp = data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A"
                             daqTemp = data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A"
-                        
-                        try:calibTemp = str(round(float(calibTemp),1))
-                        except:pass
-                        try:daqTemp = str(round(float(daqTemp),1))
-                        except:pass 
+
+                        try:
+                            calibTemp = str(round(float(calibTemp), 1))
+                        except:
+                            pass
+                        try:
+                            daqTemp = str(round(float(daqTemp), 1))
+                        except:
+                            pass
                         createCertificate(
                             sn,
                             data[sn][test]["Date"],
@@ -563,7 +573,7 @@ def transfer(cdir, pdir, odir, log):
                 "column header": calibKey,
             }
         )
-        
+
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",

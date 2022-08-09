@@ -1,7 +1,9 @@
 # from numpy import mean
-import copy,csv
+import copy
+import csv
 from fileinput import filename
 from tqdm import tqdm
+
 
 def ordinal(n):
     return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10:: 4])
@@ -83,11 +85,14 @@ def getFileType(fileName):
     else:
         # return "FT1"
         with open(fileName, newline="") as file:
-                for row in csv.reader(file, delimiter="\n", quotechar=","):
-                    for r in row:
-                        v = r.split(",")
-                        if(v[0]=="Model ID"): return "FT1" 
-                        else: return None   
+            for row in csv.reader(file, delimiter="\n", quotechar=","):
+                for r in row:
+                    v = r.split(",")
+                    if(v[0] == "Model ID" or v[0] == "Traveller ID"):
+                        return "FT1"
+                    else:
+                        return None
+
 
 def moveToBeginning(l, elem):
     if elem not in l:
