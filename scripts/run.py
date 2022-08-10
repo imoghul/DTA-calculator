@@ -19,14 +19,14 @@ def pause():
 atexit.register(pause)
 
 
-home = expanduser("~")+"/"
+home = ""#expanduser("~")+"/"
 
 try:
     with open(home+"EOLT-Test-Analyzer-configdir.txt") as f:
         configdir = f.read()
 except:
     from saveConfigDir import writeConfigDir
-    writeConfigDir()
+    writeConfigDir(home)
     with open(home+"EOLT-Test-Analyzer-configdir.txt") as f:
         configdir = f.read()
 
@@ -106,9 +106,13 @@ elif mode == "i":
     if certdir == "/":
         certdir = _certdir
 
-logging.basicConfig(filename=outdir+"/errors.log", level=logging.DEBUG,
+
+try:
+    logging.basicConfig(filename=outdir+"errors.log", level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
+except:
+    raise Exception("One or more directories are invalid, please choose again manually")
 transfer(certdir, preferencesFile, outdir, logger)
 
 
@@ -163,12 +167,12 @@ except Exception as e:
 
 lines = {}
 lines["out_dir"] = outdir + \
-    ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "")
+    ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "") if outdir!="" else ""
 lines["certificate_dir"] = certdir + (
-    "/" if outdir[-1] != "/" and outdir[-1] != "\\" else ""
+    ("/" if certdir[-1] != "/" and certdir[-1] != "\\" else "") if certdir!="" else ""
 )
 lines["search_dirs"] = [
-    d + ("/" if d[-1] != "/" and d[-1] != "\\" else "") for d in dirs
+    d + ((("/" if d[-1] != "/" and d[-1] != "\\" else "") if d!="" else "")) for d in dirs
 ]
 
 try:

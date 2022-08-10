@@ -5,6 +5,9 @@ root = Tk()
 root.withdraw()
 
 
-def writeConfigDir():
-    with open(expanduser("~")+"/EOLT-Test-Analyzer-configdir.txt", "w") as f:
+def writeConfigDir(home):
+    with open(
+        # expanduser("~")+"/"
+        home+"EOLT-Test-Analyzer-configdir.txt", "w"
+        ) as f:
         f.write(filedialog.askdirectory(title="Choose the config directory") + "/")
