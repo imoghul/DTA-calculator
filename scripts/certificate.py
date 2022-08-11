@@ -7,26 +7,26 @@ import sys
 import shutil
 
 
-def docPath(sn, cbDate, path):
+def docPath(sn, cbDate, path): # convert sn, date, and path into a path for the certificate
     return (
         path + sn + "_" + cbDate.replace("/", "") + "_certificate.docx"
     )  # path+"%s_%s_certificate.docx" % (sn,cbDate.replace("/",""))
 
 
-def createCopy(sn, cbDate, path):
+def createCopy(sn, cbDate, path): # create a copy of TEMPLATE.docx to a new path for the specified certificate
     dest = docPath(sn, cbDate, path)
     shutil.copy2(path + "TEMPLATE.docx", dest)
 
 
-def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, header = False):
+def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, header = False):
     try:
-        createCopy(sn, cbDate, path)
+        createCopy(sn, cbDate, path) # create the copy
         dest = docPath(sn, cbDate, path)
-        doc = Document(dest)
+        doc = Document(dest) # open the copy
 
-        for t in doc.tables:
-            for c in t._cells:
-                if c.text == "SERIAL NUMBER":
+        for t in doc.tables: # loop through the tables, becuase whoever make the certificate put the data we need to change in invisible tables
+            for c in t._cells: # loop through cells
+                if c.text == "SERIAL NUMBER": # change SERIAL NUMBER to match desired sn and match font
                     c.text = sn
                     paragraphs = c.paragraphs
                     paragraph = paragraphs[0]
@@ -44,7 +44,7 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
                     or c.text == "Air Monitoring Probe:"
                 ): # set other cells
                 # NOTE: for some reason, separating this if into multiple ones messed with the font 
-                    try:
+                    try: # insert data into desired places
                         if c.text == "CALIBRATION DATE":
                             c.text = cbDate
                         elif c.text == "RESULT":
@@ -54,7 +54,7 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
                         elif c.text == "CALIB":
                             c.text = PostCalibAir
                         elif c.text == "Air Monitoring Probe:" and header:
-                            c.text = "Air Monitoring Probe:\nGlycol Probe:"
+                            c.text = "Air Monitoring Probe:\nGlycol Probe:" # if header is true, add a LF and Glycol Probe:
                     except:
                         raise Exception(
                             "Error while generating the certificate")
@@ -69,27 +69,25 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
 
                 doc.save(dest)
     except Exception as e:
-        # print(docPath(sn, cbDate, path))
-        try:
+        try: # remove the copy if a failure occured during the certificate generation, to avoid half generated certificates
             os.remove(docPath(sn, cbDate, path))
         except:pass
-        # print(str(e))  # print("Couldn't generate certificate for "+sn)
-        raise e# logger.error(e)
+        raise e
 
 
-def convertToPDF_doc(doc):
+def convertToPDF_doc(doc): # convert a single docx to a pdf
     # with contextlib.redirect_stdout(open(os.devnull, 'w')):
-    try:
-        print("Converting %s to pdf" % doc.replace("\\", "/").split("/")[-1])
-        convert(doc)
-    except:
-        print(doc + " couldn't be converted to a pdf")
+        try:
+            print("Converting %s to pdf" % doc.replace("\\", "/").split("/")[-1])
+            convert(doc)
+        except:
+            print(doc + " couldn't be converted to a pdf")
 
 
-def convertToPDF_path(path):
+def convertToPDF_path(path): # convert all docx in path to pdf
     # with contextlib.redirect_stdout(open(os.devnull, 'w')):
-    try:
-        print("Converting certificates to pdfs")
-        convert(path)
-    except Exception as e:
-        print("Some files couldn't be converted to a pdf")
+        try:
+            print("Converting certificates to pdfs")
+            convert(path)
+        except Exception as e:
+            print("Some files couldn't be converted to a pdf")

@@ -4,7 +4,7 @@ from os.path import expanduser
 root = Tk()
 root.withdraw()
 
-
+# saves the configdir in the config dir text file after asking the user for it
 def writeConfigDir(home):
     with open(
         # expanduser("~")+"/"
