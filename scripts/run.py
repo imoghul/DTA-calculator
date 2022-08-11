@@ -113,11 +113,17 @@ try:
     logger = logging.getLogger(__name__)
 except:
     raise Exception("One or more directories are invalid, please choose again manually")
+locs = {}
+locs["out_dir"] = outdir + \
+    ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "") if outdir!="" else ""
+locs["certificate_dir"] = certdir + (
+    ("/" if certdir[-1] != "/" and certdir[-1] != "\\" else "") if certdir!="" else ""
+)
 transfer(certdir, preferencesFile, outdir, logger)
 
 
 def createFile():
-    global dirs
+    global dirs,locs
     with open(
         outdir + getOutFileName(), mode="w", newline=""
     ) as out:
@@ -139,6 +145,20 @@ def createFile():
             dirs = sys.argv[1:]
         elif not cli and mode != "d":
             raise Exception("\n\nUse valid arguments")
+
+        locs["search_dirs"] = [
+            d + ((("/" if d[-1] != "/" and d[-1] != "\\" else "") if d!="" else "")) for d in dirs
+        ]
+
+        try:
+            with open(locationFile, "w") as f:
+                json.dump(locs, f, indent=4)
+        except (PermissionError):
+            logger.error(
+                Exception("Locations file couldn't be opened. Close the file if it is open"))
+        except Exception as e:
+            logger.error(e)
+
 
         original = os.getcwd()
 
@@ -165,21 +185,4 @@ except (PermissionError):
 except Exception as e:
     logger.error(e)
 
-lines = {}
-lines["out_dir"] = outdir + \
-    ("/" if outdir[-1] != "/" and outdir[-1] != "\\" else "") if outdir!="" else ""
-lines["certificate_dir"] = certdir + (
-    ("/" if certdir[-1] != "/" and certdir[-1] != "\\" else "") if certdir!="" else ""
-)
-lines["search_dirs"] = [
-    d + ((("/" if d[-1] != "/" and d[-1] != "\\" else "") if d!="" else "")) for d in dirs
-]
 
-try:
-    with open(locationFile, "w") as f:
-        json.dump(lines, f, indent=4)
-except (PermissionError):
-    logger.error(
-        Exception("Locations file couldn't be opened. Close the file if it is open"))
-except Exception as e:
-    logger.error(e)
