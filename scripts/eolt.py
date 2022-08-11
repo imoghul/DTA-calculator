@@ -520,11 +520,11 @@ def writeSummaryToFile(writer):
                 try:
                     if (
                         "Date" in data[sn][test]
-                        and testResKey in data[sn][test]
+                        and testResKey in data[sn][test] and data[sn][test][testResKey] == "Test Complete"
                         and (daqTempKey in data[sn][test] or postDaqTempKey in data[sn][test])
                         and (calibKey in data[sn][test] or postCalibKey in data[sn][test])
                     ):  # check to make sure all required parts of the certificate are included
-                        # if(not isThreading):
+                        
                         # if the post calibration daq temperature is in data store it in daqTemp otherwise store N/A
                         daqTemp = data[sn][test][postDaqTempKey] if postDaqTempKey in data[sn][test] else "N/A"
                         # if the post calibration calibration temperature is in data store it in daqTemp otherwise store N/A
@@ -558,8 +558,6 @@ def writeSummaryToFile(writer):
                             calibTemp += "\n"+glycolTemp
                             daqTemp += "\n"+daqTemp
 
-                        if data[sn][test][testResKey] != "Test Complete":
-                            continue  # if the test failed then don't generate the certificate
 
                         # # # check to see if there is a glycol temp but no calibTemp
                         # if ("N/A" in calibTemp and glycolTemp!=""):
