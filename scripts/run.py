@@ -73,7 +73,7 @@ if mode == "d":
     try:
         with open(locationFile) as file:
             data = json.load(file)  # read the locations.json file
-        outdir = data["out_dir"]  # retrieve outdir
+        outdir = data["out_dir"] # retrieve outdir
         certdir = data["certificate_dir"]  # retrieve certdir
         dirs = data["search_dirs"]  # retrieve dirs
         if type(dirs) != list:
@@ -108,6 +108,17 @@ elif mode == "i":
     if certdir == "/":  # if ESC or Cancel was pressed on tkinter prompt, then use what was already in locations.json
         certdir = _certdir
 
+outdir = outdir + \
+            ("/" if outdir[-1] != "/" and outdir[-1] !=
+             "\\" else "") if outdir != "" else ""
+certdir = certdir + (
+            ("/" if certdir[-1] != "/" and certdir[-1]
+             != "\\" else "") if certdir != "" else ""
+        )
+for i,v in enumerate(dirs):
+            dirs[i] += (
+            ("/" if dirs[i][-1] != "/" and dirs[i][-1]
+             != "\\" else "") if dirs[i] != "" else "")
 
 try:
     # create error logger
