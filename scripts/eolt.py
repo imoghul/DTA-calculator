@@ -469,11 +469,10 @@ def writeSummaryToFile(writer):
                         and (daqTempKey in data[sn][test] or postDaqTempKey in data[sn][test])
                         and (calibKey in data[sn][test] or postCalibKey in data[sn][test])
                     ):
-                        createCopy(sn, data[sn][test]["Date"], certdir)
                         # if(not isThreading):
                         daqTemp = data[sn][test][postDaqTempKey] if postDaqTempKey in data[sn][test] else "N/A"
                         calibTemp = data[sn][test][postCalibKey] if postCalibKey in data[sn][test] else "N/A"
-                        if calibTemp.isnumeric() and float(calibTemp) == 0:
+                        if (calibTemp.isnumeric() and float(calibTemp) == 0) or calibTemp=="N/A":
                             calibTemp = data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A"
                             daqTemp = data[sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A"
 
@@ -490,19 +489,21 @@ def writeSummaryToFile(writer):
                         glycolTemp = data[sn][test][postCalibGlycolKey] if postCalibGlycolKey in data[sn][test] else ""
                         if glycolTemp == "" and calibGlycolKey in data[sn][test]:
                             glycolTemp = data[sn][test][calibGlycolKey]
-                        
-                        
-                        # if glycolTemp == "":
-                        #     continue
 
                         try:
                             glycolTemp = str(round(float(glycolTemp),1))
                         except:pass
 
+                        # if not ("N/A"==calibTemp and glycolTemp!=""):
+                        #     continue#print(calibTemp,glycolTemp,data[sn][test][calibKey])#(data[sn][test])
+
                         if glycolTemp != "":
                             calibTemp += "\n"+glycolTemp
                             daqTemp += "\n"+daqTemp
                         
+                        
+                        if data[sn][test][testResKey] != "Test Complete":continue
+
                         createCertificate(
                             sn,
                             data[sn][test]["Date"],
@@ -629,26 +630,26 @@ def transfer(cdir, pdir, odir, log):
             }
         )
 
-        retrieveData["Test Preferences"].append(
-            {
-                "test": "FT2 SUM",
-                "title": "Air",
-                "region": "Post Calibration Data",
-                "column": 2,
-                "hide": True,
-                "column header": calibKey,
-            }
-        )
-        retrieveData["Test Preferences"].append(
-            {
-                "test": "FT2 SUM",
-                "title": "Air",
-                "region": "Post Calibration Data",
-                "column": 2,
-                "hide": True,
-                "column header": postCalibKey,
-            }
-        )
+        # retrieveData["Test Preferences"].append(
+        #     {
+        #         "test": "FT2 SUM",
+        #         "title": "Air",
+        #         "region": "Post Calibration Data",
+        #         "column": 2,
+        #         "hide": True,
+        #         "column header": calibKey,
+        #     }
+        # )
+        # retrieveData["Test Preferences"].append(
+        #     {
+        #         "test": "FT2 SUM",
+        #         "title": "Air",
+        #         "region": "Post Calibration Data",
+        #         "column": 2,
+        #         "hide": True,
+        #         "column header": postCalibKey,
+        #     }
+        # )
 
         retrieveData["Test Preferences"].append(
             {

@@ -20,6 +20,7 @@ def createCopy(sn, cbDate, path):
 
 def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, header = False):
     try:
+        createCopy(sn, cbDate, path)
         dest = docPath(sn, cbDate, path)
         doc = Document(dest)
 
@@ -67,6 +68,8 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
 
                 doc.save(dest)
     except Exception as e:
+        print(docPath(sn, cbDate, path))
+        os.remove(docPath(sn, cbDate, path))
         # print(str(e))  # print("Couldn't generate certificate for "+sn)
         raise e# logger.error(e)
 
