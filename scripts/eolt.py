@@ -546,7 +546,7 @@ def writeSummaryToFile(writer):
     #             f.write(i)
 
 
-def transfer(cdir, pdir, odir, log):
+def init(cdir, pdir, odir, log):
     global certdir, preferencesFile, detectionList, retrieveData, genCert, outdir, logger, outFileName
     logger = log
     certdir = cdir
