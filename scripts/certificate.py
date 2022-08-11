@@ -68,8 +68,10 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
 
                 doc.save(dest)
     except Exception as e:
-        print(docPath(sn, cbDate, path))
-        os.remove(docPath(sn, cbDate, path))
+        # print(docPath(sn, cbDate, path))
+        try:
+            os.remove(docPath(sn, cbDate, path))
+        except:pass
         # print(str(e))  # print("Couldn't generate certificate for "+sn)
         raise e# logger.error(e)
 
