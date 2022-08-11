@@ -180,8 +180,8 @@ def createFile():
         try:
             # runs at the end of searching
             writeSummaryToFile(writer)
-        except:  # error handling
-            logger.error(Exception("Couldn't write summary file"))
+        except Exception as e:  # error handling
+            logger.error(e)#(Exception("Couldn't write summary file"))
 
 
 try:

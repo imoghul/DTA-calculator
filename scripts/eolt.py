@@ -576,7 +576,6 @@ def writeSummaryToFile(writer):
                             daqTemp,
                             calibTemp,
                             certdir,
-                            logger,
                             # boolean to determine whether or not to add Glycol Probe: to the row title or not
                             header=glycolTemp != ""
                         )
