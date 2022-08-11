@@ -42,7 +42,8 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, h
                     or c.text == "DAQ TEMP"
                     or c.text == "CALIB"
                     or c.text == "Air Monitoring Probe:"
-                ):
+                ): # set other cells
+                # NOTE: for some reason, separating this if into multiple ones messed with the font 
                     try:
                         if c.text == "CALIBRATION DATE":
                             c.text = cbDate

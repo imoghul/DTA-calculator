@@ -5,7 +5,7 @@ from fileinput import filename
 from tqdm import tqdm
 
 
-def ordinal(n):
+def ordinal(n):  # convert int num to ordinal string
     return "%d%s" % (n, "tsnrhtdd"[(n // 10 % 10 != 1) * (n % 10 < 4) * n % 10:: 4])
 
 
@@ -13,29 +13,29 @@ def empty():
     pass
 
 
-def mean(x):
+def mean(x):  # calculate mean
     sum = 0
     for i in x:
         sum += i
     return sum / len(x)
 
 
-def average(x):
+def average(x):  # calculate mean without throwing an error due to empty list
     if len(x) == 0:
         return 0
     return mean(x)
 
 
-def dtToMin(y, mon, d, h, m, s):
+def dtToMin(y, mon, d, h, m, s):  # convert date time to minutes
     return 525600 * y + 43800 * mon + 1440 * d + 60 * h + m + s / 60
 
 
-def closestTo(arr, val):
+def closestTo(arr, val):  # find the elemnt of a list of numbers that is closest to val
     v = min(arr, key=lambda x: abs(x - val))
     return (v, arr.index(v))
 
 
-def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
+def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021 converted to tuple
     dt = dt.split(" ")
     d = dt[2]
     d_arr = d.split("/")
@@ -53,6 +53,7 @@ def readTime(dt):  # sample dt: 3:09:12.039 PM 11/24/2021
     return (year, month, day, h, m, s)
 
 
+# custom process bar; depricated
 def process_bar(process, current, total, message="", bar_length=25, bar_pos=40 * " "):
     fraction = current / total
     arrow = int(fraction * bar_length - 1) * "-" + ">"
@@ -68,22 +69,21 @@ def process_bar(process, current, total, message="", bar_length=25, bar_pos=40 *
     )
 
 
-def parseSUMfileName(fileName):
+def parseSUMfileName(fileName):  # retrieve data from fileName for ft2sum
     data = {}
     _date = fileName.split("_")[-3]
     data["Date"] = _date[4:6] + "/" + _date[6:8] + "/" + _date[0:4]
     return data
 
 
-def getFileType(fileName):
+def getFileType(fileName):  # return file type
     if "_SUM" in fileName:
         return "FT2 SUM"
     elif "_RAW" in fileName:
         return "FT2 RAW"
     elif "FT3_" in fileName or "ft3_" in fileName:
         return "FT3"
-    else:
-        # return "FT1"
+    else:  # if cell A1 is "Model ID" or "Traveller ID" return "FT1"
         with open(fileName, newline="") as file:
             for row in csv.reader(file, delimiter="\n", quotechar=","):
                 for r in row:
@@ -94,13 +94,13 @@ def getFileType(fileName):
                         return None
 
 
-def moveToBeginning(l, elem):
+def moveToBeginning(l, elem):  # move an element of a list to the beginning of it
     if elem not in l:
         return
     l.insert(0, l.pop(l.index(elem)))
 
 
-def getFT2SUMTitle_noCH(d):
+def getFT2SUMTitle_noCH(d):  # return header of a preference, ignoring column header
     try:
         return ((d["region"] + ":") if "region" in d else "") + (
             ("_".join(d["title"]) if type(d["title"]) == list else d["title"])
@@ -111,11 +111,11 @@ def getFT2SUMTitle_noCH(d):
         )
 
 
-def getFT2SUMTitle_config(d):
+def getFT2SUMTitle_config(d):  # return header of an FT2 SUM preference
     return getFT2SUMTitle_noCH(d) if "column header" not in d else d["column header"]
 
 
-def getFT3Title_config(d):
+def getFT3Title_config(d):  # return header of an FT3 preference
     try:
         return d["title"] if "column header" not in d else d["column header"]
     except:
@@ -124,7 +124,7 @@ def getFT3Title_config(d):
         )
 
 
-def getFT1Title_config(d):
+def getFT1Title_config(d):  # return header of an FT1 preference
     try:
         return (
             (((d["step"] + ":") if "step" in d else "") + d["title"])
@@ -137,7 +137,7 @@ def getFT1Title_config(d):
         )
 
 
-def getTitle_config(d):
+def getTitle_config(d):  # get column header of a preference
     try:
         res = None
         if "column header" in d:
@@ -163,15 +163,16 @@ def anyIn(val, l):  # checks if any of the elements of l are in val
     return True in [(i in val) for i in l]
 
 
-def allIn(val, l):
+def allIn(val, l):  # check if all of elements of val are in l
     return all([(i in val) for i in l])
 
 
-def allInSome(targets, finds):
+def allInSome(targets, finds):  # checks if atleast 1 element of targets are in finds
     return True in [allIn(i, finds) for i in targets]
 
 
-def getFromData(data, title):  # takes data[sn]
+# takes data[sn], and returns its data; depricated data format
+def getFromData(data, title):
     vals = []
     for i in data:
         if title in data:
@@ -179,6 +180,7 @@ def getFromData(data, title):  # takes data[sn]
     return vals if vals != [] else None
 
 
+# adds to data[sn]; depricated data format
 def addToData(data, title, val, sn):
     added = False
     for i in data:
@@ -193,6 +195,7 @@ def addToData(data, title, val, sn):
             data.append({"Serial Number": sn, title: val})
 
 
+# run a list of threads limiting to a max number of threads at once
 def runThreads(threads, max, message):
     originalMax = max
     upperMax = 15000
