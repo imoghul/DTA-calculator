@@ -5,23 +5,28 @@ from docx2pdf import convert
 import os
 import sys
 import shutil
+import glob
 
+def createDocPath(sn, cbDate, path): # convert sn, date, and path into a path for the certificate
+    name = path + sn + "_" + cbDate.replace("/", "") + "_certificate"
+    num = len(glob.glob(name+"*"))
+    name = name+("(%d)"%num if num else "") +".docx" 
+    return name
 
-def docPath(sn, cbDate, path): # convert sn, date, and path into a path for the certificate
-    return (
-        path + sn + "_" + cbDate.replace("/", "") + "_certificate.docx"
-    )  # path+"%s_%s_certificate.docx" % (sn,cbDate.replace("/",""))
-
+# def getDocPath(sn, cbDate, path):
+#     name = path + sn + "_" + cbDate.replace("/", "") + "_certificate"
+#     return glob.glob(name+"*").sort(reverse=True)[0]
 
 def createCopy(sn, cbDate, path): # create a copy of TEMPLATE.docx to a new path for the specified certificate
-    dest = docPath(sn, cbDate, path)
+    dest = createDocPath(sn, cbDate, path)
     shutil.copy2(path + "TEMPLATE.docx", dest)
+    return dest
 
 
 def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, header = False):
     try:
-        createCopy(sn, cbDate, path) # create the copy
-        dest = docPath(sn, cbDate, path)
+        dest = createCopy(sn, cbDate, path) # create the copy
+        # dest = getDocPath(sn, cbDate, path)
         doc = Document(dest) # open the copy
 
         for t in doc.tables: # loop through the tables, becuase whoever make the certificate put the data we need to change in invisible tables
@@ -70,7 +75,7 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, header = 
                 doc.save(dest)
     except Exception as e:
         try: # remove the copy if a failure occured during the certificate generation, to avoid half generated certificates
-            os.remove(docPath(sn, cbDate, path))
+            os.remove(dest)#(getDocPath(sn, cbDate, path))
         except:pass
         raise e
 

@@ -557,6 +557,7 @@ def writeSummaryToFile(writer):
                         if glycolTemp != "":
                             calibTemp += "\n"+glycolTemp
                             daqTemp += "\n"+daqTemp
+                            
 
 
                         # # # check to see if there is a glycol temp but no calibTemp
