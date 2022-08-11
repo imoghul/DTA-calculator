@@ -223,7 +223,7 @@ Errors that take place during runtime will be recorded in ```errors.log``` in th
 
 ****
 
-An extra script with the name ```EOLT-Test-Analyzer-Comprehensive.exe``` is provided with no support/documentation. This is an old script that was included due to the benefit it may contribute. It will use the same folders that the main script uses, but does not utilize a config file as it is just used to retrive all the data possible from FT2 SUM files. 
+An extra script with the name ```EOLT-Test-Analyzer-FT2_RAW.exe``` is provided with no support/documentation. This is an old script that was included due to the benefit it may contribute. It will use the same folders that the main script uses, but does not utilize a config file as it is just used to retrive all the data possible from FT2 RAW files. Output will be stored in ```comprehensive_summary.csv```
 
 ****
 

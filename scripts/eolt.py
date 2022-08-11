@@ -494,15 +494,18 @@ def writeSummaryToFile(writer):
                             glycolTemp = str(round(float(glycolTemp),1))
                         except:pass
 
-                        # if not ("N/A"==calibTemp and glycolTemp!=""):
-                        #     continue#print(calibTemp,glycolTemp,data[sn][test][calibKey])#(data[sn][test])
-
                         if glycolTemp != "":
                             calibTemp += "\n"+glycolTemp
                             daqTemp += "\n"+daqTemp
                         
                         
                         if data[sn][test][testResKey] != "Test Complete":continue
+
+
+                        # # # check to see if there is a glycol temp but no calibTemp
+                        # if ("N/A" in calibTemp and glycolTemp!=""):
+                        #     print(calibTemp,glycolTemp,data[sn][test][calibKey] if calibKey in data[sn][test] else "calibKey not found")
+                        # continue
 
                         createCertificate(
                             sn,
