@@ -57,6 +57,21 @@ while postDaqTempKey == calibKey:
                       string.digits + string.ascii_uppercase)
         for i in range(20)
     )
+postCalibGlycolKey = postDaqTempKey
+while postCalibGlycolKey == postDaqTempKey:
+    postCalibGlycolKey = "".join(
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
+        for i in range(20)
+    )
+
+calibGlycolKey = postCalibGlycolKey
+while calibGlycolKey == postCalibGlycolKey:
+    calibGlycolKey = "".join(
+        random.choice(string.ascii_lowercase +
+                      string.digits + string.ascii_uppercase)
+        for i in range(20)
+    )
 # daqTempKey = "daqTempKey"
 # calibKey = "calibKey"
 # testResKey = "testResKey"
@@ -447,6 +462,7 @@ def writeSummaryToFile(writer):
             counter += 1
             for test in data[sn]:
                 try:
+                    
                     if (
                         "Date" in data[sn][test]
                         and testResKey in data[sn][test]
@@ -469,6 +485,24 @@ def writeSummaryToFile(writer):
                             daqTemp = str(round(float(daqTemp), 1))
                         except:
                             pass
+
+
+                        glycolTemp = data[sn][test][postCalibGlycolKey] if postCalibGlycolKey in data[sn][test] else ""
+                        if glycolTemp == "" and calibGlycolKey in data[sn][test]:
+                            glycolTemp = data[sn][test][calibGlycolKey]
+                        
+                        
+                        # if glycolTemp == "":
+                        #     continue
+
+                        try:
+                            glycolTemp = str(round(float(glycolTemp),1))
+                        except:pass
+
+                        if glycolTemp != "":
+                            calibTemp += "\n"+glycolTemp
+                            daqTemp += "\n"+daqTemp
+                        
                         createCertificate(
                             sn,
                             data[sn][test]["Date"],
@@ -478,11 +512,12 @@ def writeSummaryToFile(writer):
                             daqTemp,
                             calibTemp,
                             certdir,
-                            logger
+                            logger,
+                            header = glycolTemp!=""
                         )
-                        if(isThreading):
-                            certThreads.append(threading.Thread(target=createCertificate, args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[
-                                               sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir, logger)))
+                        # if(isThreading):
+                        #     certThreads.append(threading.Thread(target=createCertificate, args=(sn, data[sn][test]["Date"], "Pass" if data[sn][test][testResKey] == "Test Complete" else "Fail", data[
+                        #                        sn][test][daqTempKey] if daqTempKey in data[sn][test] else "N/A", data[sn][test][calibKey] if calibKey in data[sn][test] else "N/A", certdir, logger)))
                 except Exception as e:
                     raise e
                     # logger.error(Exception(
@@ -545,11 +580,21 @@ def transfer(cdir, pdir, odir, log):
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",
-                "title": "Air2",
+                "title": "Air1",
                 "region": "Post Calibration Data",
                 "column": 2,
                 "hide": True,
                 "column header": postCalibKey,
+            }
+        )
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
+                "title": "Glycol",
+                "region": "Post Calibration Data",
+                "column": 2,
+                "hide": True,
+                "column header": postCalibGlycolKey,
             }
         )
 
@@ -566,11 +611,21 @@ def transfer(cdir, pdir, odir, log):
         retrieveData["Test Preferences"].append(
             {
                 "test": "FT2 SUM",
-                "title": "Air2",
+                "title": "Air1",
                 "region": "Calibration Data",
                 "column": 2,
                 "hide": True,
                 "column header": calibKey,
+            }
+        )
+        retrieveData["Test Preferences"].append(
+            {
+                "test": "FT2 SUM",
+                "title": "Glycol",
+                "region": "Calibration Data",
+                "column": 2,
+                "hide": True,
+                "column header": calibGlycolKey,
             }
         )
 

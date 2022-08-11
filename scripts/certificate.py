@@ -18,14 +18,13 @@ def createCopy(sn, cbDate, path):
     shutil.copy2(path + "TEMPLATE.docx", dest)
 
 
-def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger):
+def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger, header = False):
     try:
         dest = docPath(sn, cbDate, path)
         doc = Document(dest)
 
         for t in doc.tables:
             for c in t._cells:
-
                 if c.text == "SERIAL NUMBER":
                     c.text = sn
                     paragraphs = c.paragraphs
@@ -41,6 +40,7 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger):
                     or c.text == "RESULT"
                     or c.text == "DAQ TEMP"
                     or c.text == "CALIB"
+                    or c.text == "Air Monitoring Probe:"
                 ):
                     try:
                         if c.text == "CALIBRATION DATE":
@@ -48,9 +48,11 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger):
                         elif c.text == "RESULT":
                             c.text = result
                         elif c.text == "DAQ TEMP":
-                            c.text = str(float(DAQTemp))
+                            c.text = DAQTemp
                         elif c.text == "CALIB":
-                            c.text = str(float(PostCalibAir))
+                            c.text = PostCalibAir
+                        elif c.text == "Air Monitoring Probe:" and header:
+                            c.text = "Air Monitoring Probe:\nGlycol Probe:"
                     except:
                         raise Exception(
                             "Error while generating the certificate")
@@ -66,7 +68,7 @@ def createCertificate(sn, cbDate, result, DAQTemp, PostCalibAir, path, logger):
                 doc.save(dest)
     except Exception as e:
         # print(str(e))  # print("Couldn't generate certificate for "+sn)
-        logger.error(e)
+        raise e# logger.error(e)
 
 
 def convertToPDF_doc(doc):
